@@ -2,11 +2,11 @@
 
 
 
-chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+chrome.runtime.sendMessage({greeting: "hello"});
   //console.log(response.farewell);
-});
 console.log("test");
-
+console.log("nesMessage");
+readSearchResults();
 function readSearchResults(rootNode) {
   console.log(rootNode)
   var elems = document.getElementsByClassName("yuRUbf");
