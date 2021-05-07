@@ -1,5 +1,6 @@
 # CODE-DaWeSys
 CODE - COokie DEcliner
+![logo_long_800](https://github.com/DonSimerino/CODE-DaWeSys/blob/main/logos/code_logo_long_800.png?raw=true)
 ## Installation
 ```
 git clone https://github.com/DonSimerino/CODE-DaWeSys.git 
