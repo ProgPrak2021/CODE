@@ -13,4 +13,4 @@ Es gibt schon vier Python Skripte:
 * database_playground: Für das Aufsetzen und Abfragen eigener Datenbanken
 * apicall_example: Altes Beispiel für Google API Abfrage, darf gerne erweitert werden
 
-Bei Bedarf können gerne weitere Skripte erstellen.
+Bei Bedarf können gerne weitere Skripte erstellt werden.
