@@ -9,7 +9,7 @@ img.css('margin-top', '0.5em')
 img.appendTo(result);
 
 $('.code-selector').on('click', function(){
-    var xhttp = new XMLHttpRequest();
+  var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
      alert(this.responseText);
@@ -17,9 +17,19 @@ $('.code-selector').on('click', function(){
   };
 
   //Flask projekt muss am laufen sein 
-  xhttp.open("GET", "http://127.0.0.1:5000/urls/google.com", true);
-  xhttp.send();
-
+  var url_list = readSearchResults();
+  xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true);
+  xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+  xhttp.send(url_list);
 })
 
+function readSearchResults(rootNode) {
+  var elems = document.getElementsByClassName("yuRUbf");
+  var url_list = [];
+  for(var i of elems){
+    url_list.push(i.children[0].href);
+  }
+console.log(url_list)
+return url_list;
+}
 
