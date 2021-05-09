@@ -16,8 +16,8 @@ $('.code-selector').on('click', function(){
     }
   };
 
-  //Hier habe ich einen einfachen Server gemacht, um es zu testen. Alternativ kannst du es schon mit dem Flask Projekt testen. 
-  xhttp.open("GET", "http://localhost:8080", true);
+  //Flask projekt muss am laufen sein 
+  xhttp.open("GET", "http://127.0.0.1:5000/urls/google.com", true);
   xhttp.send();
 
 })

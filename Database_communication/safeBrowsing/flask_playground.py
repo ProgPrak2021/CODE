@@ -1,7 +1,9 @@
 from flask import Flask, render_template, jsonify
 import database_playground
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
