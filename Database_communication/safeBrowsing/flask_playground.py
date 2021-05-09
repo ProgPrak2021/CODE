@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 import database_playground
-from flask_cors import CORS
+from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 
 app = Flask(__name__)
 CORS(app)
