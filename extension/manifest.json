@@ -1,0 +1,26 @@
+{
+  "name": "cookie-decliner",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Gets rid of annoying cookie banners",
+  "background": "views/background.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/jquery.min.js", "content.js"]
+    }
+  ],
+  "chrome_url_overrides": {
+    "newtab":"views/home.html"
+  },
+  "browser_action" : {
+    "default_popup": "views/popup.html",
+    "default_title": "Cookie Decliner Title",
+    "default_icon": "/images/icon_128_clear.png"
+  }, 
+
+  "permissions": [
+    "tabs"
+  ]
+
+}
