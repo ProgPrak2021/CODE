@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template, jsonify
+import database_playground
 
 app = Flask(__name__)
 
@@ -6,7 +7,38 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     # label calculation
-    return 'Hello, World!'
+    
+    return "Hello CODE" 
+   
 
-if __name__ == '__main__': # runs on port 5000,
-    app.run()
+@app.route('/urls/', methods=['GET'])
+def urls():
+
+   db = database_playground.connect_db() 
+   con = db.cursor()
+
+   con.execute(
+       "SELECT site, category FROM sites_data ORDER BY site ASC")
+
+   rows = con.fetchall()
+   return jsonify(rows)
+  #  return render_template("list.html", rows=rows)
+
+
+@app.route('/urls/<url>', methods=['GET'])
+def url(url):
+
+   db = database_playground.connect_db() 
+   con = db.cursor()
+
+   con.execute(
+       "SELECT site, category, cookies, requests_tracking FROM sites_data WHERE site = ? ORDER BY site ASC", [url])
+
+   rows = con.fetchall()
+   return jsonify(rows)
+  #  return render_template("list.html", rows=rows)
+
+
+
+if __name__ == '__main__':
+   app.run(debug=True)
