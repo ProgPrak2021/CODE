@@ -1,5 +1,6 @@
 # CODE-DaWeSys
 CODE - COokie DEcliner
+
 ![logo_long_800](https://github.com/DonSimerino/CODE-DaWeSys/blob/main/logos/code_logo_long_800.png?raw=true)
 ## Installation
 ```
@@ -13,4 +14,5 @@ Es gibt schon vier Python Skripte:
 * database_playground: Für das Aufsetzen und Abfragen eigener Datenbanken
 * apicall_example: Altes Beispiel für Google API Abfrage, darf gerne erweitert werden
 
-Bei Bedarf können gerne weitere Skripte erstellt werden.
+Bei Bedarf können gerne weitere Skripte erstellen.
+
