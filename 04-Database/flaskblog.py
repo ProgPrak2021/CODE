@@ -9,9 +9,9 @@ db = SQLAlchemy(app)
 
 
 class Website(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    rating = db.Column(db.String(120),nullable=False)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    domain = db.Column(db.String(20), unique=True, nullable=False)
+    rating = db.Column(db.Integer)
 
 
 
