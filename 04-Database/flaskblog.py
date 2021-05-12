@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 
 class Website(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    domain = db.Column(db.String(20), unique=True, nullable=False)
+    domain = db.Column(db.String, unique=True, nullable=False)
     rating = db.Column(db.Integer)
 
 
