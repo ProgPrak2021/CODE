@@ -1,7 +1,7 @@
 import requests
 
-api_key_google = "AIzaSyCtU_yY1gjbJTrrMm1e079QbPFkcbD-Q24"
-api_key_rapid = "23d87808f5msha20b75abfb56301p11c451jsn77e524bcf0e5"
+api_key_google = "AIzaSyCtU_yY1gjbJTrrMm1e079QbPFkcbD-Q24"  # deprecated
+api_key_rapid = "23d87808f5msha20b75abfb56301p11c451jsn77e524bcf0e5"  # deprecated
 body = {
     "client": {
         "clientId": "ProgPrak",
