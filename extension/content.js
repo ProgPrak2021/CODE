@@ -17,19 +17,24 @@ $('.code-selector').on('click', function(){
   };
 
   //Flask projekt muss am laufen sein 
-  var url_list = readSearchResults();
+  var urls = readSearchResults();
   xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true);
   xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-  xhttp.send(url_list);
+  xhttp.send(urls);
 })
 
 function readSearchResults(rootNode) {
   var elems = document.getElementsByClassName("yuRUbf");
-  var url_list = [];
+  var urls = "";
   for(var i of elems){
-    url_list.push(i.children[0].href);
+    var url = new URL(i.children[0].href)
+    domain = url.hostname;
+    domain = domain.replace('www.','');
+    domain = domain.replace('de.','');
+    urls+=domain; //output is a domain 
+    urls+="Split";
   }
-console.log(url_list)
-return url_list;
+console.log(urls)
+return urls;
 }
 
