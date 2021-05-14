@@ -16,13 +16,26 @@ def hello_world():
     return "Hello CODE"
 
 
+
+
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
     urls = str(request.data)
-    list = re.split(r'.(?=http)', urls)
-    list.pop(0)
-    print(list)
-    return "HJH"
+    print(urls)
+    if urls.__contains__("http://"):
+        print("unsafe web protocol found")
+    urls = urls.split("https://")
+    urls.pop(0)
+    domains = []
+    for e in urls:
+        if (e.__contains__("www.")) or e.__contains__("de.") or e.__contains__("shop."):
+            e = e.replace('www.', '').replace('de.', '').replace('shop.', '')
+        domains.append(e.split("/")[0])
+
+    print(urls)
+    print(domains)
+    print(len(domains))
+    return jsonify(domains)
 
 
 @app.route('/urls/', methods=['GET'])

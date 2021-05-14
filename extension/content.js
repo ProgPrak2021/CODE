@@ -28,13 +28,15 @@ function readSearchResults(rootNode) {
   var urls = "";
   for(var i of elems){
     var url = new URL(i.children[0].href)
+    urls += url
+   /* 
     domain = url.hostname;
     domain = domain.replace('www.','');
     domain = domain.replace('de.','');
     urls+=domain; //output is a domain 
     urls+="Split";
+    */
   }
-console.log(urls)
 return urls;
 }
 
