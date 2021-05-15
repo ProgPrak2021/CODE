@@ -34,6 +34,7 @@ def receive_urls():
     print(urls)
     print(domains)
     print(len(domains))
+    calc_label(domains)
     return jsonify(domains)
 
 
