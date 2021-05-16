@@ -1,4 +1,4 @@
-var result = $('h3').closest('div')
+var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 img.attr('src', "https://lisztos.s3.amazonaws.com/images/icon_128_clear.png");
 //img.attr('src', 'https://www.google.com/search?q=orange&sxsrf=ALeKk02SZqG-A6h6nM_XrHyIU98gIgRk9w:1621172387851&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjDl7Diqc7wAhXTCWMBHY61BmsQ_AUoA3oECAIQBQ&biw=1920&bih=937#imgrc=kBUCtsWcfmgoVM'); //select img from src folder? 
