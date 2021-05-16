@@ -23,7 +23,7 @@ def calc_label(domain_list):
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
     trackers = generic_sql_query(query)
-    print(trackers)
+    print(len(trackers))
     for cookie in trackers:
         print(cookie)
     return 0

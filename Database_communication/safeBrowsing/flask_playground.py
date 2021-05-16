@@ -40,10 +40,12 @@ def receive_urls():
             e = e.replace('www.', '').replace('de.', '').replace('shop.', '')
         domains.append(e.split("/")[0])
     domains = list(dict.fromkeys(domains))
-    print(domains)
 
+    print(domains)
     print(len(domains))
+
     calc_label(domains)
+
     return jsonify(domains)
 
 
