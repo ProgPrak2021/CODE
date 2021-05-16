@@ -45,6 +45,17 @@ def receive_urls():
     return jsonify(domains)
 
 
+@app.route('/ids/', methods=['GET'])
+def ids():
+    query = "SELECT ID FROM top500 ORDER BY ID ASC"
+    return jsonify(generic_sql_query(query))
+
+@app.route('/ids/<id>', methods=['GET'])
+def id(id):
+    query = f"SELECT Website FROM top500 where ID = \"{id}\" ORDER BY ID ASC"
+    return jsonify(generic_sql_query(query))
+
+
 @app.route('/urls/', methods=['GET'])
 def urls():
     query = "SELECT site, category FROM sites_data ORDER BY site ASC"
