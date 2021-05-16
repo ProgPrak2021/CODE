@@ -1,5 +1,7 @@
 from flask import jsonify
 from safeBrowsing import database_playground
+import json
+
 
 
 def generic_sql_query(query):
@@ -19,11 +21,20 @@ def calc_label(domain_list):
     for domain in domain_list:
         domain_dict[domain] = whotracksme_score(domain)
 
+    return json.dumps(domain_dict)
+
+
 
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
     trackers = generic_sql_query(query)
-    print(len(trackers))
+    print(len(trackers), "trackers/ cookies")
     for cookie in trackers:
         print(cookie)
-    return 0
+        if(cookie.__contains__("Facebook")):
+            return 3;
+        return 1;
+
+    return 0;
+
+

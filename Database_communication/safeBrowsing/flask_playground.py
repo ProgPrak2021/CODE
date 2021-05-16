@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
-
+import json
 from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label
 
 app = Flask(__name__)
@@ -10,8 +10,6 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
-
-
     return "Hello CODE"
 
 
@@ -20,8 +18,6 @@ def hello_world():
 @app.route('/s')
 def calc_labels():
     # label calculation
-
-
     return "test"
 
 
@@ -42,7 +38,7 @@ def receive_urls():
     domains = list(dict.fromkeys(domains))
 
     print(domains)
-    print(len(domains))
+    print(len(domains), "domains")
 
     calc_label(domains)
 
