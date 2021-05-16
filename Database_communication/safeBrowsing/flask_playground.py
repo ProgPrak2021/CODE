@@ -40,14 +40,14 @@ def receive_urls():
     print(domains)
     print(len(domains), "domains")
 
-    domains = calc_label(domains)
 
-    return jsonify(domains)
+    a = calc_label(domains)
+    return jsonify(a)
 
 
 @app.route('/ids/', methods=['GET'])
 def ids():
-    query = "SELECT ID FROM top500 ORDER BY ID ASC"
+    query = "SELECT ID, Website FROM top500 ORDER BY ID ASC"
     return jsonify(generic_sql_query(query))
 
 @app.route('/ids/<id>', methods=['GET'])
