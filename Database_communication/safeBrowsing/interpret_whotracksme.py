@@ -2,8 +2,7 @@ from flask import jsonify
 from safeBrowsing import database_playground
 import json
 
-#from safeBrowsing import top500_db_connection
-
+from safeBrowsing import top500_db_connection
 
 
 def generic_sql_query(query):
@@ -34,9 +33,9 @@ def whotracksme_score(domain):
     for cookie in trackers:
         print(cookie)
         if(cookie.__contains__("Facebook")):
-            return 3;
-        return 1;
+            return 3
+        return 1
 
-    return 0;
+    return 0
 
 
