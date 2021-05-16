@@ -1,6 +1,7 @@
 var result = $('h3').closest('div')
 var img = $('<img class="code-selector">');
 img.attr('src', "https://lisztos.s3.amazonaws.com/images/icon_128_clear.png");
+//img.attr('src', "icon_128.png"); //select img from src folder? 
 img.css('width', '25px')
 img.css('float', 'left')
 img.css('margin-left', '-2.25em')
@@ -21,6 +22,16 @@ $('.code-selector').on('click', function(){
   xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true);
   xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
   xhttp.send(urls);
+
+  /*GET method for key-value list (domain, [1,2,3])
+  set img depending on number
+  
+  
+  
+  
+  
+  
+  */
 })
 
 function readSearchResults(rootNode) {

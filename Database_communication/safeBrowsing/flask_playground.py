@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
@@ -11,9 +11,19 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
-    # label calculation
+
 
     return "Hello CODE"
+
+
+
+
+@app.route('/s')
+def calc_labels():
+    # label calculation
+
+
+    return "test"
 
 
 
@@ -21,7 +31,6 @@ def hello_world():
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
     urls = str(request.data)
-    print(urls)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
@@ -31,10 +40,13 @@ def receive_urls():
         if (e.__contains__("www.")) or e.__contains__("de.") or e.__contains__("shop."):
             e = e.replace('www.', '').replace('de.', '').replace('shop.', '')
         domains.append(e.split("/")[0])
-
-    print(urls)
+    domains = list(dict.fromkeys(domains))
     print(domains)
-    print(len(domains))
+    x = "wikipedia.org"
+    query = f"SELECT site, category, cookies, requests_tracking FROM sites_data WHERE site = \"{x}\" ORDER BY site ASC"
+    print(query)
+    #print(generic_sql_query(query))
+
     return jsonify(domains)
 
 
@@ -50,12 +62,16 @@ def urls():
 @app.route('/urls/<url>', methods=['GET'])
 def url(url):
     query = f"SELECT site, category, cookies, requests_tracking FROM sites_data WHERE site = \"{url}\" ORDER BY site ASC"
+    print(url)
+    print(query)
+    print(generic_sql_query(query))
     return generic_sql_query(query)
 
 
 @app.route('/tracker/<url>', methods=['GET']) #
 def trackers_category_from_url(url):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
+
     return generic_sql_query(query)
 
 
