@@ -1,11 +1,9 @@
 from flask import jsonify
 from safeBrowsing import database_playground
-<<<<<<< HEAD
 import json
 
-=======
-from safeBrowsing import top500_db_connection
->>>>>>> 2bec9880bd4a625c5bbd9864bf5722de3b935601
+#from safeBrowsing import top500_db_connection
+
 
 
 def generic_sql_query(query):
