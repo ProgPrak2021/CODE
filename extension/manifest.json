@@ -6,7 +6,7 @@
   "background": "views/background.html",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://*.google.com/search?*"],
       "js": ["js/jquery.min.js", "content.js"]
     }
   ],
@@ -16,11 +16,23 @@
   "browser_action" : {
     "default_popup": "views/popup.html",
     "default_title": "Cookie Decliner Title",
-    "default_icon": "/images/icon_128_clear.png"
-  }, 
+    "default_icon": {
+      "16": "/images/green_icon_16.png",
+      "32": "/images/green_icon_32.png",
+      "48": "/images/green_icon_48.png",
+      "128": "/images/green_icon_128.png"
+    }
+  },
 
   "permissions": [
     "tabs"
-  ]
+  ],
+
+  "icons": {
+    "16": "/images/green_icon_16.png",
+    "32": "/images/green_icon_32.png",
+    "48": "/images/green_icon_48.png",
+    "128": "/images/green_icon_128.png"
+  }
 
 }

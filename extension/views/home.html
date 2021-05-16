@@ -1,24 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/custom.css">
-  <title>New Tab</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>New Tab</title>
 </head>
 <body>
-    <div class="container-fluid mt-5">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-4 text-center">
-            <img src="/images/icon_128_clear.png" alt="code-logo">
-            <h1>Welcome Moritz</h1>
-          </div>
-        </div>
-      </div>
+<nav class="navbar navbar-expand-sm bg-dark text-light justify-content-center">
+    <h3> Privacy Summary </h3>
+</nav>
+
+<div class="container-sm pt-3 p-3 text-dark">
+    <div class="row justify-content-center">
+        <h1 class="display-1">98%</h1> <br>
     </div>
+    <div class="row justify-content-center">
+      <center>Good job! <br>You took good care about your privacy in the past week: 98% of your visited websites had a green label!
+    </div>
+</div>
+<div class="container-sm pt-3 p-3 text-center rounded">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h3>Your privacy labels:</h3>
+            <img src="/CODE-DaWeSys/extension/images/green_icon_32.png"> example.com <br>
+            <img src="/CODE-DaWeSys/extension/images/yellow_icon_32.png"/> example.com <br>
+            <img src="/CODE-DaWeSys/extension/images/red_icon_32.png"> example.com <br>
+        </div>
+        <div class="col-4">
+            <form action="">
+                <div class="form-group">
+                    <h3><label for="url">Create new label:</label><br></h3>
+                    <input type="url" class="form-control" placeholder="Enter url" id="url">
+                </div>
+                <button type="submit" class="btn-check btn-dark">Create</button>
+            </form>
+        </div>
+    </div>
+    <div class="row p-5 justify-content-center">
+        <div class="col-8">
+            <a href="#how" class="btn btn-dark" data-toggle="collapse">How does it work?</a>
+            <div id="how" class="collapse">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-sm fixed-bottom bg-dark text-light justify-content-center">
+    provided by CODE <img src="/CODE-DaWeSys/extension/images/green_icon_32.png">
+</nav>
 </body>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
