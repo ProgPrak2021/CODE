@@ -10,14 +10,15 @@ import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import csv
-
-
+from random import randrange
 
 app = Flask(__name__)
 CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 db = SQLAlchemy(app)
+
+
 
 class website(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -28,29 +29,29 @@ class website(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.id
 
+
+@app.route('/einlesen') # CVS Datei Top 50 einlesen und dann ausgeben lassen / provisorisch 
+def index2():
+    with open('top50websites.csv','r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        for line in csv_reader:
+            if(line[2] != "Adult"): # keine pornoseiten bitte
+                r = (line[1].split('.')[0])
+                new_domain = website(domain = r,rating = randrange(10) ) #zufälliges rating zwischen 1 und 9
+                db.session.add(new_domain)
+                db.session.commit()
+        
+        return redirect('/datenbank') 
+
+
+
 @app.route('/datenbank') # Datenbank ausgeben
 def index():
-    new_domain = website(domain = "manjak")
-    # return redirect('/alii')
-    # #return "hat nicht geklappt"
-    db.session.add(new_domain)
-    db.session.commit()
-    #con = db.session.cursor()
-    #con.execute("SELECT * from website")
     session = db.session()
     cursor = session.execute("SELECT * from website order by date_created desc").cursor
     rows = cursor.fetchall()
     return jsonify(rows)
 
-    #return db.engine.execute('select * from website')
-
-    #return("hat geklappt")
-
-# @app.route('/alii')
-# def func():
-
-#     query = "SELECT * FROM "
-#     return jsonify(generic_sql_query(query))
 
 
 @app.route('/')
@@ -126,19 +127,6 @@ def trackers_category_from_url(url):
 
 if __name__ == '__main__':
     db.create_all()
-    ## hier werden die top 50 deutschen Websiten hinzugefügt
-    with open('top50websites.csv','r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-
-        for line in csv_reader:
-            if(line[2] != "Adult"):
-                r = (line[1].split('.')[0])
-                new_domain = website(domain = r)
-                db.session.add(new_domain)
-                db.session.commit()
-    
-    print("wurde hinzugefügt")
-
     app.run(debug=True)
 
 
