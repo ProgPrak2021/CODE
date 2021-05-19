@@ -1,6 +1,7 @@
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
-img.attr('src', "https://lisztos.s3.amazonaws.com/images/icon_128_clear.png");
+
+img.attr('src', "https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png");
 //img.attr('src', 'https://www.google.com/search?q=orange&sxsrf=ALeKk02SZqG-A6h6nM_XrHyIU98gIgRk9w:1621172387851&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjDl7Diqc7wAhXTCWMBHY61BmsQ_AUoA3oECAIQBQ&biw=1920&bih=937#imgrc=kBUCtsWcfmgoVM'); //select img from src folder? 
 img.css('width', '25px')
 img.css('float', 'left')
@@ -9,7 +10,9 @@ img.css('cursor', 'pointer')
 img.css('margin-top', '0.5em')
 img.appendTo(result);
 console.log(result);
-var all_labels = ["https://lisztos.s3.amazonaws.com/images/icon_128_clear.png","https://www.gettyimages.de/gi-resources/images/500px/983794168.jpg","https://www.gettyimages.de/gi-resources/images/500px/983794168.jpg"]
+
+var all_labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
+
 $('.code-selector').on('click', function(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -30,7 +33,6 @@ $('.code-selector').on('click', function(){
 
   /*GET method for key-value list (domain, [1,2,3])
   set img depending on number
-
   */
 })
 function printLabel(whereTo, img_index){
@@ -78,4 +80,3 @@ function readSearchResults(rootNode) {
   }
 return urls;
 }
-

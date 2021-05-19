@@ -1,12 +1,59 @@
+from os import name
 from flask import Flask, render_template, jsonify, request, redirect, url_for
-import database_playground
+import database_playground 
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
 import json
 from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
+from interpret_whotracksme import generic_sql_query, calc_label
+import sqlite3
+
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+import csv
+from random import randrange
+
 
 app = Flask(__name__)
 CORS(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
+db = SQLAlchemy(app)
+
+
+
+class website(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    domain = db.Column(db.String, nullable = False)
+    rating = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Task %r>' % self.id
+
+
+@app.route('/einlesen') # CVS Datei Top 50 einlesen und dann ausgeben lassen / provisorisch 
+def index2():
+    with open('top50websites.csv','r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        for line in csv_reader:
+            if(line[2] != "Adult"): # keine pornoseiten bitte
+                r = (line[1].split('.')[0])
+                new_domain = website(domain = r,rating = randrange(10) ) #zufälliges rating zwischen 1 und 9
+                db.session.add(new_domain)
+                db.session.commit()
+        
+        return redirect('/datenbank') 
+
+
+
+@app.route('/datenbank') # Datenbank ausgeben
+def index():
+    session = db.session()
+    cursor = session.execute("SELECT * from website order by date_created desc").cursor
+    rows = cursor.fetchall()
+    return jsonify(rows)
+
 
 
 @app.route('/')
@@ -41,7 +88,7 @@ def receive_urls():
 
 @app.route('/ids/', methods=['GET'])
 def ids():
-    query = "SELECT ID, Website FROM top500 ORDER BY ID ASC"
+    query = "SELECT * FROM top500 ORDER BY ID ASC"
     return jsonify(generic_sql_query(query))
 
 
@@ -76,4 +123,8 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(debug=True)
+
+
+    
