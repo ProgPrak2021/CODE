@@ -12,8 +12,7 @@ body = {
         "platformTypes": ["WINDOWS"],
         "threatEntryTypes": ["URL"],
         "threatEntries": [
-            {
-                "url": "https://www.koolair.com/de/katalog/difusor-lineal-alta-induccion-medio-largo-alcance-df-47-narrow/"},
+            {"url": "https://www.koolair.com/de/katalog/difusor-lineal-alta-induccion-medio-largo-alcance-df-47-narrow/"},
             {"url": "https://cricfree.sc/"},
             {"url": "https://www.modellbau-bochum.de/DF-Models"}
         ]
@@ -26,9 +25,7 @@ def api_call(request, payload, body, type):
         response = requests.post(request, data=payload, json=body)
     elif type == "GET":
         response = requests.get(request)
-
-    print(response.json())
-    print(response.status_code)
+    return response.json()
 
 
 api_call(f" https://safebrowsing.googleapis.com/v4/threatMatches:find?key={api_key_google}", None, body, "POST")

@@ -3,24 +3,21 @@ import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
 import json
-from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label
+from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
 
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route('/')
 def hello_world():
     return "Hello CODE"
 
 
-
-
 @app.route('/s')
 def calc_labels():
     # label calculation
     return "test"
-
-
 
 
 @app.route('/sendurls/', methods=['POST'])
@@ -31,17 +28,14 @@ def receive_urls():
     urls = urls.split("https://")
     urls.pop(0)
     domains = []
-    for e in urls:
-        if (e.__contains__("www.")) or e.__contains__("de.") or e.__contains__("shop."):
-            e = e.replace('www.', '').replace('de.', '').replace('shop.', '')
-        domains.append(e.split("/")[0])
+    for url in urls:
+        domains.append(get_domain_by_url(url))
     domains = list(dict.fromkeys(domains))
-
+    a = calc_label(domains)
     print(domains)
     print(len(domains), "domains")
 
-
-    a = calc_label(domains)
+    # a = calc_label(domains)
     return jsonify(a)
 
 
@@ -49,6 +43,7 @@ def receive_urls():
 def ids():
     query = "SELECT ID, Website FROM top500 ORDER BY ID ASC"
     return jsonify(generic_sql_query(query))
+
 
 @app.route('/ids/<id>', methods=['GET'])
 def id(id):
@@ -71,10 +66,11 @@ def url(url):
     return jsonify(generic_sql_query(query))
 
 
-@app.route('/tracker/<url>', methods=['GET']) #
+@app.route('/tracker/<url>', methods=['GET'])  #
 def trackers_category_from_url(url):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
     return jsonify(generic_sql_query(query))
+
 
 #  return render_template("list.html", rows=rows)
 
