@@ -25,9 +25,10 @@ return urls;
 /*
 -----------------------------------------------
 print methode/logik überarbeitet:
-- alle domains sollten jetzt erkannt werden
+- alle domains werden jetzt erkannt (auch mit 'shop.','de.', etc. Prefix)
 - obsoleter Aufruf aller domains für jedes Element behoben
 - doppelte domains werden jetzt erkannt
+
 
 - printLabels() wird nur 1 mal für die gesamte Darstellung aufgerufen 
 - var output ist unser Anhaltspunkt für die Zuordung der Labels
@@ -66,16 +67,6 @@ print methode/logik überarbeitet:
 //})
 
 
-/*
-function findLabel(domain, label_index){
-  var div = findByDomain(domain);
-  if(div === null){ // should not happen as it means that the url was not found in website
-    return;
-  }
-  printLabel(div, label_index);
-}
-*/
-
 function printLabels(output){
   var labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
   var divs = document.getElementsByClassName("yuRUbf");
@@ -97,18 +88,24 @@ function printLabels(output){
 function getLabel(div, output){
   var url = JSON.stringify(div.children[0].href)
   var domain = "";
-  console.log("url "+url)
   for(var key of Object.keys(output)){
     if(url.includes(key)){
       domain = key;
     }
   }
-  console.log("domain/key: "+ domain + " and type: "+typeof domain)
   var index = output[domain];
-  console.log("index "+ index)
   return index //1...2....3
 }
 
+/*
+function findLabel(domain, label_index){
+  var div = findByDomain(domain);
+  if(div === null){ // should not happen as it means that the url was not found in website
+    return;
+  }
+  printLabel(div, label_index);
+}
+*/
 
 
 /*
