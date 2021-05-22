@@ -20,15 +20,23 @@ def generic_sql_query(query):
 information we found out) At the end we check the score of each domain and give the domains a fitting label """
 
 
+#all domains are now standardized (no prefix whatsoever)
 def get_domain_by_url(url):
-    if (url.__contains__("www.")) or url.__contains__("de.") or url.__contains__("shop."):
-        url = url.replace('www.', '').replace('de.', '').replace('shop.', '')
-    return url.split("/")[0]
+    if url.__contains__("www."):
+        url = url.replace('www.', '')
+    url = url.split("/")[0]
+    url_split = url.split(".")
+    if len(url_split) >= 3:
+        url_split.pop(0)
+    url = ".".join(url_split)
+    return url
 
 
+
+#python dict does not support duplicate keys! ERROR
 def calc_label(domain_list):
     domain_dict = {}
-    print(domain_list)
+    print(domain_list, "were here")
     for domain in domain_list:
         domain_dict[domain] = whotracksme_score(domain) #+ phishstats_score(domain)
         google_safe_browsing_score(domain)
@@ -58,7 +66,7 @@ def api_call(request, payload, body, type):
 my_api_key = ""
 
 
-def phishstats_score(domain): # unfortunately this api is fucking slow
+def phishstats_score(domain): # unfortunately this api is fucking slow      #lelel
     print("test")
     response = api_call(f"https://phishstats.info:2096/api/phishing?_where=(url,like,~{domain}~)", None, None, "GET")
     print(len(response))
