@@ -8,7 +8,7 @@ from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label, ge
 from interpret_whotracksme import generic_sql_query, calc_label
 import sqlite3
 
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import csv
 from random import randrange
@@ -18,18 +18,18 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 
 
 
-class website(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    domain = db.Column(db.String, nullable = False)
-    rating = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Task %r>' % self.id
+#class website(db.Model):
+#    id = db.Column(db.Integer, primary_key = True)
+#    domain = db.Column(db.String, nullable = False)
+#   rating = db.Column(db.Integer)
+#    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+#
+ #   def __repr__(self):
+ #       return '<Task %r>' % self.id
 
 
 @app.route('/einlesen') # CVS Datei Top 50 einlesen und dann ausgeben lassen / provisorisch 
@@ -39,7 +39,7 @@ def index2():
         for line in csv_reader:
             if(line[2] != "Adult"): # keine pornoseiten bitte
                 r = (line[1].split('.')[0])
-                new_domain = website(domain = r,rating = randrange(10) ) #zufälliges rating zwischen 1 und 9
+                new_domain = website(domain = r,rating = randrange(10))  # zufälliges rating zwischen 1 und 9
                 db.session.add(new_domain)
                 db.session.commit()
         
@@ -77,7 +77,7 @@ def receive_urls():
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))
-    domains = list(dict.fromkeys(domains))
+    #domains = list(dict.fromkeys(domains))
     a = calc_label(domains)
     print(domains)
     print(len(domains), "domains")
@@ -123,7 +123,7 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
-    db.create_all()
+#    db.create_all()
     app.run(debug=True)
 
 

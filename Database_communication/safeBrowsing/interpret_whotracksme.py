@@ -20,7 +20,7 @@ def generic_sql_query(query):
 information we found out) At the end we check the score of each domain and give the domains a fitting label """
 
 
-#all domains are now standardized (no prefix whatsoever)
+# all domains are now standardized (no prefix whatsoever)
 def get_domain_by_url(url):
     if url.__contains__("www."):
         url = url.replace('www.', '')
@@ -32,22 +32,20 @@ def get_domain_by_url(url):
     return url
 
 
-
 def calc_label(domain_list):
     domain_dict = {}
     print(domain_list, "were here")
     for domain in domain_list:
-        domain_dict[domain] = whotracksme_score(domain) #+ phishstats_score(domain)
+        domain_dict[domain] = whotracksme_score(domain) + phishstats_score(domain)
         google_safe_browsing_score(domain)
     return json.dumps(domain_dict)
-
 
 
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
     trackers = generic_sql_query(query)
     print(domain, "\t", len(trackers), "trackers")
-    #print(trackers)
+    # print(trackers)
 
     index = 0
     for cookie in trackers:
@@ -59,18 +57,12 @@ def whotracksme_score(domain):
             print("1")
             index = 1
         else:
-            #TODO: yet to be implemented
+            # TODO: yet to be implemented
             print("2")
             index = 2
 
-
-    return index # ... = 0
-    #bedeutet: domain ist in keiner Datenbank enthalten
-
-
-
-
-
+    return index  # ... = 0
+    # bedeutet: domain ist in keiner Datenbank enthalten
 
 
 def api_call(request, payload, body, type):
@@ -84,10 +76,10 @@ def api_call(request, payload, body, type):
 my_api_key = ""
 
 
-def phishstats_score(domain): # unfortunately this api is fucking slow      #lelel
+def phishstats_score(domain):  # unfortunately this api is fucking slow      #lelel
     print("test")
     response = api_call(f"https://phishstats.info:2096/api/phishing?_where=(url,like,~{domain}~)", None, None, "GET")
-    print(len(response))
+    print(response)
     for object in response:
         if get_domain_by_url(object["url"]) == domain:
             print(f"domain: {domain} is bad.")

@@ -7,3 +7,4 @@ def connect_db():
 
 def connect_db_top500():
     return sqlite3.connect('top500webpages.db')
+
