@@ -36,7 +36,7 @@ def calc_label(domain_list):
     domain_dict = {}
     print(domain_list, "were here")
     for domain in domain_list:
-        domain_dict[domain] = whotracksme_score(domain) + phishstats_score(domain)
+        domain_dict[domain] = whotracksme_score(domain) #+ phishstats_score(domain)
         google_safe_browsing_score(domain)
     return json.dumps(domain_dict)
 
@@ -50,15 +50,12 @@ def whotracksme_score(domain):
     index = 0
     for cookie in trackers:
         if cookie.__contains__("Facebook"):
-            print("3")
             return 3
         elif len(trackers) > 0:
             # TODO: yet to be implemented
-            print("1")
             index = 1
         else:
             # TODO: yet to be implemented
-            print("2")
             index = 2
 
     return index  # ... = 0
