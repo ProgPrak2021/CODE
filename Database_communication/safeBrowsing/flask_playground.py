@@ -32,27 +32,27 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
  #       return '<Task %r>' % self.id
 
 
-@app.route('/einlesen') # CVS Datei Top 50 einlesen und dann ausgeben lassen / provisorisch 
-def index2():
-    with open('top50websites.csv','r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for line in csv_reader:
-            if(line[2] != "Adult"): # keine pornoseiten bitte
-                r = (line[1].split('.')[0])
-                new_domain = website(domain = r,rating = randrange(10))  # zufälliges rating zwischen 1 und 9
-                db.session.add(new_domain)
-                db.session.commit()
+#@app.route('/einlesen') # CVS Datei Top 50 einlesen und dann ausgeben lassen / provisorisch
+#def index2():
+ #   with open('top50websites.csv','r') as csv_file:
+  #      csv_reader = csv.reader(csv_file)
+   #     for line in csv_reader:
+    #        if(line[2] != "Adult"): # keine pornoseiten bitte
+     #           r = (line[1].split('.')[0])
+      #          new_domain = website(domain = r,rating = randrange(10))  # zufälliges rating zwischen 1 und 9
+       #         db.session.add(new_domain)
+        #        db.session.commit()
         
-        return redirect('/datenbank') 
+        #return redirect('/datenbank')
 
 
 
-@app.route('/datenbank') # Datenbank ausgeben
-def index():
-    session = db.session()
-    cursor = session.execute("SELECT * from website order by date_created desc").cursor
-    rows = cursor.fetchall()
-    return jsonify(rows)
+#@app.route('/datenbank') # Datenbank ausgeben
+#def index():
+ #   session = db.session()
+  #  cursor = session.execute("SELECT * from website order by date_created desc").cursor
+   # rows = cursor.fetchall()
+    #return jsonify(rows)
 
 
 
@@ -77,13 +77,13 @@ def receive_urls():
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))
-    #domains = list(dict.fromkeys(domains))
-    a = calc_label(domains)
-    print(domains)
-    print(len(domains), "domains")
+    domains = list(dict.fromkeys(domains))
 
-    # a = calc_label(domains)
-    return jsonify(a)
+    domains = calc_label(domains)
+
+    print(domains)
+
+    return jsonify(domains)
 
 
 @app.route('/ids/', methods=['GET'])
