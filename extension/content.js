@@ -73,7 +73,11 @@ function printLabels(output){
   
   for(var div of divs){
     var label = getLabel(div, output)
-    var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label - 1]+'"> <div class=\"content\"><h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
+    if(label <= 0){
+      break;
+    } else {
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label - 1]+'"> <div class=\"content\"><h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
+    }
     /* img.attr('src', labels[label - 1]);
     img.css('width', '25px')
     img.css('float', 'left ')

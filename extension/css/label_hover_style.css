@@ -1,23 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700');
 
-.list{
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
 
 .list .entry:hover{
-    background: #86ff3b;
+    /*background: #86ff3b;
     box-shadow: 0 0 0 4px red;
     background-color: red;
+    */
 
 
 }
 
 .list .entry .content{
-    position: absolute;
-    bottom: -50px;
+    margin-left: -2.25em;
     width: 115px;
     padding: 0px;
     margin-left: -110px;
@@ -28,7 +22,6 @@
     transition: 0.5s;
     transform: translateX(-50%) translateY(-50px);
     background-color: antiquewhite;
-
 }
 
 .list .entry .content:before{
@@ -36,8 +29,8 @@ content: '';
 position: absolute;
 width: 30px;
 height: 30px;
-bottom: 90px;
-left: 96px;
+bottom: 87px;
+left: 100px;
 transform: rotate(45deg);
 background-color: antiquewhite;
 }
@@ -53,14 +46,15 @@ background-color: antiquewhite;
     padding: 0;
 }
 .list {
+    margin-right: -2.5em;
     width: 30px;
     float: left;
     cursor: pointer;
 }
 .code-selector {
-    width: 30px;
+    width: 25px;
     float: left;
-    margin-left: -2.5em;
+    margin-left: -2.25em;
     cursor: pointer;
     margin-top:0.5em;
 }
