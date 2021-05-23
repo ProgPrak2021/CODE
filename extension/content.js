@@ -1,7 +1,7 @@
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 
-img.attr('src', "https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png");
+img.attr('src', "https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png"); //icon_128_clear
 img.css('width', '25px')
 img.css('float', 'left')
 img.css('margin-left', '-2.25em')
@@ -18,7 +18,6 @@ function sendURLsToBackend(rootNode) {
     urls += url
     console.log("urls "+url)
   }
-  
 return urls;
 }
 
@@ -28,6 +27,7 @@ print methode/logik überarbeitet:
 - alle domains werden jetzt erkannt (auch mit 'shop.','de.', etc. Prefix)
 - obsoleter Aufruf aller domains für jedes Element behoben
 - doppelte domains werden jetzt erkannt
+- gelbes icon ist nun der default
 
 
 - printLabels() wird nur 1 mal für die gesamte Darstellung aufgerufen 
