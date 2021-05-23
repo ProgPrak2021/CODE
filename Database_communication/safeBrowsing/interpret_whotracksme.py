@@ -33,7 +33,6 @@ def get_domain_by_url(url):
 
 
 
-#python dict does not support duplicate keys! ERROR
 def calc_label(domain_list):
     domain_dict = {}
     print(domain_list, "were here")
@@ -43,16 +42,35 @@ def calc_label(domain_list):
     return json.dumps(domain_dict)
 
 
+
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
     trackers = generic_sql_query(query)
-    # print(len(trackers), "trackers/ cookies")
+    print(domain, "\t", len(trackers), "trackers")
+    #print(trackers)
+
+    index = 0
     for cookie in trackers:
-        # print(cookie)
-        if (cookie.__contains__("Facebook")):
+        if cookie.__contains__("Facebook"):
+            print("3")
             return 3
-        # return 1
-    return 1
+        elif len(trackers) > 0:
+            # TODO: yet to be implemented
+            print("1")
+            index = 1
+        else:
+            #TODO: yet to be implemented
+            print("2")
+            index = 2
+
+
+    return index # ... = 0
+    #bedeutet: domain ist in keiner Datenbank enthalten
+
+
+
+
+
 
 
 def api_call(request, payload, body, type):
