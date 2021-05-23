@@ -14,9 +14,9 @@ function sendURLsToBackend(rootNode) {
   var elems = document.getElementsByClassName("yuRUbf");
   var urls = "";
   for(var i of elems){
-    var url = new URL(i.children[0].href)
-    urls += url
-    console.log("urls "+url)
+    var url = new URL(i.children[0].href);
+    urls += url;
+    console.log("urls "+url);
   }
 return urls;
 }
@@ -55,7 +55,7 @@ $('.code-selector').on('click', function(){
         //findLabel(key, output[key]);
       }
       console.log(getDiv("kino.de"))
-    */
+      */
     }
 };
 
@@ -73,16 +73,19 @@ function printLabels(output){
   
   for(var div of divs){
     var label = getLabel(div, output)
-    var img = $('<img class="code-selector">');
-    img.attr('src', labels[label - 1]);
+    var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label - 1]+'"> <div class=\"content\"><h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
+    /* img.attr('src', labels[label - 1]);
     img.css('width', '25px')
     img.css('float', 'left ')
     img.css('margin-left', '-2.25em')
     img.css('cursor', 'pointer')
     img.css('margin-top', '0.5em')
-    img.appendTo(div)  
+    */
+    img.appendTo(div);  
+    //$("").appendTo(div)
+    //div.innerHTML += "<div class=\"lololo\">"+JSON.stringify(img)+"<p>jahsjdhsjhd</p> </div>";
   }
-
+  $('head').append("<link rel=\"stylesheet\" href=\"/css/label_hover_style.css\">");
 }
 
 function getLabel(div, output){
