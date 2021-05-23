@@ -40,7 +40,7 @@ print methode/logik überarbeitet:
 ------------------------------------------------
 */
 
-$('.code-selector').on('click', function(){
+//$('.code-selector').on('click', function(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -64,7 +64,7 @@ $('.code-selector').on('click', function(){
   xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true);
   xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
   xhttp.send(urls);
-})
+//})
 
 
 function printLabels(output){
