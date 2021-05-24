@@ -12,7 +12,6 @@ import sqlite3
 from datetime import datetime
 import csv
 from random import randrange
-
 app = Flask(__name__)
 CORS(app)
 

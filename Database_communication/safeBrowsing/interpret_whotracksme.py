@@ -6,10 +6,17 @@ import json
 
 # from safeBrowsing import top500_db_connection
 
+def fill_label_database(domain_dict):
+    db = database_playground.connect_db_labels()
+    print(domain_dict)
+    for key in domain_dict:
+        print(key)
+        query = f"INSERT INTO domain_data (domain, label)VALUES (\"{key}\", \"{domain_dict[key]}\"); "
+        generic_sql_query(query, db)
+
 
 def generic_sql_query(query, db):
     con = db.cursor()
-
     con.execute(query)
     rows = con.fetchall()
     return rows
@@ -34,9 +41,17 @@ def get_domain_by_url(url):
 def calc_label(domain_list):
     domain_dict = {}
     print(domain_list, "were here")
+    db = database_playground.connect_db_labels()
+
     for domain in domain_list:
-        domain_dict[domain] = whotracksme_score(domain) #+ phishstats_score(domain)
-        google_safe_browsing_score(domain)
+        query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\";"
+        labels = generic_sql_query(query, db)
+
+        if not labels:
+            domain_dict[domain] = whotracksme_score(domain)  # + phishstats_score(domain)
+        else:
+            domain_dict[domain] = labels[0][0]
+        # google_safe_browsing_score(domain)
     return json.dumps(domain_dict)
 
 
