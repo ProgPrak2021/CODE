@@ -68,16 +68,17 @@ print methode/logik überarbeitet:
 
 
 function printLabels(output){
-  var labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
+  var labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/siren.png","https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
   var divs = document.getElementsByClassName("yuRUbf");
   
   for(var div of divs){
     var label = getLabel(div, output)
-    if(label <= 0){
+  /*  if(label <= 0){
       break;
     } else {
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label - 1]+'"> <div class=\"content\"><h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
-    }
+      var tester ="facebook"*/
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label]+'"> <div class=\"content\"> <h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
+   // }
     /* img.attr('src', labels[label - 1]);
     img.css('width', '25px')
     img.css('float', 'left ')
@@ -113,7 +114,6 @@ function findLabel(domain, label_index){
   printLabel(div, label_index);
 }
 */
-
 
 /*
 function printLabel(whereTo, img_index){
