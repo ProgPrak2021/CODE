@@ -7,8 +7,7 @@ import json
 # from safeBrowsing import top500_db_connection
 
 
-def generic_sql_query(query):
-    db = database_playground.connect_db()
+def generic_sql_query(query, db):
     con = db.cursor()
 
     con.execute(query)
@@ -43,7 +42,8 @@ def calc_label(domain_list):
 
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
-    trackers = generic_sql_query(query)
+    db = database_playground.connect_db()
+    trackers = generic_sql_query(query, db)
     print(domain, "\t", len(trackers), "trackers")
     # print(trackers)
 
