@@ -2,6 +2,7 @@ import requests
 from flask import jsonify
 from safeBrowsing import database_playground
 import json
+from dotenv import dotenv_values
 
 
 # from safeBrowsing import top500_db_connection
@@ -41,6 +42,8 @@ def get_domain_by_url(url):
 
 
 def calc_label(domain_list):
+    #global config
+    #config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
     print(domain_list, "were here")
     db = database_playground.connect_db_labels()
@@ -51,9 +54,10 @@ def calc_label(domain_list):
 
         if not labels:
             domain_dict[domain] = whotracksme_score(domain)  # + phishstats_score(domain)
+            # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
+            #domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
             domain_dict[domain] = labels[0][0]
-        # google_safe_browsing_score(domain)
     fill_label_database(domain_dict)
     return json.dumps(domain_dict)
 
@@ -88,9 +92,6 @@ def api_call(request, payload, body, type):
     return response.json()
 
 
-my_api_key = ""
-
-
 def phishstats_score(domain):  # unfortunately this api is fucking slow      #lelel
     print("test")
     response = api_call(f"https://phishstats.info:2096/api/phishing?_where=(url,like,~{domain}~)", None, None, "GET")
@@ -118,5 +119,22 @@ def google_safe_browsing_score(domain):
             ]
         }
     }
-    response = api_call(f" https://safebrowsing.googleapis.com/v4/threatMatches:find?key={my_api_key}", None, body,
+    response = api_call(f" https://safebrowsing.googleapis.com/v4/threatMatches:find?key={config['GOOGLE_API_KEY']}",
+                        None, body,
                         "POST")
+    return 0
+
+
+def web_risk_api_score(domain):
+    url = "https://wot-web-risk-and-safe-browsing.p.rapidapi.com/targets"
+
+    querystring = {"t": domain}
+
+    headers = {
+        'x-rapidapi-key': config["RAPID_API_KEY"],
+        'x-rapidapi-host': "wot-web-risk-and-safe-browsing.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    print(response.json())
+    return 0
