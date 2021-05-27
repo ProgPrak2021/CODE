@@ -8,17 +8,19 @@ import json
 
 def fill_label_database(domain_dict):
     db = database_playground.connect_db_labels()
-    print(domain_dict)
+    # print(domain_dict)
     for key in domain_dict:
         print(key)
-        query = f"INSERT INTO domain_data (domain, label)VALUES (\"{key}\", \"{domain_dict[key]}\"); "
-        generic_sql_query(query, db)
+        query = f"REPLACE INTO domain_data (domain, label) VALUES (\"{key}\", \"{domain_dict[key]}\"); "
+        cursor = db.cursor()
+        cursor.execute(query)
+        db.commit()
 
 
 def generic_sql_query(query, db):
-    con = db.cursor()
-    con.execute(query)
-    rows = con.fetchall()
+    cursor = db.cursor()
+    cursor.execute(query)
+    rows = cursor.fetchall()
     return rows
 
 
@@ -52,6 +54,7 @@ def calc_label(domain_list):
         else:
             domain_dict[domain] = labels[0][0]
         # google_safe_browsing_score(domain)
+    fill_label_database(domain_dict)
     return json.dumps(domain_dict)
 
 

@@ -7,5 +7,12 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:I:\ProgrammingProjects\ProgPrak\CODE-DaWeSys\Database_communication\safeBrowsing\whotracksme.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="labels" uuid="22f852dd-28e1-44f0-b7aa-f5e825e83e27">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\CODE-DaWeSys\Database_communication\safeBrowsing\labels</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
