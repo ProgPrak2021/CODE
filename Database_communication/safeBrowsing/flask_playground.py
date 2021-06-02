@@ -5,7 +5,6 @@ from flask_cors import CORS  # import with me with the following cmd: pip instal
 import re
 import json
 from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
-from interpret_whotracksme import generic_sql_query, calc_label
 import sqlite3
 
 # from flask_sqlalchemy import SQLAlchemy
@@ -63,6 +62,14 @@ def calc_labels():
     # label calculation
     return "test"
 
+# collecting the original full urls to replace on the search page
+# still in progress - just for fun at the moment
+# @author diana
+# def collect_full_urls(urls):
+#     full_urls = []
+#     for url in urls:
+#         full_urls.append(url)
+#     return full_urls
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
@@ -71,6 +78,9 @@ def receive_urls():
         print("unsafe web protocol found")
     urls = urls.split("https://")
     urls.pop(0)
+    ###
+    #full_urls = collect_full_urls(urls)
+    ###
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))

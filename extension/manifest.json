@@ -4,6 +4,11 @@
   "manifest_version": 2,
   "description": "Gets rid of annoying cookie banners",
   "background": "views/background.html",
+
+  "web_accessible_resources": [
+    "images/*.png"
+  ],
+
   "content_scripts": [
     {
       "matches": ["https://*.google.com/search?*", "https://*.google.de/search?*" ],

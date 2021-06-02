@@ -1,14 +1,18 @@
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 
-img.attr('src', "https://simonk.s3.eu-central-1.amazonaws.com/images/siren.png"); //icon_128_clear
-img.css('width', '30px')
-img.css('float', 'left')
-img.css('margin-left', '-2.5em')
-img.css('cursor', 'pointer')
-img.css('margin-top', '0.5em')
-img.appendTo(result);
-console.log(result);
+//NOTE: Please refer to local images with chrome.runtime.getURL('images/[name].png')
+//Access rights already granted in manifest.json
+//questions to diana. <3
+
+// img.attr('src', chrome.runtime.getURL('images/siren.png'));
+// img.css('width', '30px')
+// img.css('float', 'left')
+// img.css('margin-left', '-2.5em')
+// img.css('cursor', 'pointer')
+// img.css('margin-top', '0.5em')
+// img.appendTo(result);
+// console.log(result);
 
 function sendURLsToBackend(rootNode) { 
   var elems = document.getElementsByClassName("yuRUbf");
@@ -68,7 +72,7 @@ print methode/logik überarbeitet:
 
 
 function printLabels(output){
-  var labels = [["https://simonk.s3.eu-central-1.amazonaws.com/images/siren.png", "none"],["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png", "green"],["https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png", "yellow"],["https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png", "red"]]
+  var labels = [[chrome.runtime.getURL('images/siren.png'), "none"],[chrome.runtime.getURL('images/green_icon_128.png'), "green"],[chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],[chrome.runtime.getURL('images/red_icon_128.png'), "red"]]
   var divs = document.getElementsByClassName("yuRUbf");
   
   for(var div of divs){
