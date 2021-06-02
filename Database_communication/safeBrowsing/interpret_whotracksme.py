@@ -1,6 +1,5 @@
 import requests
 from flask import jsonify
-#from safeBrowsing import database_playground
 import database_playground
 import json
 from dotenv import dotenv_values

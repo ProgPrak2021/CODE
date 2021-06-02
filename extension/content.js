@@ -68,7 +68,7 @@ print methode/logik überarbeitet:
 
 
 function printLabels(output){
-  var labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/siren.png","https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
+  var labels = [["https://simonk.s3.eu-central-1.amazonaws.com/images/siren.png", "none"],["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png", "green"],["https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png", "yellow"],["https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png", "red"]]
   var divs = document.getElementsByClassName("yuRUbf");
   
   for(var div of divs){
@@ -77,7 +77,7 @@ function printLabels(output){
       break;
     } else {
       var tester ="facebook"*/
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label]+'"> <div class=\"content\"> <h2>headline</h2><p> example text example text example text example text</p></div></div></div>');
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <h2>Trackers: </h2><img src="https://lisztos.s3.amazonaws.com/images/'+labels[label][1]+'_popup.png" style="width: 103px; margin-left: auto;margin-right: auto; alt:"tracker_count"></div></div></div>');
    // }
     /* img.attr('src', labels[label - 1]);
     img.css('width', '25px')

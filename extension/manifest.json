@@ -6,7 +6,7 @@
   "background": "views/background.html",
   "content_scripts": [
     {
-      "matches": ["https://*.google.com/search?*"],
+      "matches": ["https://*.google.com/search?*", "https://*.google.de/search?*" ],
       "js": ["js/jquery.min.js", "content.js"],
       "css":["/css/label_hover_style.css"]
     }

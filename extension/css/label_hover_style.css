@@ -21,18 +21,18 @@
     opacity: 0;
     transition: 0.5s;
     transform: translateX(-50%) translateY(-50px);
-    background-color: antiquewhite;
+    border: solid 2px black;
 }
 
 .list .entry .content:before{
-content: '';
+/* content: '';
 position: absolute;
 width: 30px;
 height: 30px;
 bottom: 87px;
 left: 100px;
-transform: rotate(45deg);
-background-color: antiquewhite;
+transform: rotate(45deg); */
+
 }
 
 .list .entry:hover .content{
