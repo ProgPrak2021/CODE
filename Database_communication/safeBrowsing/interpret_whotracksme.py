@@ -53,7 +53,19 @@ def calc_label(domain_list):
         labels = generic_sql_query(query, db)
 
         if not labels:
-            domain_dict[domain] = whotracksme_score(domain)  # + phishstats_score(domain)
+            value1 = whotracksme_score(domain)
+            value2 = privacyspy_score(domain)
+            score = 0
+
+            if(value1 > 0 and value2 > 0):
+                score = (value1 + value2)/2
+            elif(value1 > 0):
+                score = value1
+            else:
+                score = value2
+
+        
+            domain_dict[domain] = score  # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             #domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
@@ -82,6 +94,15 @@ def whotracksme_score(domain):
 
     return index  # ... = 0
     # bedeutet: domain ist in keiner Datenbank enthalten
+
+def privacyspy_score(domain):
+    req = requests.get("https://privacyspy.org/api/v2/index.json") ### statt online jedes mal aurufen  besser lokal json speichern !
+    response = req.json()
+    for item in response:
+        if(domain.upper() in item['name'].upper()):
+            return item['score']
+    return 0
+
 
 
 def api_call(request, payload, body, type):
