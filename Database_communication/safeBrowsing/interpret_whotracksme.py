@@ -29,7 +29,6 @@ def generic_sql_query(query, db):
 information we found out) At the end we check the score of each domain and give the domains a fitting label """
 
 
-# all domains are now standardized (no prefix whatsoever)
 def get_domain_by_url(url):
     if url.__contains__("www."):
         url = url.replace('www.', '')
@@ -95,6 +94,7 @@ def whotracksme_score(domain):
     return index  # ... = 0
     # bedeutet: domain ist in keiner Datenbank enthalten
 
+
 def privacyspy_score(domain):
     req = requests.get("https://privacyspy.org/api/v2/index.json") ### statt online jedes mal aurufen  besser lokal json speichern !
     response = req.json()
@@ -102,7 +102,6 @@ def privacyspy_score(domain):
         if(domain.upper() in item['name'].upper()):
             return item['score']
     return 0
-
 
 
 def api_call(request, payload, body, type):
@@ -113,7 +112,9 @@ def api_call(request, payload, body, type):
     return response.json()
 
 
-def phishstats_score(domain):  # unfortunately this api is fucking slow      #lelel
+
+
+def phishstats_score(domain):  # unfortunately this api is fucking slow
     print("test")
     response = api_call(f"https://phishstats.info:2096/api/phishing?_where=(url,like,~{domain}~)", None, None, "GET")
     print(response)

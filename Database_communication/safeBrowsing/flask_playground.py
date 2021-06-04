@@ -126,7 +126,7 @@ def url(url):
 
 @app.route('/tracker/<url>', methods=['GET'])  #
 def trackers_category_from_url(url):
-    query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
+    query = f"SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
     db = database_playground.connect_db()
     return jsonify(generic_sql_query(query, db))
 
@@ -135,5 +135,5 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
-    #    db.create_all()
+    #db.create_all()
     app.run(debug=True)

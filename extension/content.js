@@ -1,18 +1,31 @@
+/* COMMENTS / NOTES / DOCUMENTATION / ...
+-----------------------------------------------
+NOTE: Please refer to local images with chrome.runtime.getURL('images/[name].png')
+Access rights already granted in manifest.json
+questions to diana. <3
+
+
+print methode/logik überarbeitet:
+
+- alle domains werden jetzt erkannt (auch mit 'shop.','de.', etc. Prefix)
+- obsoleter Aufruf aller domains für jedes Element behoben
+- doppelte domains werden jetzt erkannt
+- sirene.png per default --> KEIN DATENBANK EINTRAG GEFUNDEN 
+- printLabels() wird nur 1 mal für die gesamte Darstellung aufgerufen 
+- var output ist unser Anhaltspunkt für die Zuordung der Labels
+- jede geladene Domain sucht sich die entsprechenden Informationen aus der Liste (var output)
+- Laden der Labels ist nun kein @click event mehr 
+
+#author simon
+
+
+
+-----------------------------------------------
+*/
+
+
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
-
-//NOTE: Please refer to local images with chrome.runtime.getURL('images/[name].png')
-//Access rights already granted in manifest.json
-//questions to diana. <3
-
-// img.attr('src', chrome.runtime.getURL('images/siren.png'));
-// img.css('width', '30px')
-// img.css('float', 'left')
-// img.css('margin-left', '-2.5em')
-// img.css('cursor', 'pointer')
-// img.css('margin-top', '0.5em')
-// img.appendTo(result);
-// console.log(result);
 
 function sendURLsToBackend(rootNode) { 
   var elems = document.getElementsByClassName("yuRUbf");
@@ -25,25 +38,6 @@ function sendURLsToBackend(rootNode) {
 return urls;
 }
 
-/*
------------------------------------------------
-print methode/logik überarbeitet:
-- alle domains werden jetzt erkannt (auch mit 'shop.','de.', etc. Prefix)
-- obsoleter Aufruf aller domains für jedes Element behoben
-- doppelte domains werden jetzt erkannt
-- sirene.png per default --> KEIN DATENBANK EINTRAG GEFUNDEN 
-
-
-- printLabels() wird nur 1 mal für die gesamte Darstellung aufgerufen 
-- var output ist unser Anhaltspunkt für die Zuordung der Labels
-- jede geladene Domain sucht sich die entsprechenden Informationen aus der Liste (var output)
-
-- Laden der Labels ist nun kein @click event mehr 
-
-#author simon
-------------------------------------------------
-*/
-
 //$('.code-selector').on('click', function(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -52,50 +46,46 @@ print methode/logik überarbeitet:
       var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
       
       printLabels(output)
-      /*
-      for (var key of Object.keys(output)) {
-        console.log("key "+key)
-        getDiv(key)
-        //findLabel(key, output[key]);
-      }
-      console.log(getDiv("kino.de"))
-      */
+      
     }
-};
-
-  //Flask projekt muss am laufen sein 
+}; 
   var urls = sendURLsToBackend();
-  xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true);
+  xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
   xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
   xhttp.send(urls);
 //})
 
 
+
+
 function printLabels(output){
   var labels = [[chrome.runtime.getURL('images/siren.png'), "none"],[chrome.runtime.getURL('images/green_icon_128.png'), "green"],[chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],[chrome.runtime.getURL('images/red_icon_128.png'), "red"]]
+  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'),chrome.runtime.getURL('images/icons/oracle_icon.png'),chrome.runtime.getURL('images/icons/spy_icon.png'),chrome.runtime.getURL('images/icons/facebook_icon.png')]
   var divs = document.getElementsByClassName("yuRUbf");
-  
+  var tracker_count = 0
+
   for(var div of divs){
     var label = getLabel(div, output)
-  /*  if(label <= 0){
-      break;
-    } else {
-      var tester ="facebook"*/
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <h2>Trackers: </h2><img src="https://lisztos.s3.amazonaws.com/images/'+labels[label][1]+'_popup.png" style="width: 103px; margin-left: auto;margin-right: auto; alt:"tracker_count"></div></div></div>');
-   // }
-    /* img.attr('src', labels[label - 1]);
-    img.css('width', '25px')
-    img.css('float', 'left ')
-    img.css('margin-left', '-2.25em')
-    img.css('cursor', 'pointer')
-    img.css('margin-top', '0.5em')
-    */
-    img.appendTo(div);  
-    //$("").appendTo(div)
-    //div.innerHTML += "<div class=\"lololo\">"+JSON.stringify(img)+"<p>jahsjdhsjhd</p> </div>";
+    //var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <h2>Trackers: </h2><img src="https://lisztos.s3.amazonaws.com/images/'+labels[label][1]+'_popup.png" style="width: 103px; margin-left: auto;margin-right: auto; alt:"tracker_count"></div></div></div>');
+    //img.appendTo(div);  
+    if(label == 1){
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 6</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"></div></div></div></div>');
+      img.appendTo(div);  
+     }
+     if(label == 0){
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 21</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"><img class="icons" src="'+icons[1]+'"></div></div></div></div>');
+      img.appendTo(div);  
+     }
+     if(label == 3){
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 34</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"><img class="icons" src="'+icons[1]+'"><img class="icons" src="'+icons[2]+'"><img class="icons" src="'+icons[3]+'"></div></div></div></div>');
+      img.appendTo(div);  
+     }
+   
   }
-  $('head').append("<link rel=\"stylesheet\" href=\"/css/label_hover_style.css\">");
+  $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
 }
+
+
 
 function getLabel(div, output){
   var url = JSON.stringify(div.children[0].href)
@@ -109,7 +99,16 @@ function getLabel(div, output){
   return index //1...2....3
 }
 
-/*
+
+
+
+
+
+
+
+
+/* code dumpster
+-------------------------------------------------------------
 function findLabel(domain, label_index){
   var div = findByDomain(domain);
   if(div === null){ // should not happen as it means that the url was not found in website
@@ -136,4 +135,5 @@ function printLabel(whereTo, img_index){
   }
   //img.appendTo(whereTo);
 }
+-------------------------------------------------------------
 */
