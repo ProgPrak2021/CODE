@@ -2,6 +2,7 @@ import requests
 from flask import jsonify
 import database_playground
 import json
+from pprint import pprint
 from dotenv import dotenv_values
 
 
@@ -11,7 +12,7 @@ def fill_label_database(domain_dict):
     db = database_playground.connect_db_labels()
     # print(domain_dict)
     for key in domain_dict:
-        print(key)
+        #print(key)
         query = f"REPLACE INTO domain_data (domain, label) VALUES (\"{key}\", \"{domain_dict[key]}\"); "
         cursor = db.cursor()
         cursor.execute(query)
@@ -46,15 +47,17 @@ def calc_label(domain_list):
     domain_dict = {}
     print(domain_list, "were here")
     db = database_playground.connect_db_labels()
+    data_summary = {}
 
     for domain in domain_list:
         query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\";"
-        labels = generic_sql_query(query, db)
+        labels = None #generic_sql_query(query, db)
 
         if not labels:
-            value1 = whotracksme_score(domain)
+            value1 = 1 #whotracksme_score(domain)
             value2 = privacyspy_score(domain)
             score = 0
+
 
             if(value1 > 0 and value2 > 0):
                 score = (value1 + value2)/2
@@ -63,35 +66,68 @@ def calc_label(domain_list):
             else:
                 score = value2
 
-        
-            domain_dict[domain] = score  # + phishstats_score(domain)
+            # TODO: CREATE JSON DATA SUMMARY FROM ALL SOURCES --> APPEND INFORMATION PACKAGE(json list) TO KEY(domain)
+            data_summary[domain] = whotracksme_score(domain)#, tester_db(), tester_api()
+
+
+
+            domain_dict[domain] = score
+            #domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             #domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
             domain_dict[domain] = labels[0][0]
     fill_label_database(domain_dict)
-    return json.dumps(domain_dict)
+
+    #print(data_summary)
+    return json.dumps(data_summary) #json.dumps(domain_dict)
+
+
+def tester_db():
+    tester = {"PRIVACY": {}}
+    tester["PRIVACY"]['VALUE'] = '9999'
+    tester["PRIVACY"]['xxxx'] = 'yyyy'
+    return tester
+
+def tester_api():
+    tester = {"INFORMATION": {}}
+    tester["INFORMATION"]['VALUE'] = '1234'
+    tester["INFORMATION"]['pppp'] = 'xxxx'
+    return tester
 
 
 def whotracksme_score(domain):
     query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
     db = database_playground.connect_db()
     trackers = generic_sql_query(query, db)
-    print(domain, "\t", len(trackers), "trackers")
+    #print(domain, "\t", len(trackers), "trackers")
     # print(trackers)
 
-    index = 0
-    for cookie in trackers:
-        if cookie.__contains__("Facebook"):
-            return 3
-        elif len(trackers) > 0:
-            # TODO: yet to be implemented
-            index = 1
-        else:
-            # TODO: yet to be implemented
-            index = 2
+    # TODO: CREATE WHOTRACKME.db DATA SUMMARY (information package)
+    data_summary = {'whotracksme.db': {}}
 
-    return index  # ... = 0
+
+    index = 0
+    facebook = False
+    for cookie in trackers:
+        if not cookie.__contains__("Facebook"):
+            index = 1
+            facebook = False
+        else:
+            index = 3
+            facebook = True
+            break;
+
+
+
+    data_summary['whotracksme.db']['label'] = eval(str(index))
+    data_summary['whotracksme.db']['tracker'] = eval(str(len(trackers)))
+    data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
+
+
+    #print(data_summary)
+
+    return data_summary#index  # ... = 0
     # bedeutet: domain ist in keiner Datenbank enthalten
 
 
