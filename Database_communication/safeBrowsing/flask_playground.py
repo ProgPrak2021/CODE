@@ -11,6 +11,7 @@ import sqlite3
 from datetime import datetime
 import csv
 from random import randrange
+
 app = Flask(__name__)
 CORS(app)
 
@@ -62,6 +63,7 @@ def calc_labels():
     # label calculation
     return "test"
 
+
 # collecting the original full urls to replace on the search page
 # still in progress - just for fun at the moment
 # @author diana
@@ -73,22 +75,23 @@ def calc_labels():
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
+    hardcoded_user_preference = ["pornvertising", "cdn"]
     urls = str(request.data)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
     urls.pop(0)
     ###
-    #full_urls = collect_full_urls(urls)
+    # full_urls = collect_full_urls(urls)
     ###
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))
     domains = list(dict.fromkeys(domains))
 
-    domains = calc_label(domains)
+    domains = calc_label(domains, hardcoded_user_preference)
 
-    #print(domains)
+    # print(domains)
 
     return jsonify(domains)
 
@@ -135,5 +138,5 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
-    #db.create_all()
+    # db.create_all()
     app.run(debug=True)

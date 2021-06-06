@@ -10,4 +10,4 @@ def connect_db_top500():
 
 
 def connect_db_labels():
-    return sqlite3.connect('labels')
+    return sqlite3.connect('labels.db')
