@@ -19,57 +19,133 @@
     <div class="container-sm pt-3 p-3 text-dark">
         <nav class="navbar navbar-expand row justify-content-center">
             <button type="button" class="btn btn-lg btn-light">Allgemein</button>
-            <button type="button" class="btn btn-lg btn-secondary">Präferenzen</button>
-            <button type="button" class="btn btn-lg btn-light">Erweitert</button>
-            <button type="button" class="btn btn-lg btn-light">Hilfe</button>
+            <button type="button" class="btn btn-lg btn-secondary" href="#pref"
+                data-toggle="collapse">Präferenzen</button>
+            <button type="button" class="btn btn-lg btn-light" href="#more" data-toggle="collapse">Erweitert</button>
+            <button type="button" class="btn btn-lg btn-light" href="#help" data-toggle="collapse">Hilfe</button>
 
         </nav>
 
     </div>
 
-
     <div class="container-sm pt-3 p-3 text-center rounded">
-        <div class="row justify-content-center">
 
-            <div class="col-4">
+        <div class="row justify-content-md-center">
+            <div class="col-10">
                 <div class="jumbotron">
-                    <h1 class="display-5">preferences</h1>
-                    <p class="lead">Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne sie, erstelle und pflege eigene Präferenzlisten</p>
+                    <h1 class="display-5">general info</h1>
+                    <p class="lead">Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne sie,
+                        erstelle und pflege eigene Präferenzlisten</p>
                     <hr class="my-4">
                     <p>It uses utility classes for typography and spacing to space content out within the larger
                         container.</p>
                     <p class="lead">
                         <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
                     </p>
-
-
                 </div>
-
-
-                <!--
-                <form method="post" action="">
-                    <div class="form-group">
-                        <h3><label for="url">Choose prefence</label></h3>
-                        <p>Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne sie, erstelle und pflege eigene Präferenzlisten</p>
-                    </div>
-                </form>
-            -->
             </div>
-
-
-
         </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-10">
+                <div class="collapse" id="pref">
+                    <div class="jumbotron">
+                        <h1 class="display-5">personal preferences</h1>
+                        <p class="lead">Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne
+                            sie,
+                            erstelle und pflege eigene Präferenzlisten</p>
+                        <hr class="my-4">
+                        <p>It uses utility classes for typography and spacing to space content out within the
+                            larger
+                            container.</p>
+                        <div class="container lead">
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-6 ">
+                                    jo you want to track facebook?
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Check this custom
+                                            checkbox</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-6">
+                                    do you want to track anything?
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                                        <label class="custom-control-label" for="customRadio1">Toggle this custom radio</label>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-10">
+                <div class="collapse" id="more">
+                    <div class="jumbotron">
+                        <h1 class="display-5">upgrade</h1>
+                        <p class="lead">Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne
+                            sie,
+                            erstelle und pflege eigene Präferenzlisten</p>
+                        <hr class="my-4">
+                        <p>It uses utility classes for typography and spacing to space content out within the
+                            larger
+                            container.</p>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-10">
+                <div class="collapse" id="help">
+                    <div class="jumbotron">
+                        <h1 class="display-5">need help?</h1>
+                        <p class="lead">Passe deine CODE Päferenzen an, füge privacy aspects hinzu oder entferne
+                            sie,
+                            erstelle und pflege eigene Präferenzlisten</p>
+                        <hr class="my-4">
+                        <p>It uses utility classes for typography and spacing to space content out within the
+                            larger
+                            container.</p>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="row p-5 justify-content-center">
             <div class="col-8">
-                <a href="#how" class="btn btn-dark" data-toggle="collapse">How does it work?</a>
-                <div id="how" class="collapse">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                <a href="#how2" class="btn btn-dark" data-toggle="collapse">How does it work?</a>
+                <div id="how2" class="collapse">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                    labore
                     et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo
                     consequat.
                     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
                     pariatur.
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+                    anim id
                     est laborum.
                 </div>
             </div>
