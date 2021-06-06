@@ -30,6 +30,8 @@
     }
   },
 
+  "options_page" : "/views/options.html",
+
   "permissions": [
     "tabs"
   ],

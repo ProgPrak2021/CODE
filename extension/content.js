@@ -63,15 +63,15 @@ function printLabels(output) {
 
   function storeVar(key, value) {
     if (key == "label") {
-      console.log("key: " + key + " value: " + value)
+      //console.log("key: " + key + " value: " + value)
       label = value
     }
     if (key == "tracker") {
-      console.log("key: " + key + " value: " + value)
+      //console.log("key: " + key + " value: " + value)
       tracker = value
     }
     if (key == "facebook") {
-      console.log("key: " + key + " value: " + value)
+      //console.log("key: " + key + " value: " + value)
       facebook = value
     }
   }
