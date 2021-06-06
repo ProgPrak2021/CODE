@@ -79,7 +79,7 @@ def calc_label(domain_list):
             domain_dict[domain] = labels[0][0]
     fill_label_database(domain_dict)
 
-    #print(data_summary)
+    pprint(data_summary)
     return json.dumps(data_summary) #json.dumps(domain_dict)
 
 

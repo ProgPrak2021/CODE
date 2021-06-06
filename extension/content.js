@@ -27,76 +27,108 @@ print methode/logik überarbeitet:
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 
-function sendURLsToBackend(rootNode) { 
+function sendURLsToBackend(rootNode) {
   var elems = document.getElementsByClassName("yuRUbf");
   var urls = "";
-  for(var i of elems){
+  for (var i of elems) {
     var url = new URL(i.children[0].href);
     urls += url;
-    console.log("urls "+url);
+    console.log("urls " + url);
   }
-return urls;
+  return urls;
 }
 
 //$('.code-selector').on('click', function(){
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      console.log(this.responseText)
-      var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-      
-      printLabels(output)
-      
-    }
-}; 
-  var urls = sendURLsToBackend();
-  xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
-  xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-  xhttp.send(urls);
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    console.log(this.responseText)
+    var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+
+    printLabels(output)
+
+  }
+};
+var urls = sendURLsToBackend();
+xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+xhttp.send(urls);
 //})
 
 
 
 
-function printLabels(output){
-  var labels = [[chrome.runtime.getURL('images/siren.png'), "none"],[chrome.runtime.getURL('images/green_icon_128.png'), "green"],[chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],[chrome.runtime.getURL('images/red_icon_128.png'), "red"]]
-  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'),chrome.runtime.getURL('images/icons/oracle_icon.png'),chrome.runtime.getURL('images/icons/spy_icon.png'),chrome.runtime.getURL('images/icons/facebook_icon.png')]
-  var divs = document.getElementsByClassName("yuRUbf");
-  var tracker_count = 0
 
-  for(var div of divs){
-    var label = getLabel(div, output)
-    //var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <h2>Trackers: </h2><img src="https://lisztos.s3.amazonaws.com/images/'+labels[label][1]+'_popup.png" style="width: 103px; margin-left: auto;margin-right: auto; alt:"tracker_count"></div></div></div>');
-    //img.appendTo(div);  
-    if(label == 1){
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 6</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"></div></div></div></div>');
-      img.appendTo(div);  
-     }
-     if(label == 0){
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 21</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"><img class="icons" src="'+icons[1]+'"></div></div></div></div>');
-      img.appendTo(div);  
-     }
-     if(label == 3){
-      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="'+labels[label][0]+'"> <div class=\"content\"> <div class="inner"><h2>Trackers: 34</h2><h2> Including:</h2><img class="icons" src="'+icons[0]+'"><img class="icons" src="'+icons[1]+'"><img class="icons" src="'+icons[2]+'"><img class="icons" src="'+icons[3]+'"></div></div></div></div>');
-      img.appendTo(div);  
-     }
-   
-  }
-  $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
-}
+function printLabels(output) {
 
-
-
-function getLabel(div, output){
-  var url = JSON.stringify(div.children[0].href)
-  var domain = "";
-  for(var key of Object.keys(output)){
-    if(url.includes(key)){
-      domain = key;
+  function storeVar(key, value) {
+    if (key == "label") {
+      console.log("key: " + key + " value: " + value)
+      label = value
+    }
+    if (key == "tracker") {
+      console.log("key: " + key + " value: " + value)
+      tracker = value
+    }
+    if (key == "facebook") {
+      console.log("key: " + key + " value: " + value)
+      facebook = value
     }
   }
-  var index = output[domain];
-  return index //1...2....3
+
+  function traverse_JSON(obj, func) {
+    for (var key in obj) {
+      func.apply(this, [key, obj[key]]);
+      if (obj[key] !== null && typeof (obj[key]) == "object") {
+        //going one step down in the object tree!!
+        traverse_JSON(obj[key], func);
+      }
+    }
+  }
+
+
+  var labels = [[chrome.runtime.getURL('images/siren.png'), "none"], [chrome.runtime.getURL('images/green_icon_128.png'), "green"], [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"], [chrome.runtime.getURL('images/red_icon_128.png'), "red"]]
+  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png')]
+  var divs = document.getElementsByClassName("yuRUbf");
+
+
+  for (var div of divs) {
+    var label, tracker, facebook
+    var domain = getDomain(div)
+
+    traverse_JSON(output[domain], storeVar);
+
+    //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
+
+    if (facebook == true) {
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+      img.appendTo(div);
+    } else {
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"></div></div></div></div>');
+      img.appendTo(div);
+    }
+  }
+  $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
+
+}
+
+function getDomain(div) {
+  var url = JSON.stringify(div.children[0].href)
+  if (url.includes("https://")) {
+    url = url.replace("https://", "")
+  } else {
+    console.log("---- http protocol found ----")
+    return ""
+  }
+  url = url.split("/")[0]
+  url_split = url.split(".")
+  if (url_split.length >= 3) {
+    url_split.shift()
+  }
+  url = url_split.join(".")
+
+  return url
+
 }
 
 
@@ -135,5 +167,81 @@ function printLabel(whereTo, img_index){
   }
   //img.appendTo(whereTo);
 }
+
+FUCKING RECURSIVE SHIT
+
+function recursiveScan(obj, index) {
+  console.log("iteration")
+  var res
+  switch (index) {
+    case 1:
+      var anchor = "tracker"
+      break;
+    case 2:
+      var anchor = "label"
+      break;
+    case 3:
+      var anchor = "facebook"
+      break;
+  }
+
+  if (typeof (anchor) !== 'undefined') {
+
+    Object.keys(obj).forEach(key => {
+
+      if (key == anchor) {
+        console.log("current anchor: " + anchor + " and value: " + obj[key] + " typeof " + typeof (obj[key]))
+        res = obj[key]
+      }
+
+      if (typeof obj[key] === 'object') {
+        return recursiveScan(obj[key], index)
+      }
+
+    })
+  }
+  //if(typeof(res) === 'undefined' || null)
+  //return ""
+
+  console.log("res " + res + " typeof " + typeof (res))
+  return res
+}
+
+function nestedLoop(obj) {
+  var res
+  function recurse(obj, current) {
+    for (const key in obj) {
+      let value = obj[key];
+      if (value != undefined) {
+        if (value && typeof value === 'object') {
+          recurse(value, key);
+        } else {
+          if (value == "tracker")
+            res = value;
+          console.log(value)
+          if (value == "label")
+            res = value;
+        }
+      }
+    }
+  }
+  recurse(obj);
+  return res;
+}
+
+function getLabel(div, output) {
+  var url = JSON.stringify(div.children[0].href)
+  var domain = "";
+  for (var key of Object.keys(output)) {
+    if (url.includes(key)) {
+      domain = key;
+    }
+  }
+  var index = output[domain];
+  return index //1...2....3
+}
+
+
+
 -------------------------------------------------------------
 */
