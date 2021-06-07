@@ -96,6 +96,22 @@ def receive_urls():
     return jsonify(domains)
 
 
+# collecting visited urls for statistics
+# still working on it
+# @author: diana
+# @app.route('/collecturls/', methods=['POST'])
+# def collect_visited_urls():
+#     urls_list = str(request.data)
+#     urls_list = urls_list.split("https://")
+#     urls_list.pop(0)
+#     domains = []
+#     for url in urls_list:
+#         domains.append(get_domain_by_url(url))
+#     domains = list(dict.fromkeys(domains))
+#     print(domains)
+#     return jsonify(domains)
+
+
 @app.route('/ids/', methods=['GET'])
 def ids():
     query = "SELECT * FROM top500 ORDER BY ID ASC"
