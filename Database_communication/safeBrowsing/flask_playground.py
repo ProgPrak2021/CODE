@@ -75,7 +75,7 @@ def calc_labels():
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
-    hardcoded_user_preference = ["pornvertising", "cdn"]
+    hardcoded_user_preference = ["pornvertising"]
     urls = str(request.data)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")

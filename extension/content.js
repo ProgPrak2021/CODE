@@ -69,7 +69,7 @@ function sendURLsToBackend(rootNode) {
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function () {
   if (this.readyState == 4 && this.status == 200) {
-    console.log(this.responseText)
+    // console.log(this.responseText)
     var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
 
     printLabels(output)
@@ -93,7 +93,7 @@ function printLabels(output) {
       //console.log("key: " + key + " value: " + value)
       label = value
     }
-    if (key == "tracker") {
+    if (key == "tracker_count") {
       //console.log("key: " + key + " value: " + value)
       tracker = value
     }

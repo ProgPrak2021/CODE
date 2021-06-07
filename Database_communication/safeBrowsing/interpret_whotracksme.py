@@ -53,7 +53,7 @@ def calc_label(domain_list, unwanted_categories):
     # global config
     # config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
-    print(domain_list, "were here")
+    # print(domain_list, "were here")
     db = database_playground.connect_db_labels()
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
@@ -75,7 +75,7 @@ def calc_label(domain_list, unwanted_categories):
             domain_dict[domain] = labels[0][0]
     fill_label_database(domain_dict, db_string)
 
-    print(data_summary)
+    # print(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
 
 
@@ -94,14 +94,19 @@ def tester_api():
 
 
 def whotracksme_score(domain, unwanted_categories):
-    query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{domain}\""
+
+    query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
+
     db = database_playground.connect_db()
-    trackers = generic_sql_query(query, db)
-    # print(domain, "\t", len(trackers), "trackers")
-    # print(trackers)
+    trackers = generic_sql_query(query_trackers, db)
 
     # TODO: CREATE WHOTRACKME.db DATA SUMMARY (information package)
-    data_summary = {'whotracksme.db': {}}
+    data_summary = {
+        'whotracksme.db':{
+            'label': '0',
+            'tracker_count': '0',
+            'trackers':[] 
+        }}
 
     index = 0
     facebook = False
@@ -116,13 +121,17 @@ def whotracksme_score(domain, unwanted_categories):
     index += cookie_len * 0.1
     if index > 3:
         index = 3
-    index.__round__()
+    index = index.__round__()
 
+    for i in trackers: 
+        data_summary['whotracksme.db']['trackers'] += [{  # Fill trackers array
+            'name'      : i[0],
+            'category'  : i[1],
+            'company'   : i[2]
+        }]
+        
     data_summary['whotracksme.db']['label'] = eval(str(index))
-    data_summary['whotracksme.db']['tracker'] = eval(str(len(trackers)))
-    data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
-
-    # print(data_summary)
+    data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
 
     return data_summary  # index  # ... = 0
     # bedeutet: domain ist in keiner Datenbank enthalten
