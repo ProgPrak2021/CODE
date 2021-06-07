@@ -29,7 +29,7 @@ var img = $('<img class="code-selector">');
 
 
 /*
- Collects (and just log, at the moment) URLs user clicked on.
+ Collects (and just log, at the moment) URLs user ctrl+clicked on.
  */
 function collectUrl() {
   const elems = document.querySelectorAll('.yuRUbf');
