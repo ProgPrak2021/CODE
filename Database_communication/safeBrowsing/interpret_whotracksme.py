@@ -138,12 +138,22 @@ def whotracksme_score(domain, unwanted_categories):
 
 
 def privacyspy_score(domain):
+
+    data_summary = {
+        'privacyspy':{
+            'score': '0'
+        }}
+                            #### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
+
     f = open('privacyspy.json')
     data = json.load(f)
     for item in data:
         if (domain.upper() in item['name'].upper()):
-            return item['score']
-    return 0
+            data_summary['privacyspy']['score'] = ( round((item['score']) / 3) )
+            if(data_summary['privacyspy']['score'] == (0)):
+                data_summary['privacyspy']['score'] =  1
+            return data_summary
+    return data_summary
 
 
 def api_call(request, payload, body, type):
