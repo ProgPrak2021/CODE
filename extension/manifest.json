@@ -13,7 +13,7 @@
     {
       "matches": ["https://*.google.com/search?*", "https://*.google.de/search?*" ],
       "js": ["js/jquery.min.js", "content.js"],
-      "css":["/css/label_hover_style.css"]
+      "css":["/css/hardcoded_style.css"]
     }
   ],
   "chrome_url_overrides": {
@@ -29,6 +29,8 @@
       "128": "/images/green_icon_128.png"
     }
   },
+
+  "options_page" : "/views/options.html",
 
   "permissions": [
     "tabs"

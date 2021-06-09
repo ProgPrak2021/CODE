@@ -11,6 +11,7 @@ import sqlite3
 from datetime import datetime
 import csv
 from random import randrange
+
 app = Flask(__name__)
 CORS(app)
 
@@ -62,6 +63,7 @@ def calc_labels():
     # label calculation
     return "test"
 
+
 # collecting the original full urls to replace on the search page
 # still in progress - just for fun at the moment
 # @author diana
@@ -73,24 +75,41 @@ def calc_labels():
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
+    hardcoded_user_preference = ["pornvertising"]
     urls = str(request.data)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
     urls.pop(0)
     ###
-    #full_urls = collect_full_urls(urls)
+    # full_urls = collect_full_urls(urls)
     ###
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))
     domains = list(dict.fromkeys(domains))
 
-    domains = calc_label(domains)
+    domains = calc_label(domains, hardcoded_user_preference)
 
-    print(domains)
+    # print(domains)
 
     return jsonify(domains)
+
+
+# collecting visited urls for statistics
+# still working on it
+# @author: diana
+# @app.route('/collecturls/', methods=['POST'])
+# def collect_visited_urls():
+#     urls_list = str(request.data)
+#     urls_list = urls_list.split("https://")
+#     urls_list.pop(0)
+#     domains = []
+#     for url in urls_list:
+#         domains.append(get_domain_by_url(url))
+#     domains = list(dict.fromkeys(domains))
+#     print(domains)
+#     return jsonify(domains)
 
 
 @app.route('/ids/', methods=['GET'])
@@ -126,7 +145,7 @@ def url(url):
 
 @app.route('/tracker/<url>', methods=['GET'])  #
 def trackers_category_from_url(url):
-    query = f"  SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
+    query = f"SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
     db = database_playground.connect_db()
     return jsonify(generic_sql_query(query, db))
 
@@ -135,5 +154,5 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
-    #    db.create_all()
+    # db.create_all()
     app.run(debug=True)
