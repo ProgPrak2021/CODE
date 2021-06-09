@@ -138,10 +138,9 @@ def whotracksme_score(domain, unwanted_categories):
 
 
 def privacyspy_score(domain):
-    req = requests.get(
-        "https://privacyspy.org/api/v2/index.json")  ### statt online jedes mal aurufen  besser lokal json speichern !
-    response = req.json()
-    for item in response:
+    f = open('privacyspy.json')
+    data = json.load(f)
+    for item in data:
         if (domain.upper() in item['name'].upper()):
             return item['score']
     return 0
