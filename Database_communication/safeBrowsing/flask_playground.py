@@ -1,10 +1,10 @@
 from os import name
 from flask import Flask, render_template, jsonify, request, redirect, url_for
-import database_playground
+import safeBrowsing.database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
 import json
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences
+from safeBrowsing.interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
 import sqlite3
 
 # from flask_sqlalchemy import SQLAlchemy
@@ -133,21 +133,21 @@ def receivePref():
 @app.route('/ids/', methods=['GET'])
 def ids():
     query = "SELECT * FROM top500 ORDER BY ID ASC"
-    db = database_playground.connect_db_top500()
+    db = safeBrowsing.database_playground.connect_db_top500()
     return jsonify(generic_sql_query(query, db))
 
 
 @app.route('/ids/<id>', methods=['GET'])
 def id(id):
     query = f"SELECT Website FROM top500 where ID = \"{id}\" ORDER BY ID ASC"
-    db = database_playground.connect_db_top500()
+    db = safeBrowsing.database_playground.connect_db_top500()
     return jsonify(generic_sql_query(query, db))
 
 
 @app.route('/urls/', methods=['GET'])
 def urls():
     query = "SELECT site, category FROM sites_data ORDER BY site ASC"
-    db = database_playground.connect_db()
+    db = safeBrowsing.database_playground.connect_db()
     return jsonify(generic_sql_query(query, db))
 
 
@@ -157,14 +157,14 @@ def urls():
 @app.route('/urls/<url>', methods=['GET'])
 def url(url):
     query = f"SELECT site, category, cookies, requests_tracking FROM sites_data WHERE site = \"{url}\" ORDER BY site ASC"
-    db = database_playground.connect_db()
+    db = safeBrowsing.database_playground.connect_db()
     return jsonify(generic_sql_query(query, db))
 
 
 @app.route('/tracker/<url>', methods=['GET'])  #
 def trackers_category_from_url(url):
     query = f"SELECT categories.name, sites_trackers_data.site AS has_this_tracker,trackers.name, trackers.website_url FROM trackers, categories, sites_trackers_data WHERE trackers.category_id = categories.id AND trackers.id = sites_trackers_data.tracker  AND sites_trackers_data.site =\"{url}\""
-    db = database_playground.connect_db()
+    db = safeBrowsing.database_playground.connect_db()
     return jsonify(generic_sql_query(query, db))
 
 

@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d133a185-0853-4292-94d5-ba1d9487bd63" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/Database_communication.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Database_communication.iml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/safeBrowsing/labels.db" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/labels.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../extension/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/../extension/content.js" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/csv-plugin.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/safeBrowsing/database_playground.py" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/database_playground.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/safeBrowsing/flask_playground.py" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/flask_playground.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" afterDir="false" />
+>>>>>>> 1208a13ac585b0994cb3287fd3294177da8218ac
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,13 +76,6 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
-  </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="I:\ProgrammingProjects\ProgPrak\CODE-DaWeSys\Database_communication\.idea" />
-      </set>
-    </option>
   </component>
   <component name="ProjectId" id="1sKuKhFaBCBW6RguXtAVYNkyfVq" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -173,10 +193,61 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Database_communication$interpret_whotracksme.coverage" NAME="interpret_whotracksme Coverage Results" MODIFIED="1621241602519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
     <SUITE FILE_PATH="coverage/interpret_whotracksme_py$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1623176567250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
     <SUITE FILE_PATH="coverage/Database_communication$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1621701450419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
     <SUITE FILE_PATH="coverage/Database_communication$main.coverage" NAME="main Coverage Results" MODIFIED="1620416249343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
+=======
+  <component name="WindowStateProjectService">
+    <state width="672" height="429" key="GridCell.Tab.0.bottom" timestamp="1623599853064">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="672" height="429" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1623599853064" />
+    <state width="672" height="429" key="GridCell.Tab.0.center" timestamp="1623599853063">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="672" height="429" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1623599853063" />
+    <state width="672" height="429" key="GridCell.Tab.0.left" timestamp="1623599853063">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="672" height="429" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1623599853063" />
+    <state width="672" height="429" key="GridCell.Tab.0.right" timestamp="1623599853063">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="672" height="429" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1623599853063" />
+    <state width="1345" height="223" key="GridCell.Tab.1.bottom" timestamp="1623599756446">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1345" height="223" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1623599756446" />
+    <state width="1345" height="223" key="GridCell.Tab.1.center" timestamp="1623599756446">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1345" height="223" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1623599756446" />
+    <state width="1345" height="223" key="GridCell.Tab.1.left" timestamp="1623599756446">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1345" height="223" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1623599756446" />
+    <state width="1345" height="223" key="GridCell.Tab.1.right" timestamp="1623599756446">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1345" height="223" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1623599756446" />
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2" timestamp="1623599847035">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1623599847035" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+>>>>>>> 1208a13ac585b0994cb3287fd3294177da8218ac
   </component>
 </project>
