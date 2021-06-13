@@ -1,6 +1,6 @@
 import requests
 from flask import jsonify, config
-import safeBrowsing.database_playground
+import database_playground
 import json
 from pprint import pprint
 
@@ -11,7 +11,7 @@ preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "
 # from safeBrowsing import top500_db_connection
 
 def fill_label_database(domain_dict, users):
-    db = safeBrowsing.database_playground.connect_db_labels()
+    db = database_playground.connect_db_labels()
     # print(domain_dict)
     for key in domain_dict:
         # print(key)
@@ -61,11 +61,11 @@ def dict_to_String(dict):
 
 def calc_label(domain_list):
     unwanted_categories = []  # just temporary
-    global config
-    config = dotenv_values(".env")  # take environment variables from .env.
+    # global config
+    # config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
     # print(domain_list, "were here")
-    db = safeBrowsing.database_playground.connect_db_labels()
+    db = database_playground.connect_db_labels()
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
 
@@ -111,7 +111,7 @@ def whotracksme_score(domain, unwanted_categories):
     print(preferences)
     query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
 
-    db = safeBrowsing.database_playground.connect_db()
+    db = database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
     # TODO: CREATE WHOTRACKSME.db DATA SUMMARY (information package)
@@ -198,7 +198,7 @@ def api_call(request, payload, body, type):
 def phishstats_score(domain):  # unfortunately this api is fucking slow
 
     query = f"SELECT score from phish_score where URL like '%{domain}%'"
-    db = safeBrowsing.database_playground.connect_phishcore_db()
+    db = database_playground.connect_phishcore_db()
     req = generic_sql_query(query, db)
     data_summary = {
         'phishstats.db': {
