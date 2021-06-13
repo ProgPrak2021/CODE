@@ -1,15 +1,15 @@
 import requests
-from flask import jsonify
-import database_playground
+from flask import jsonify, config
+import safeBrowsing.database_playground
 import json
 from pprint import pprint
-from dotenv import dotenv_values
+
 
 
 # from safeBrowsing import top500_db_connection
 
 def fill_label_database(domain_dict, users):
-    db = database_playground.connect_db_labels()
+    db = safeBrowsing.database_playground.connect_db_labels()
     # print(domain_dict)
     for key in domain_dict:
         # print(key)
@@ -54,7 +54,7 @@ def calc_label(domain_list, unwanted_categories):
     # config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
     # print(domain_list, "were here")
-    db = database_playground.connect_db_labels()
+    db = safeBrowsing.database_playground.connect_db_labels()
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
 
@@ -65,19 +65,22 @@ def calc_label(domain_list, unwanted_categories):
         if not labels:
 
             # TODO: CREATE JSON DATA SUMMARY FROM ALL SOURCES --> APPEND INFORMATION PACKAGE(json list) TO KEY(domain)
-            data_summary[domain] = whotracksme_score(domain, unwanted_categories)  # , tester_db(), tester_api()
+            data_summary[domain] = whotracksme_score(domain, unwanted_categories), phishstats_score(domain) #, tester_db(), tester_api()
 
 
 
-            domain_dict[domain] = data_summary[domain]["whotracksme.db"]["label"]
+
+
+            domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
+            domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
             domain_dict[domain] = labels[0][0]
-    fill_label_database(domain_dict, db_string)
+    #fill_label_database(domain_dict, db_string) bekomme hier einen fehler :/
 
-    # print(data_summary)
+    pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
 
 
@@ -99,7 +102,7 @@ def whotracksme_score(domain, unwanted_categories):
 
     query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
 
-    db = database_playground.connect_db()
+    db = safeBrowsing.database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
     # TODO: CREATE WHOTRACKME.db DATA SUMMARY (information package)
@@ -181,14 +184,43 @@ def api_call(request, payload, body, type):
 
 
 def phishstats_score(domain):  # unfortunately this api is fucking slow
-    print("test")
-    response = api_call(f"https://phishstats.info:2096/api/phishing?_where=(url,like,~{domain}~)", None, None, "GET")
-    print(response)
-    for object in response:
-        if get_domain_by_url(object["url"]) == domain:
-            print(f"domain: {domain} is bad.")
-            return 1
-    return 0
+
+    query = f"SELECT score from phish_score where URL like '%{domain}%'"
+    db = safeBrowsing.database_playground.connect_phishcore_db()
+    req = generic_sql_query(query, db)
+    data_summary = {
+        'phishstats.db': {
+            'label': '1',
+            'category': 'no phishing',
+        }}
+
+    if (req == []):
+        return data_summary
+
+
+    score = req[0][0]
+
+    num = float(score)
+
+    if num <= 2:
+        data_summary['phishstats.db']['label'] = eval(str(2))
+        data_summary['phishstats.db']['category'] = eval("possibly phishing")
+
+    elif num <= 4:
+        data_summary['phishstats.db']['label'] = eval(str(2))
+        data_summary['phishstats.db']['category'] = "sus"
+
+    data_summary['phishstats.db']['label'] = eval(str(3))
+
+    if num <= 6:
+        data_summary['phishstats.db']['category'] = "probably phishing"
+
+    else:
+        data_summary['whotracksme.db']['category'] = eval(str("guranteed phishing"))
+
+    return data_summary
+
+
 
 
 def google_safe_browsing_score(domain):
