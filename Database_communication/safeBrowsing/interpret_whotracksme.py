@@ -1,15 +1,17 @@
 import requests
 from flask import jsonify, config
-import safeBrowsing.database_playground
+import database_playground
 import json
 from pprint import pprint
 
+
+preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 
 
 # from safeBrowsing import top500_db_connection
 
 def fill_label_database(domain_dict, users):
-    db = safeBrowsing.database_playground.connect_db_labels()
+    db = database_playground.connect_db_labels()
     # print(domain_dict)
     for key in domain_dict:
         # print(key)
@@ -49,26 +51,32 @@ def build_user_linking_string(unwanted_categroies):
     return db_string
 
 
-def calc_label(domain_list, unwanted_categories):
+def dict_to_String(dict):
+    end_string = ""
+    for key in dict:
+        if dict[key]:
+            dict[key] = dict[key].sort()
+            end_string += key + str(dict[key])
+
+
+def calc_label(domain_list):
+    unwanted_categories = []  # just temporary
     # global config
     # config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
     # print(domain_list, "were here")
-    db = safeBrowsing.database_playground.connect_db_labels()
+    db = database_playground.connect_db_labels()
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
 
     for domain in domain_list:
-        query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\";"
+        #query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\" AND user_linking = \"{dict_to_String(preferences)}\";"
         labels = None  # generic_sql_query(query, db)
 
         if not labels:
 
             # TODO: CREATE JSON DATA SUMMARY FROM ALL SOURCES --> APPEND INFORMATION PACKAGE(json list) TO KEY(domain)
             data_summary[domain] = whotracksme_score(domain, unwanted_categories), phishstats_score(domain) #, tester_db(), tester_api()
-
-
-
 
 
             domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
@@ -78,6 +86,7 @@ def calc_label(domain_list, unwanted_categories):
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
             domain_dict[domain] = labels[0][0]
+
     #fill_label_database(domain_dict, db_string) bekomme hier einen fehler :/
 
     pprint(data_summary)
@@ -99,38 +108,45 @@ def tester_api():
 
 
 def whotracksme_score(domain, unwanted_categories):
-
+    print(preferences)
     query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
 
-    db = safeBrowsing.database_playground.connect_db()
+    db = database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
-    # TODO: CREATE WHOTRACKME.db DATA SUMMARY (information package)
+    # TODO: CREATE WHOTRACKSME.db DATA SUMMARY (information package)
     data_summary = {
-        'whotracksme.db':{
+        'whotracksme.db': {
             'label': '0',
             'tracker_count': '0',
             'facebook': '',
             'amazon': '',
             'trackers': []
         }}
+    if preferences["whotracksme"]:
+        if "disable" in preferences["whotracksme"]:
+            return data_summary
 
     index = 0
     facebook = False
     amazon = False
     for cookie in trackers:
         for category in unwanted_categories:
-            if cookie.__contains__(category):
+            if cookie in (category):
                 index += 2
-        if cookie.__contains__("Facebook"):
-            index += 0.5
-            facebook = True
-        if cookie.__contains__("Amazon"):
-            index += 0.5
-            amazon = True
-
+            if preferences["whotracksme"]:
+                if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
+                    index += 0.5
+                    facebook = True
+                if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
+                    index += 0.5
+                    amazon = True
+    tracker_weight_multiplier = 0.1
+    if preferences["whotracksme"]:
+        if "weight_tracker" in preferences["whotracksme"]:
+            tracker_weight_multiplier = 0.2
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
-    index += cookie_len * 0.1
+    index += cookie_len * tracker_weight_multiplier
     if index > 3:
         index = 3
 
@@ -139,38 +155,34 @@ def whotracksme_score(domain, unwanted_categories):
 
     index = index.__round__()
 
-    for i in trackers: 
+    for i in trackers:
         data_summary['whotracksme.db']['trackers'] += [{  # Fill trackers array
-            'name'      : i[0],
-            'category'  : i[1],
-            'company'   : i[2]
+            'name': i[0],
+            'category': i[1],
+            'company': i[2]
         }]
-        
     data_summary['whotracksme.db']['label'] = eval(str(index))
     data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
     data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
     data_summary['whotracksme.db']['amazon'] = eval(str(amazon))
 
-
-
     return data_summary
 
 
 def privacyspy_score(domain):
-
     data_summary = {
-        'privacyspy':{
+        'privacyspy': {
             'score': '0'
         }}
-     ### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
+    ### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
 
     f = open('privacyspy.json')
     data = json.load(f)
     for item in data:
         if (domain.upper() in item['name'].upper()):
-            data_summary['privacyspy']['score'] = ( round((item['score']) / 3) )
-            if(data_summary['privacyspy']['score'] == (0)):
-                data_summary['privacyspy']['score'] =  1
+            data_summary['privacyspy']['score'] = (round((item['score']) / 3))
+            if (data_summary['privacyspy']['score'] == (0)):
+                data_summary['privacyspy']['score'] = 1
             return data_summary
     return data_summary
 
@@ -186,7 +198,7 @@ def api_call(request, payload, body, type):
 def phishstats_score(domain):  # unfortunately this api is fucking slow
 
     query = f"SELECT score from phish_score where URL like '%{domain}%'"
-    db = safeBrowsing.database_playground.connect_phishcore_db()
+    db = database_playground.connect_phishcore_db()
     req = generic_sql_query(query, db)
     data_summary = {
         'phishstats.db': {
@@ -224,14 +236,22 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
 
 
 def google_safe_browsing_score(domain):
+    data_summary = {
+        'safe_browsing_api': {
+            'label': '0',
+            'threatType': '',
+            'platform': '',
+
+        }}
     body = {
         "client": {
             "clientId": "ProgPrak",
             "clientVersion": "141"
         },
         "threatInfo": {
-            "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING"],
-            "platformTypes": ["WINDOWS"],
+            "threatTypes": ["THREAT_TYPE_UNSPECIFIED", "MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE",
+                            "POTENTIALLY_HARMFUL_APPLICATION"],
+            "platformTypes": ["WINDOWS", "LINUX", "OSX", "IOS", "CHROME"],
             "threatEntryTypes": ["URL"],
             "threatEntries": [
                 {
@@ -242,6 +262,13 @@ def google_safe_browsing_score(domain):
     response = api_call(f" https://safebrowsing.googleapis.com/v4/threatMatches:find?key={config['GOOGLE_API_KEY']}",
                         None, body,
                         "POST")
+    # print(response)
+    if response:
+        print(response)
+        data_summary['safe_browsing_api.db']['label'] = 3
+        data_summary['safe_browsing_api.db']['threatType'] = response['matches'][0]['threatType']
+        data_summary['safe_browsing_api.db']['platform'] = response['matches'][0]['platformType']
+
     return 0
 
 
