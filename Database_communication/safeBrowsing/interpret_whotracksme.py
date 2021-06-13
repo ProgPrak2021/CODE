@@ -67,6 +67,8 @@ def calc_label(domain_list, unwanted_categories):
             # TODO: CREATE JSON DATA SUMMARY FROM ALL SOURCES --> APPEND INFORMATION PACKAGE(json list) TO KEY(domain)
             data_summary[domain] = whotracksme_score(domain, unwanted_categories)  # , tester_db(), tester_api()
 
+
+
             domain_dict[domain] = data_summary[domain]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
@@ -105,22 +107,33 @@ def whotracksme_score(domain, unwanted_categories):
         'whotracksme.db':{
             'label': '0',
             'tracker_count': '0',
-            'trackers':[] 
+            'facebook': '',
+            'amazon': '',
+            'trackers': []
         }}
 
     index = 0
     facebook = False
+    amazon = False
     for cookie in trackers:
         for category in unwanted_categories:
             if cookie.__contains__(category):
                 index += 2
         if cookie.__contains__("Facebook"):
             index += 0.5
-            facebook = False
+            facebook = True
+        if cookie.__contains__("Amazon"):
+            index += 0.5
+            amazon = True
+
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
     index += cookie_len * 0.1
     if index > 3:
         index = 3
+
+    if index != 0 and index.__round__() == 0:
+        index = 1
+
     index = index.__round__()
 
     for i in trackers: 
@@ -132,9 +145,12 @@ def whotracksme_score(domain, unwanted_categories):
         
     data_summary['whotracksme.db']['label'] = eval(str(index))
     data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
+    data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
+    data_summary['whotracksme.db']['amazon'] = eval(str(amazon))
 
-    return data_summary  # index  # ... = 0
-    # bedeutet: domain ist in keiner Datenbank enthalten
+
+
+    return data_summary
 
 
 def privacyspy_score(domain):
@@ -143,7 +159,7 @@ def privacyspy_score(domain):
         'privacyspy':{
             'score': '0'
         }}
-                            #### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
+     ### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
 
     f = open('privacyspy.json')
     data = json.load(f)
