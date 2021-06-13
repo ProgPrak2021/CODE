@@ -66,17 +66,17 @@ function sendURLsToBackend(rootNode) {
 }
 
 //$('.code-selector').on('click', function(){
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function () {
-  if (this.readyState == 4 && this.status == 200) {
-    // console.log(this.responseText)
-    var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-    
-    console.log(output)
-    printLabels(output)
-
-  }
-};
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      // console.log(this.responseText)
+      var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+      console.log(output)
+  
+      printLabels(output)
+  
+    }
+  };
 var urls = sendURLsToBackend();
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -90,9 +90,11 @@ xhttp.send(urls);
 function printLabels(output) {
 
   function storeVar(key, value) {
+    console.log(key)
     if (key == "label") {
       //console.log("key: " + key + " value: " + value)
       label = value
+      console.log(label);
     }
     if (key == "tracker_count") {
       //console.log("key: " + key + " value: " + value)
@@ -101,10 +103,6 @@ function printLabels(output) {
     if (key == "facebook") {
       //console.log("key: " + key + " value: " + value)
       facebook = value
-    }
-    if (key == "amazon") {
-      //console.log("key: " + key + " value: " + value)
-      amazon = value
     }
   }
 
@@ -120,34 +118,32 @@ function printLabels(output) {
 
 
   var labels = [[chrome.runtime.getURL('images/siren.png'), "none"], [chrome.runtime.getURL('images/green_icon_128.png'), "green"], [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"], [chrome.runtime.getURL('images/red_icon_128.png'), "red"]]
-  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png'), chrome.runtime.getURL('images/icons/amazon_icon.png')]
+  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png')]
   var divs = document.getElementsByClassName("yuRUbf");
 
 
   for (var div of divs) {
-    var label, tracker, facebook, amazon
-    var domain = getDomain(div)
+    var label, tracker, facebook
+    var domain = getDomain(div);
+    console.log(domain)
 
     traverse_JSON(output[domain], storeVar);
 
     //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
-    var icon_str = '<img class="icons" src="' + icons[0] + '">'
-    if (facebook == true) {
-      icon_str += '<img class="icons" src="' + icons[3] + '">'
-    }
-    if(amazon == true){
-      icon_str += '<img class="icons" src="' + icons[4] + '">'
-    }
 
-    var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2>'+ icon_str +'</div></div></div></div>');
-    img.appendTo(div);
-    
+    if (facebook == true) {
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+      img.appendTo(div);
+    } else {
+      var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"></div></div></div></div>');
+      img.appendTo(div);
+    }
   }
   $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
 
 }
 
-function getDomain(div) {
+function getDomain(div) { 
   var url = JSON.stringify(div.children[0].href)
   if (url.includes("https://")) {
     url = url.replace("https://", "")
@@ -161,7 +157,7 @@ function getDomain(div) {
     url_split.shift()
   }
   url = url_split.join(".")
-
+  url = url.replace('"', "")
   return url
 
 }
@@ -275,6 +271,4 @@ function getLabel(div, output) {
 }
 
 
-
--------------------------------------------------------------
 */

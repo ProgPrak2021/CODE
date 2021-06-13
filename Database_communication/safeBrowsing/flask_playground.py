@@ -4,7 +4,7 @@ import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
 import json
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences
 import sqlite3
 
 # from flask_sqlalchemy import SQLAlchemy
@@ -89,11 +89,29 @@ def receive_urls():
         domains.append(get_domain_by_url(url))
     domains = list(dict.fromkeys(domains))
 
-    domains = calc_label(domains, hardcoded_user_preference)
+    domains = calc_label(domains)
 
     # print(domains)
 
     return jsonify(domains)
+
+
+@app.route('/sendPref/', methods=['POST'])
+def receivePref():
+    pref = request.data.decode('UTF-8')
+    pref = pref.split("SPLIT")
+    print(pref)
+    if preferences[pref[0]]:
+        if preferences[pref[0]].__contains__(pref[1]):
+            preferences[pref[0]].remove(pref[1])
+        else:
+            preferences[pref[0]].append(pref[1])
+            print(preferences)
+    else:
+        preferences[pref[0]] = [pref[1]]
+        print(preferences)
+
+    return ""
 
 
 # collecting visited urls for statistics

@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d133a185-0853-4292-94d5-ba1d9487bd63" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Database_communication.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Database_communication.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/interpret_whotracksme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/safeBrowsing/labels.db" beforeDir="false" afterPath="$PROJECT_DIR$/safeBrowsing/labels.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../extension/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/../extension/content.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,9 +174,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Database_communication$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1621701450419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
     <SUITE FILE_PATH="coverage/Database_communication$interpret_whotracksme.coverage" NAME="interpret_whotracksme Coverage Results" MODIFIED="1621241602519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
+    <SUITE FILE_PATH="coverage/interpret_whotracksme_py$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1623176567250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
+    <SUITE FILE_PATH="coverage/Database_communication$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1621701450419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
     <SUITE FILE_PATH="coverage/Database_communication$main.coverage" NAME="main Coverage Results" MODIFIED="1620416249343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
-    <SUITE FILE_PATH="coverage/interpret_whotracksme_py$flask_playground.coverage" NAME="flask_playground Coverage Results" MODIFIED="1622141643644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safeBrowsing" />
   </component>
 </project>
