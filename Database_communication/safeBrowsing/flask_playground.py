@@ -4,7 +4,7 @@ import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
 import re
 import json
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences
 import sqlite3
 
 # from flask_sqlalchemy import SQLAlchemy

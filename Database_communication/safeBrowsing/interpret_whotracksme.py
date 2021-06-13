@@ -212,7 +212,7 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
 
     score = req[0][0]
 
-    num = float(score)
+    num = float(score.replace("\"",""))
 
     if num <= 2:
         data_summary['phishstats.db']['label'] = eval(str(2))
