@@ -90,11 +90,11 @@ xhttp.send(urls);
 function printLabels(output) {
 
   function storeVar(key, value) {
-    console.log(key)
+    //console.log(key)
     if (key == "label") {
       //console.log("key: " + key + " value: " + value)
       label = value
-      console.log(label);
+      //console.log(label);
     }
     if (key == "tracker_count") {
       //console.log("key: " + key + " value: " + value)
@@ -125,7 +125,7 @@ function printLabels(output) {
   for (var div of divs) {
     var label, tracker, facebook
     var domain = getDomain(div);
-    console.log(domain)
+    //console.log(domain)
 
     traverse_JSON(output[domain], storeVar);
 
