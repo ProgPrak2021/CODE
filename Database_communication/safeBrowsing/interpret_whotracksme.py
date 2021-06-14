@@ -89,22 +89,9 @@ def calc_label(domain_list):
 
     #fill_label_database(domain_dict, db_string) bekomme hier einen fehler :/
 
-    pprint(data_summary)
+    #pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
 
-
-def tester_db():
-    tester = {"PRIVACY": {}}
-    tester["PRIVACY"]['VALUE'] = '9999'
-    tester["PRIVACY"]['xxxx'] = 'yyyy'
-    return tester
-
-
-def tester_api():
-    tester = {"INFORMATION": {}}
-    tester["INFORMATION"]['VALUE'] = '1234'
-    tester["INFORMATION"]['pppp'] = 'xxxx'
-    return tester
 
 
 def whotracksme_score(domain, unwanted_categories):
