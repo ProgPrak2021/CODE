@@ -8,8 +8,6 @@ from pprint import pprint
 preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 
 
-# from safeBrowsing import top500_db_connection
-
 def fill_label_database(domain_dict, users):
     db = database_playground.connect_db_labels()
     # print(domain_dict)
@@ -26,10 +24,6 @@ def generic_sql_query(query, db):
     cursor.execute(query)
     rows = cursor.fetchall()
     return rows
-
-
-"""idea: Each time we find out some bad information about a domain this domain gets points(ofc relatively to the 
-information we found out) At the end we check the score of each domain and give the domains a fitting label """
 
 
 def get_domain_by_url(url):
@@ -87,8 +81,6 @@ def calc_label(domain_list):
         else:
             domain_dict[domain] = labels[0][0]
 
-    #fill_label_database(domain_dict, db_string) bekomme hier einen fehler :/
-
     #pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
 
@@ -134,12 +126,11 @@ def whotracksme_score(domain, unwanted_categories):
             tracker_weight_multiplier = 0.2
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
     index += cookie_len * tracker_weight_multiplier
+
     if index > 3:
         index = 3
-
     if index != 0 and index.__round__() == 0:
         index = 1
-
     index = index.__round__()
 
     for i in trackers:
@@ -148,6 +139,7 @@ def whotracksme_score(domain, unwanted_categories):
             'category': i[1],
             'company': i[2]
         }]
+
     data_summary['whotracksme.db']['label'] = eval(str(index))
     data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
     data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
@@ -161,8 +153,6 @@ def privacyspy_score(domain):
         'privacyspy': {
             'score': '0'
         }}
-    ### Wenn die Domain nicht in der privacyspy auftaucht dann ist der score 0
-
     f = open('privacyspy.json')
     data = json.load(f)
     for item in data:
@@ -172,6 +162,7 @@ def privacyspy_score(domain):
                 data_summary['privacyspy']['score'] = 1
             return data_summary
     return data_summary
+
 
 
 def api_call(request, payload, body, type):
