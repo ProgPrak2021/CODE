@@ -201,7 +201,8 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     data_summary = {
         'phishstats.db': {
             'score': '0',
-            'category': 'no phishing',
+            'category': 'no info',
+            'phishing': 'false'
         }}
 
     if (req == []):
@@ -214,7 +215,7 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
 
     if num <= 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
-        data_summary['phishstats.db']['category'] = eval("possibly phishing")
+        data_summary['phishstats.db']['category'] = "possibly phishing"
 
     elif num <= 4:
         data_summary['phishstats.db']['score'] = eval(str(2))
@@ -226,7 +227,9 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
         data_summary['phishstats.db']['category'] = "probably phishing"
 
     else:
-        data_summary['whotracksme.db']['category'] = eval(str("guranteed phishing"))
+        data_summary['phishstats.db']['category'] = "guranteed phishing"
+        data_summary['phishstats.db']['phishing'] = "True"
+
 
     return data_summary
 
