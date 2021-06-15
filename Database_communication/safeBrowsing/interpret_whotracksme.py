@@ -69,11 +69,11 @@ def backend_main(domain_list):
         if not labels:
 
             # TODO. ACTUALLY CALCUTALTE THE LABEL
-            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#, google_safe_browsing_score(domain)])
+            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain), privacyspy_score(domain)])#, google_safe_browsing_score(domain)])
 
 
             #TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
-            data_summary[domain] = {'label': calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain)#, google_safe_browsing_score(domain)
+            data_summary[domain] = {'label': calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), privacyspy_score(domain) #, google_safe_browsing_score(domain)
 
 
             #domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
@@ -89,11 +89,14 @@ def backend_main(domain_list):
 
 def calc_label(db_array):
     res = 0
+    no_data = 0
     for db in db_array:
-        #print(db)
         res += int(list(db.values())[0]['score'])
-        #print(res)
-    res = res / len(db_array)
+        if int(list(db.values())[0]['score']) == 0:
+            no_data += 1
+    if res == 0:
+        return 0
+    res = res / (len(db_array) - no_data)
     if res > 3:
         res = 3
     if res != 0 and res.__round__() == 0:
@@ -101,6 +104,7 @@ def calc_label(db_array):
     res = res.__round__()
     #print(res)
     return res
+
 
 def whotracksme_score(domain, unwanted_categories):
     #print(preferences)
@@ -167,16 +171,16 @@ def whotracksme_score(domain, unwanted_categories):
 def privacyspy_score(domain):
     data_summary = {
         'privacyspy': {
-            'score': '0'
+            'score': '0',
+            'name': ''
         }}
-    f = open('privacyspy.json')
-    data = json.load(f)
-    for item in data:
-        if (domain.upper() in item['name'].upper()):
-            data_summary['privacyspy']['score'] = (round((item['score']) / 3))
-            if (data_summary['privacyspy']['score'] == (0)):
-                data_summary['privacyspy']['score'] = 1
-            return data_summary
+    with open('privacyspy.json', encoding="utf8") as file:
+        data = json.load(file)
+    for elem in data:
+         if (domain in elem['hostnames']):
+             data_summary['privacyspy']['score'] = elem['score'] / 3
+             data_summary['privacyspy']['name'] = elem['name']
+
     return data_summary
 
 
@@ -196,7 +200,7 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     req = generic_sql_query(query, db)
     data_summary = {
         'phishstats.db': {
-            'score': '1',
+            'score': '0',
             'category': 'no phishing',
         }}
 
