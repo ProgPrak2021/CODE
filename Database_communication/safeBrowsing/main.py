@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main
 
 
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def receive_urls():
         domains.append(get_domain_by_url(url))
     domains = list(dict.fromkeys(domains))
 
-    domains = calc_label(domains)
+    domains = backend_main(domains)
 
     return jsonify(domains)
 
