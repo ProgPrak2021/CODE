@@ -101,7 +101,8 @@ def calc_label(db_array):
         res = 3
     if res != 0 and res.__round__() == 0:
         res = 1
-    res = res.__round__()
+    else:
+        res = res.__round__()
     #print(res)
     return res
 
@@ -177,8 +178,9 @@ def privacyspy_score(domain):
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
-         if (domain in elem['hostnames']):
-             data_summary['privacyspy']['score'] = elem['score'] / 3
+         if domain in elem['hostnames']:
+             print(domain + " and score: "+ str(elem['score']))
+             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
              data_summary['privacyspy']['name'] = elem['name']
 
     return data_summary
