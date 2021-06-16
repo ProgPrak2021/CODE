@@ -4,7 +4,6 @@ import database_playground
 import json
 from pprint import pprint
 
-
 preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 
 
@@ -63,29 +62,31 @@ def backend_main(domain_list):
     db_string = build_user_linking_string(unwanted_categories)
 
     for domain in domain_list:
-        #query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\" AND user_linking = \"{dict_to_String(preferences)}\";"
+        # query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\" AND user_linking = \"{dict_to_String(preferences)}\";"
         labels = None  # generic_sql_query(query, db)
 
         if not labels:
 
             # TODO. ACTUALLY CALCUTALTE THE LABEL
-            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain), privacyspy_score(domain)])#, google_safe_browsing_score(domain)])
+            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
+                                       privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
+            # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
+            data_summary[domain] = {'label': calced_label}, whotracksme_score(domain,
+                                                                              unwanted_categories), phishstats_score(
+                domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
 
-            #TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
-            data_summary[domain] = {'label': calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), privacyspy_score(domain) #, google_safe_browsing_score(domain)
-
-
-            #domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
+            # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
-            #domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
+            # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
             domain_dict[domain] = labels[0][0]
 
-    #pprint(data_summary)
+    # pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
+
 
 def calc_label(db_array):
     res = 0
@@ -103,12 +104,12 @@ def calc_label(db_array):
         res = 1
     else:
         res = res.__round__()
-    #print(res)
+    # print(res)
     return res
 
 
 def whotracksme_score(domain, unwanted_categories):
-    #print(preferences)
+    # print(preferences)
     query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
 
     db = database_playground.connect_db()
@@ -178,13 +179,12 @@ def privacyspy_score(domain):
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
-         if domain in elem['hostnames']:
-             print(domain + " and score: "+ str(elem['score']))
-             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
-             data_summary['privacyspy']['name'] = elem['name']
+        if domain in elem['hostnames']:
+            print(domain + " and score: " + str(elem['score']))
+            data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
+            data_summary['privacyspy']['name'] = elem['name']
 
     return data_summary
-
 
 
 def api_call(request, payload, body, type):
@@ -210,18 +210,19 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     if (req == []):
         return data_summary
 
-
     score = req[0][0]
 
-    num = float(score.replace("\"",""))
+    num = float(score.replace("\"", ""))
 
     if num <= 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "possibly phishing"
+        return data_summary
 
     elif num <= 4:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "sus"
+        return data_summary
 
     data_summary['phishstats.db']['score'] = eval(str(3))
 
@@ -229,13 +230,10 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
         data_summary['phishstats.db']['category'] = "probably phishing"
 
     else:
-        data_summary['phishstats.db']['category'] = "guranteed phishing"
+        data_summary['phishstats.db']['category'] = "guaranteed phishing"
         data_summary['phishstats.db']['phishing'] = "True"
 
-
     return data_summary
-
-
 
 
 def google_safe_browsing_score(domain):
