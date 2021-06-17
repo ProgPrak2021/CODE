@@ -71,6 +71,8 @@ def backend_main(domain_list):
             calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
+            saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
+                                       privacyspy_score(domain)], domain)
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
             data_summary[domain] = {'label': calced_label}, whotracksme_score(domain,
                                                                               unwanted_categories), phishstats_score(
@@ -84,8 +86,31 @@ def backend_main(domain_list):
         else:
             domain_dict[domain] = labels[0][0]
 
-    # pprint(data_summary)
+    pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
+
+
+def saveCalcLabels(data_summary, domain):
+    db = database_playground.connect_new_labels()
+    # print(domain_dict)
+
+    whotracksme_label = data_summary[0]["whotracksme.db"]["score"]
+    tracker_cnt = data_summary[0]["whotracksme.db"]["tracker_count"]
+    amzn = data_summary[0]["whotracksme.db"]["amazon"]
+    fcbook = data_summary[0]["whotracksme.db"]["facebook"]
+
+
+    phishstats_label = data_summary[1]["phishstats.db"]["score"]
+    phishing_category = data_summary[1]["phishstats.db"]["category"]
+
+    privacyspy_score = str(data_summary[2]["privacyspy"]["score"])
+
+    privacyspy_score = "0.6"
+
+    query = f"REPLACE INTO labels (domain, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
+    cursor = db.cursor()
+    cursor.execute(query)
+    db.commit()
 
 
 def calc_label(db_array):

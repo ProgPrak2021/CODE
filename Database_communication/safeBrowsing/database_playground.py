@@ -15,3 +15,6 @@ def connect_db_labels():
 def connect_phishcore_db():
     return sqlite3.connect('phishstats.db')
 
+def connect_new_labels():
+    return sqlite3.connect('newlabels.db')
+
