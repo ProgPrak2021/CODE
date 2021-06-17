@@ -203,6 +203,31 @@ def privacyspy_score(domain):
             'rubric': {
 
                 'Handling': {
+                    'Does the policy allow personally - targeted or behavioral marketing?': {
+                        'points' : '10',
+                        'percent' : '',
+                        'value' : ''
+                    },
+
+                    'Does the service allow you to permanently delete your personal data?': {
+                        'points': '5',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Does the service allow third-party access to private personal data?': {
+                        'points': '10',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'When does the policy allow law enforcement access to personal data?': {
+                        'points': '5',
+                        'percent': '',
+                        'value': ''
+                    }
+
+
                 },
 
                 'Transparency': {
