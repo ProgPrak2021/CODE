@@ -260,6 +260,30 @@ def privacyspy_score(domain):
 
                 'Collection': {
 
+                    'Does the service collect personal data from third parties?': {
+                        'points': '10',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Is it clear why the service collects the personal data that it does?': {
+                        'points': '10',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?': {
+                        'points': '10',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Does the policy list the personal data it collects?': {
+                        'points': '10',
+                        'percent': '',
+                        'value': ''
+                    }
+
                 }
 
 
