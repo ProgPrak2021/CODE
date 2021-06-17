@@ -232,6 +232,30 @@ def privacyspy_score(domain):
 
                 'Transparency': {
 
+                    'Does the policy outline the service general security practices?': {
+                        'points': '3',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Is the policys history made available?': {
+                        'points': '5',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Does the policy require users to be notified in case of a data breach?': {
+                        'points': '7',
+                        'percent': '',
+                        'value': ''
+                    },
+
+                    'Will affected users be notified when the policy is meaningfully changed?': {
+                        'points': '5',
+                        'percent': '',
+                        'value': ''
+                    }
+
                 },
 
                 'Collection': {
