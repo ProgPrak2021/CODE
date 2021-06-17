@@ -199,7 +199,25 @@ def privacyspy_score(domain):
     data_summary = {
         'privacyspy': {
             'score': '0',
-            'name': ''
+            'name': '',
+            'rubric': {
+
+                'Handling': {
+                },
+
+                'Transparency': {
+
+                },
+
+                'Collection': {
+
+                }
+
+
+
+
+            }
+
         }}
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
