@@ -233,12 +233,14 @@ def privacyspy_score(domain):
 
                 'Transparency': {
 
+                    #hier auf den namen achten
                     'Does the policy outline the service general security practices?': {
                         'points': '3',
                         'percent': '',
                         'value': ''
                     },
 
+                    # hier auf den namen achten
                     'Is the policys history made available?': {
                         'points': '5',
                         'percent': '',
@@ -307,7 +309,6 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['rubric']['Handling'][
                 'Does the policy allow personally - targeted or behavioral marketing?'][value] = elem['rubric']['0']['value']['percent']
 
-
             data_summary['privacyspy']['rubric']['Handling'][
                 'Does the service allow you to permanently delete your personal data?'][percent] = elem['rubric']['4']['option']['percent']
             data_summary['privacyspy']['rubric']['Handling'][
@@ -323,8 +324,27 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['rubric']['Handling'][
                 'When does the policy allow law enforcement access to personal data?'][value] = elem['rubric']['9']['value']['percent']
 
+#transparency
 
+            data_summary['privacyspy']['rubric']['Transparency'][
+                'Does the policy outline the service general security practices?'][percent] = elem['rubric']['1']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the policy outline the service general security practices?'][value] = elem['rubric']['1']['value']['percent']
 
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Is the policys history made available?'][percent] = elem['rubric']['3']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Is the policys history made available?'][value] = elem['rubric']['3']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the policy require users to be notified in case of a data breach?'][percent] = elem['rubric']['5']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the policy require users to be notified in case of a data breach?'][value] = elem['rubric']['5']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Will affected users be notified when the policy is meaningfully changed?'][percent] = elem['rubric']['11']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Will affected users be notified when the policy is meaningfully changed?'][value] = elem['rubric']['11']['value']['percent']
 
 
 
