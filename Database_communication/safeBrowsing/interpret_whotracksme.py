@@ -331,21 +331,42 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['rubric']['Handling'][
                 'Does the policy outline the service general security practices?'][value] = elem['rubric']['1']['value']['percent']
 
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Is the policys history made available?'][percent] = elem['rubric']['3']['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Is the policys history made available?'][value] = elem['rubric']['3']['value']['percent']
 
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Does the policy require users to be notified in case of a data breach?'][percent] = elem['rubric']['5']['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Does the policy require users to be notified in case of a data breach?'][value] = elem['rubric']['5']['value']['percent']
 
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Will affected users be notified when the policy is meaningfully changed?'][percent] = elem['rubric']['11']['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
+            data_summary['privacyspy']['rubric']['Transparency'][
                 'Will affected users be notified when the policy is meaningfully changed?'][value] = elem['rubric']['11']['value']['percent']
 
+#controlling
+
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the service collect personal data from third parties?'][percent] = elem['rubric']['2']['option']['percent']
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the service collect personal data from third parties?'][value] = elem['rubric']['2']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Is it clear why the service collects the personal data that it does?'][percent] = elem['rubric']['7']['option']['percent']
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Is it clear why the service collects the personal data that it does?'][value] = elem['rubric']['7']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?'][percent] = elem['rubric']['8']['option']['percent']
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?'][value] = elem['rubric']['8']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the policy list the personal data it collects?'][percent] = elem['rubric']['10']['option']['percent']
+            data_summary['privacyspy']['rubric']['Collection'][
+                'Does the policy list the personal data it collects?'][value] = elem['rubric']['10']['value']['percent']
 
 
 
