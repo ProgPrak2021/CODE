@@ -200,6 +200,7 @@ def privacyspy_score(domain):
         'privacyspy': {
             'score': '0',
             'name': '',
+
             'rubric': {
 
                 'Handling': {
@@ -292,13 +293,42 @@ def privacyspy_score(domain):
             }
 
         }}
-    with open('privacyspy.json', encoding="utf8") as file:
+
+    with open('rubric.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
             print(domain + " and score: " + str(elem['score']))
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the policy allow personally - targeted or behavioral marketing?'][percent] = elem['rubric']['0']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the policy allow personally - targeted or behavioral marketing?'][value] = elem['rubric']['0']['value']['percent']
+
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the service allow you to permanently delete your personal data?'][percent] = elem['rubric']['4']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the service allow you to permanently delete your personal data?'][value] = elem['rubric']['4']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the service allow third-party access to private personal data?'][percent] = elem['rubric']['6']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'Does the service allow third-party access to private personal data?'][value] = elem['rubric']['6']['value']['percent']
+
+            data_summary['privacyspy']['rubric']['Handling'][
+                'When does the policy allow law enforcement access to personal data?'][percent] = elem['rubric']['9']['option']['percent']
+            data_summary['privacyspy']['rubric']['Handling'][
+                'When does the policy allow law enforcement access to personal data?'][value] = elem['rubric']['9']['value']['percent']
+
+
+
+
+
+
+
 
     return data_summary
 
