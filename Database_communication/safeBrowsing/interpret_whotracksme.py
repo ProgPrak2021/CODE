@@ -66,10 +66,9 @@ def backend_main(domain_list):
         labels = None  # generic_sql_query(query, db)
 
         if not labels:
-
             # TODO. ACTUALLY CALCUTALTE THE LABEL
-            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
-                                       privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
+            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
+                                       #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
             saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain)], domain)
