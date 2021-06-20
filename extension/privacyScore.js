@@ -9,14 +9,14 @@ chrome.history.search({
   'text': '',
   'startTime': oneWeekAgo
 }, function (historyItems) {
-  this.urls = "";
+  urls = "";
   this.countURLs = 0;
   for (var i = 0; i < historyItems.length; i++) {
     if (historyItems[i].url.includes("chrome-") || historyItems[i].url.includes("google.com/search?")) {
       //do not include google search pages and chrome internal pages
       continue;
     }
-    this.urls += historyItems[i].url.toString();
+    urls += historyItems[i].url.toString();
     this.countURLs++;
   }
 });
