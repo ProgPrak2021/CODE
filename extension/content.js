@@ -140,7 +140,7 @@ function printLabels(output) {
         traverse_JSON(output[domain], storeVar);
 
         //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
-        var expert_mode = true;
+        var expert_mode = false;
 
         if (expert_mode) { //this is for the expert mode
             expert_label = 4; // some number from 1 to 7
