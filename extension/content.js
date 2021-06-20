@@ -143,16 +143,17 @@ function printLabels(output) {
     var expert_mode = true;
 
     if (expert_mode) { //this is for the expert mode
-      expert_label = 2; // some number from 1 to 7
+      expert_label = 9; // some number from 1 to 7
       var list_of_coin_order = get_correct_order(expert_label)
-      let i = 0;
+
       var img_string = '';
       one_coin_style = '.row{margin-left:auto;';
       two_coins_style = '.row{position:relative;left:27px;';
-      while (list_of_coin_order[i] != -1) {
+
+      for (var i = 0; i < list_of_coin_order.length; i++) {
         img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
-        i++;
       }
+
       if (facebook == true) {
         var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + '</div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
         img.appendTo(div);
