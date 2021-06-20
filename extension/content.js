@@ -143,14 +143,27 @@ function printLabels(output) {
         var expert_mode = true;
 
         if (expert_mode) { //this is for the expert mode
-            expert_label = 7; // some number from 1 to 7
+            expert_label = 4; // some number from 1 to 7
             var list_of_coin_order = get_correct_order(expert_label)
+            let i = 0;
+            var img_string = '';
+            one_coin_style = '.row{margin-left:auto;';
+            two_coins_style = '.row{position:relative;left:27px;';
+            while (list_of_coin_order[i] != -1) {
+                img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
+                i++;
+            }
             if (facebook == true) {
-                var img = $('<div class="list"> <div class="entry"><div class="row"><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[0]][0] + '"></div><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[1]][0] + '"></div><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[2]][0] + '"></div> </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + '</div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
                 img.appendTo(div);
             } else {
-                var img = $('<div class="list"> <div class="entry"><div class="row"><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[0]][0] + '"></div><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[1]][0] + '"></div><div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[2]][0] + '"></div> </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
                 img.appendTo(div);
+            }
+            if (i == 1) { // fix styling of less than three coins
+                apply_coin_style(one_coin_style);
+            } else if (i == 2) {
+                apply_coin_style(two_coins_style);
             }
         } else { // this is default mode 
 
@@ -168,6 +181,21 @@ function printLabels(output) {
 
 }
 
+function apply_coin_style(coin_style) {
+    head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+
+    head.appendChild(style);
+
+    style.type = 'text/css';
+    if (style.styleSheet) {
+        // This is required for IE8 and below.
+        style.styleSheet.cssText = coin_style;
+    } else {
+        style.appendChild(document.createTextNode(coin_style));
+    }
+}
+
 function get_correct_order(label) {
     /* 
     bronze_coin:index 0
@@ -177,18 +205,22 @@ function get_correct_order(label) {
     */
     switch (label) {
         case 1:
-            return [1, 1, 1]
+            return [0, -1, -1]
         case 2:
-            return [1, 1, 0]
+            return [0, 0, -1]
         case 3:
-            return [1, 1, 0]
+            return [0, 0, 0]
         case 4:
-            return [1, 1, 1]
+            return [1, -1, -1]
         case 5:
-            return [2, 1, 1]
+            return [1, 1, -1]
         case 6:
-            return [2, 2, 1]
+            return [1, 1, 1]
         case 7:
+            return [2, -1, -1]
+        case 8:
+            return [2, 2, -1]
+        case 9:
             return [2, 2, 2]
         default:
             return "ERROR"
