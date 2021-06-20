@@ -4,7 +4,7 @@ import database_playground
 import json
 from pprint import pprint
 
-preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
+preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 
 
 def fill_label_database(domain_dict, users):
@@ -159,17 +159,19 @@ def whotracksme_score(domain, unwanted_categories):
         for category in unwanted_categories:
             if cookie in (category):
                 index += 2
-            if preferences["whotracksme"]:
-                if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
-                    index += 0.5
-                    facebook = True
-                if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
-                    index += 0.5
-                    amazon = True
+        #if preferences["whotracksme"]:
+        if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
+            index += 0.5
+            facebook = True
+        if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
+            index += 0.5
+            amazon = True
+
     tracker_weight_multiplier = 0.1
-    if preferences["whotracksme"]:
-        if "weight_tracker" in preferences["whotracksme"]:
-            tracker_weight_multiplier = 0.2
+    #if preferences["whotracksme"]:
+    if "weight_tracker" in preferences["whotracksme"]:
+        tracker_weight_multiplier = 0.2
+
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
     index += cookie_len * tracker_weight_multiplier
 
@@ -197,178 +199,19 @@ def whotracksme_score(domain, unwanted_categories):
 def privacyspy_score(domain):
     data_summary = {
         'privacyspy': {
-            'score': '0',
-            'name': '',
-
-            'rubric': {
-
-                'Handling': {
-                    'Does the policy allow personally - targeted or behavioral marketing?': {
-                        'points' : '10',
-                        'percent' : '0',
-                        'value' : ''
-                    },
-
-                    'Does the service allow you to permanently delete your personal data?': {
-                        'points': '5',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Does the service allow third-party access to private personal data?': {
-                        'points': '10',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'When does the policy allow law enforcement access to personal data?': {
-                        'points': '5',
-                        'percent': '0',
-                        'value': ''
-                    }
-
-
-                },
-
-                'Transparency': {
-
-                    #hier auf den namen achten
-                    'Does the policy outline the service general security practices?': {
-                        'points': '3',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    # hier auf den namen achten
-                    'Is the policys history made available?': {
-                        'points': '5',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Does the policy require users to be notified in case of a data breach?': {
-                        'points': '7',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Will affected users be notified when the policy is meaningfully changed?': {
-                        'points': '5',
-                        'percent': '0',
-                        'value': ''
-                    }
-
-                },
-
-                'Collection': {
-
-                    'Does the service collect personal data from third parties?': {
-                        'points': '10',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Is it clear why the service collects the personal data that it does?': {
-                        'points': '10',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?': {
-                        'points': '10',
-                        'percent': '0',
-                        'value': ''
-                    },
-
-                    'Does the policy list the personal data it collects?': {
-                        'points': '10',
-                        'percent': '0',
-                        'value': ''
-                    }
-
-                }
-
-
-
-
-            }
-
+        'score': '0',
+        'name': ''
         }}
 
-    with open('rubric.json', encoding="utf8") as file:
+    with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
-        if domain in elem['hostnames']:
-            print(domain + " and score: " + str(elem['score']))
-            data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
+        if (domain in elem['hostnames']):
+            data_summary['privacyspy']['score'] = elem['score'] / 3
             data_summary['privacyspy']['name'] = elem['name']
 
-            data_summary['privacyspy']['rubric']['Handling']['Does the policy allow personally - targeted or behavioral marketing?']['percent'] = elem['rubric'][0]['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling']['Does the policy allow personally - targeted or behavioral marketing?']['value'] = elem['rubric'][0]['value']
-
-            data_summary['privacyspy']['rubric']['Handling'][
-                'Does the service allow you to permanently delete your personal data?']['percent'] = elem['rubric'][4]['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
-                'Does the service allow you to permanently delete your personal data?']['value'] = elem['rubric'][4]['value']
-
-            data_summary['privacyspy']['rubric']['Handling'][
-                'Does the service allow third-party access to private personal data?']['percent'] = elem['rubric'][6]['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
-                'Does the service allow third-party access to private personal data?']['value'] = elem['rubric'][6]['value']
-
-            data_summary['privacyspy']['rubric']['Handling'][
-                'When does the policy allow law enforcement access to personal data?']['percent'] = elem['rubric'][9]['option']['percent']
-            data_summary['privacyspy']['rubric']['Handling'][
-                'When does the policy allow law enforcement access to personal data?']['value'] = elem['rubric'][9]['value']
-
-#transparency
-
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Does the policy outline the service general security practices?']['percent'] = elem['rubric'][1]['option']['percent']
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Does the policy outline the service general security practices?']['value'] = elem['rubric'][1]['value']
-
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Is the policys history made available?']['percent'] = elem['rubric'][3]['option']['percent']
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Is the policys history made available?']['value'] = elem['rubric'][3]['value']
-
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Does the policy require users to be notified in case of a data breach?']['percent'] = elem['rubric'][5]['option']['percent']
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Does the policy require users to be notified in case of a data breach?']['value'] = elem['rubric'][5]['value']
-
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Will affected users be notified when the policy is meaningfully changed?']['percent'] = elem['rubric'][11]['option']['percent']
-            data_summary['privacyspy']['rubric']['Transparency'][
-                'Will affected users be notified when the policy is meaningfully changed?']['value'] = elem['rubric'][11]['value']
-
-#controlling
-
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the service collect personal data from third parties?']['percent'] = elem['rubric'][2]['option']['percent']
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the service collect personal data from third parties?']['value'] = elem['rubric'][2]['value']
-
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Is it clear why the service collects the personal data that it does?']['percent'] = elem['rubric'][7]['option']['percent']
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Is it clear why the service collects the personal data that it does?']['value'] = elem['rubric'][7]['value']
-
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?']['percent'] = elem['rubric'][8]['option']['percent']
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the service allow the user to control whether personal data is collected or used for non-critical purposes?']['value'] = elem['rubric'][8]['value']
-
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the policy list the personal data it collects?']['percent'] = elem['rubric'][10]['option']['percent']
-            data_summary['privacyspy']['rubric']['Collection'][
-                'Does the policy list the personal data it collects?']['value'] = elem['rubric'][10]['value']
-
-
-
-
     return data_summary
+
 
 
 def api_call(request, payload, body, type):
