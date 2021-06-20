@@ -28,28 +28,54 @@ var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 
 
+/*
+ Collects (and just log, at the moment) URLs user ctrl+clicked on.
+ */
+function collectUrl() {
+  const elems = document.querySelectorAll('.yuRUbf');
+  var clickedUrls = '';
+
+  elems.forEach(element => {
+    element.addEventListener('click', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        //console.log('clicked on: ' + findUrl(element));
+        clickedUrls += findUrl(element);
+        //console.log('clickedUrls: '+ clickedUrls);
+      }
+    });
+  });
+  return clickedUrls;
+}
+/*
+Extracts URL from the Google Search Result element (class name: 'yuRUbf')
+ */
+function findUrl(element) {
+  return new URL(element.children[0].href);
+}
+
+
 function sendURLsToBackend(rootNode) {
-    var elems = document.getElementsByClassName("yuRUbf");
-    var urls = "";
-    for (var i of elems) {
-        var url = new URL(i.children[0].href);
-        urls += url;
-        console.log("urls " + url);
-    }
-    return urls;
+  var elems = document.getElementsByClassName("yuRUbf");
+  var urls = "";
+  for (var i of elems) {
+    var url = new URL(i.children[0].href);
+    urls += url;
+    console.log("urls " + url);
+  }
+  return urls;
 }
 
 //$('.code-selector').on('click', function(){
 var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        // console.log(this.responseText)
-        var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-        console.log(output)
+xhttp.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    // console.log(this.responseText)
+    var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+    console.log(output)
 
-        printLabels(output)
+    printLabels(output)
 
-    }
+  }
 };
 var urls = sendURLsToBackend();
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
@@ -60,161 +86,163 @@ xhttp.send(urls);
 
 function printLabels(output) {
 
-    function storeVar(key, value) {
-        //console.log(key)
-        if (key == "label") {
-            //console.log("key: " + key + " value: " + value)
-            label = value
-                //console.log(label);
-        }
-        if (key == "tracker_count") {
-            //console.log("key: " + key + " value: " + value)
-            tracker = value
-        }
-        if (key == "facebook") {
-            //console.log("key: " + key + " value: " + value)
-            facebook = value
-        }
+  function storeVar(key, value) {
+    //console.log(key)
+    if (key == "label") {
+      //console.log("key: " + key + " value: " + value)
+      label = value
+      //console.log(label);
+    }
+    if (key == "tracker_count") {
+      //console.log("key: " + key + " value: " + value)
+      tracker = value
+    }
+    if (key == "facebook") {
+      //console.log("key: " + key + " value: " + value)
+      facebook = value
+    }
+    if (key == "amazon") {
+      //console.log("key: " + key + " value: " + value)
+      amazon = value
+    }
+  }
+
+  function traverse_JSON(obj, func) {
+    for (var key in obj) {
+      func.apply(this, [key, obj[key]]);
+      if (obj[key] !== null && typeof (obj[key]) == "object") {
+        //going one step down in the object tree!!
+        traverse_JSON(obj[key], func);
+      }
+    }
+  }
+
+  var labels_expert = [
+    [chrome.runtime.getURL('images/icons/bronze_coin_128.png'), "none"],
+    [chrome.runtime.getURL('images/icons/silver_coin_128.png'), "none"],
+    [chrome.runtime.getURL('images/icons/gold_coin_128.png'), "none"]
+  ]
+  var labels = [
+    [chrome.runtime.getURL('images/siren.png'), "none"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
+  ]
+
+  var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png'), chrome.runtime.getURL('images/icons/amazon_icon.png')]
+  var divs = document.getElementsByClassName("yuRUbf");
+
+  for (var div of divs) {
+    var label, tracker, facebook, amazon
+    var domain = getDomain(div);
+    //console.log(domain)
+
+    traverse_JSON(output[domain], storeVar);
+
+    //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
+    var expert_mode = true;
+
+    if (expert_mode) { //this is for the expert mode
+      expert_label = 2; // some number from 1 to 7
+      var list_of_coin_order = get_correct_order(expert_label)
+      let i = 0;
+      var img_string = '';
+      one_coin_style = '.row{margin-left:auto;';
+      two_coins_style = '.row{position:relative;left:27px;';
+      while (list_of_coin_order[i] != -1) {
+        img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
+        i++;
+      }
+      if (facebook == true) {
+        var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + '</div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+        img.appendTo(div);
+      } else {
+        var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+        img.appendTo(div);
+      }
+      if (i == 1) { // fix styling of less than three coins
+        apply_coin_style(one_coin_style);
+      } else if (i == 2) {
+        apply_coin_style(two_coins_style);
+      }
+    } else { // this is default mode 
+
+      if (facebook == true) {
+        var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
+        img.appendTo(div);
+      } else {
+        var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"></div></div></div></div>');
+        img.appendTo(div);
+      }
     }
 
-    function traverse_JSON(obj, func) {
-        for (var key in obj) {
-            func.apply(this, [key, obj[key]]);
-            if (obj[key] !== null && typeof(obj[key]) == "object") {
-                //going one step down in the object tree!!
-                traverse_JSON(obj[key], func);
-            }
-        }
-    }
-
-
-    var labels_expert = [
-        [chrome.runtime.getURL('images/icons/bronze_coin_128.png'), "none"],
-        [chrome.runtime.getURL('images/icons/silver_coin_128.png'), "none"],
-        [chrome.runtime.getURL('images/icons/gold_coin_128.png'), "none"]
-    ]
-    var labels = [
-        [chrome.runtime.getURL('images/siren.png'), "none"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
-    ]
-    var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png')]
-    var divs = document.getElementsByClassName("yuRUbf");
-
-
-    for (var div of divs) {
-        var label, tracker, facebook
-        var domain = getDomain(div);
-        //console.log(domain)
-
-        traverse_JSON(output[domain], storeVar);
-
-        //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
-        var expert_mode = false;
-
-        if (expert_mode) { //this is for the expert mode
-            expert_label = 4; // some number from 1 to 7
-            var list_of_coin_order = get_correct_order(expert_label)
-            let i = 0;
-            var img_string = '';
-            one_coin_style = '.row{margin-left:auto;';
-            two_coins_style = '.row{position:relative;left:27px;';
-            while (list_of_coin_order[i] != -1) {
-                img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
-                i++;
-            }
-            if (facebook == true) {
-                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + '</div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            } else {
-                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            }
-            if (i == 1) { // fix styling of less than three coins
-                apply_coin_style(one_coin_style);
-            } else if (i == 2) {
-                apply_coin_style(two_coins_style);
-            }
-        } else { // this is default mode 
-
-            if (facebook == true) {
-                var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            } else {
-                var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"></div></div></div></div>');
-                img.appendTo(div);
-            }
-        }
-
-    }
-    $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
-
+  }
+  $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
 }
 
 function apply_coin_style(coin_style) {
-    head = document.head || document.getElementsByTagName('head')[0],
-        style = document.createElement('style');
+  head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
 
-    head.appendChild(style);
+  head.appendChild(style);
 
-    style.type = 'text/css';
-    if (style.styleSheet) {
-        // This is required for IE8 and below.
-        style.styleSheet.cssText = coin_style;
-    } else {
-        style.appendChild(document.createTextNode(coin_style));
-    }
+  style.type = 'text/css';
+  if (style.styleSheet) {
+    // This is required for IE8 and below.
+    style.styleSheet.cssText = coin_style;
+  } else {
+    style.appendChild(document.createTextNode(coin_style));
+  }
 }
 
 function get_correct_order(label) {
-    /* 
-    bronze_coin:index 0
-    silver_coin:index 1
-    gold_coin:index 2
-    label goes from 1 to 7 
-    */
-    switch (label) {
-        case 1:
-            return [0, -1, -1]
-        case 2:
-            return [0, 0, -1]
-        case 3:
-            return [0, 0, 0]
-        case 4:
-            return [1, -1, -1]
-        case 5:
-            return [1, 1, -1]
-        case 6:
-            return [1, 1, 1]
-        case 7:
-            return [2, -1, -1]
-        case 8:
-            return [2, 2, -1]
-        case 9:
-            return [2, 2, 2]
-        default:
-            return "ERROR"
-    }
+  /* 
+  bronze_coin:index 0
+  silver_coin:index 1
+  gold_coin:index 2
+  label goes from 1 to 7 
+  */
+  switch (label) {
+    case 1:
+      return [0, -1, -1]
+    case 2:
+      return [0, 0, -1]
+    case 3:
+      return [0, 0, 0]
+    case 4:
+      return [1, -1, -1]
+    case 5:
+      return [1, 1, -1]
+    case 6:
+      return [1, 1, 1]
+    case 7:
+      return [2, -1, -1]
+    case 8:
+      return [2, 2, -1]
+    case 9:
+      return [2, 2, 2]
+    default:
+      return "ERROR"
+  }
 
 }
 
 function getDomain(div) {
-    var url = JSON.stringify(div.children[0].href)
-    if (url.includes("https://")) {
-        url = url.replace("https://", "")
-    } else {
-        console.log("---- http protocol found ----")
-        return ""
-    }
-    url = url.split("/")[0]
-    url_split = url.split(".")
-    if (url_split.length >= 3) {
-        url_split.shift()
-    }
-    url = url_split.join(".")
-    url = url.replace('"', "")
-    return url
+  var url = JSON.stringify(div.children[0].href)
+  if (url.includes("https://")) {
+    url = url.replace("https://", "")
+  } else {
+    console.log("---- http protocol found ----")
+    return ""
+  }
+  url = url.split("/")[0]
+  url_split = url.split(".")
+  if (url_split.length >= 3) {
+    url_split.shift()
+  }
+  url = url_split.join(".")
+  url = url.replace('"', "")
+  return url
 
 }
 
@@ -325,6 +353,7 @@ function getLabel(div, output) {
   var index = output[domain];
   return index //1...2....3
 }
-
-
 */
+
+
+
