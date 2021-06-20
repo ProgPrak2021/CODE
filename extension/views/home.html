@@ -9,27 +9,9 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../privacyScore.js"></script>
 </head>
 <body>
-
-<?php
-$website = $websiteErr = "";
-  if (empty($_POST["website"])) {
-    $website = "";
-  } else {
-    $website = test_input($_POST["website"]);
-    // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
-    if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
-      $websiteErr = "Invalid URL";
-    }
-  }
-
-  function test_input($data) {
-    $data = htmlspecialchars($data);
-    return $data;
-}
-?>
-
 
 <nav class="navbar navbar-expand-sm bg-dark text-light justify-content-center">
     <h3> Privacy Summary </h3>
@@ -37,10 +19,11 @@ $website = $websiteErr = "";
 
 <div class="container-sm pt-3 p-3 text-dark">
     <div class="row justify-content-center">
-        <h1 class="display-1">98%</h1> <br>
+        <h1 class="display-1"><div id="privacyScore_number"></div></h1>
+
     </div>
     <div class="row justify-content-center">
-        Good job! <br>You took good care about your privacy in the past week: 98% of your visited websites had a green label!
+        <div id="privacyScore_info"></div>
     </div>
 </div>
 <div class="container-sm pt-3 p-3 text-center rounded">
@@ -77,5 +60,6 @@ $website = $websiteErr = "";
 
 <nav class="navbar navbar-expand-sm fixed-bottom bg-dark text-light justify-content-center">
     provided by CODE <img src="../images/green_icon_32.png" height="32" width="32" alt="logo"/></nav>
+<script src="../privacyScore.js"></script>
 </body>
 </html>
