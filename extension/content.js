@@ -27,33 +27,6 @@ print methode/logik überarbeitet:
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 
-
-/*
- Collects (and just log, at the moment) URLs user ctrl+clicked on.
- */
-function collectUrl() {
-    const elems = document.querySelectorAll('.yuRUbf');
-    var clickedUrls = '';
-
-    elems.forEach(element => {
-        element.addEventListener('click', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                //console.log('clicked on: ' + findUrl(element));
-                clickedUrls += findUrl(element);
-                //console.log('clickedUrls: '+ clickedUrls);
-            }
-        });
-    });
-    return clickedUrls;
-}
-/*
-Extracts URL from the Google Search Result element (class name: 'yuRUbf')
- */
-function findUrl(element) {
-    return new URL(element.children[0].href);
-}
-
-
 function sendURLsToBackend(rootNode) {
     var elems = document.getElementsByClassName("yuRUbf");
     var urls = "";
