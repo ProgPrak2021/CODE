@@ -71,7 +71,7 @@ def backend_main(domain_list):
                                        #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
             saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
-                                       privacyspy_score(domain)], domain)
+                                       privacyspy_score(domain)], domain, calced_label)
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
             data_summary[domain] = {'label': calced_label}, whotracksme_score(domain,
                                                                               unwanted_categories), phishstats_score(
