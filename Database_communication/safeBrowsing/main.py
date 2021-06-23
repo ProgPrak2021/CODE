@@ -10,16 +10,6 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 
 
-# collecting the original full urls to replace on the search page
-# still in progress - just for fun at the moment
-# @author diana
-# def collect_full_urls(urls):
-#     full_urls = []
-#     for url in urls:
-#         full_urls.append(url)
-#     return full_urls
-
-
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
     hardcoded_user_preference = ["pornvertising"]
@@ -57,22 +47,6 @@ def receivePref():
         print(preferences)
 
     return ""
-
-
-# collecting visited urls for statistics
-# still working on it
-# @author: diana
-# @app.route('/collecturls/', methods=['POST'])
-# def collect_visited_urls():
-#     urls_list = str(request.data)
-#     urls_list = urls_list.split("https://")
-#     urls_list.pop(0)
-#     domains = []
-#     for url in urls_list:
-#         domains.append(get_domain_by_url(url))
-#     domains = list(dict.fromkeys(domains))
-#     print(domains)
-#     return jsonify(domains)
 
 
 @app.route('/ids/', methods=['GET'])

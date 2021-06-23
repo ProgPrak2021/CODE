@@ -11,8 +11,8 @@
 
   "content_scripts": [
     {
-      "matches": ["https://*.google.com/search?*", "https://*.google.de/search?*" ],
-      "js": ["js/jquery.min.js", "content.js"],
+      "matches": ["https://*.google.com/search?*"],
+      "js": ["js/jquery.min.js", "content.js", "privacyScore.js"],
       "css":["/css/hardcoded_style.css"]
     }
   ],
@@ -33,6 +33,7 @@
   "options_page" : "/views/options.html",
 
   "permissions": [
+    "history",
     "tabs"
   ],
 

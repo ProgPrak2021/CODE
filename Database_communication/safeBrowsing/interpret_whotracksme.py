@@ -4,7 +4,7 @@ import database_playground
 import json
 from pprint import pprint
 
-preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
+preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 
 
 def fill_label_database(domain_dict, users):
@@ -66,10 +66,9 @@ def backend_main(domain_list):
         labels = None  # generic_sql_query(query, db)
 
         if not labels:
-
             # TODO. ACTUALLY CALCUTALTE THE LABEL
-            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
-                                       privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
+            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
+                                       #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
             saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain)], domain)
@@ -160,17 +159,19 @@ def whotracksme_score(domain, unwanted_categories):
         for category in unwanted_categories:
             if cookie in (category):
                 index += 2
-            if preferences["whotracksme"]:
-                if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
-                    index += 0.5
-                    facebook = True
-                if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
-                    index += 0.5
-                    amazon = True
+        #if preferences["whotracksme"]:
+        if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
+            index += 0.5
+            facebook = True
+        if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
+            index += 0.5
+            amazon = True
+
     tracker_weight_multiplier = 0.1
-    if preferences["whotracksme"]:
-        if "weight_tracker" in preferences["whotracksme"]:
-            tracker_weight_multiplier = 0.2
+    #if preferences["whotracksme"]:
+    if "weight_tracker" in preferences["whotracksme"]:
+        tracker_weight_multiplier = 0.2
+
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
     index += cookie_len * tracker_weight_multiplier
 
@@ -199,9 +200,13 @@ def privacyspy_score(domain):
     data_summary = {
         'privacyspy': {
             'score': '0',
-            'name': ''
+            'name': '',
+
+            'rubric': {}
+
         }}
-    with open('privacyspy.json', encoding="utf8") as file:
+
+    with open('rubric.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
@@ -209,7 +214,10 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
 
+            data_summary['privacyspy']['rubric'] = elem
+
     return data_summary
+
 
 
 def api_call(request, payload, body, type):
