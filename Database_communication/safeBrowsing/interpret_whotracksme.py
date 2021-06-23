@@ -106,7 +106,7 @@ def saveCalcLabels(data_summary, domain, label):
 
     #privacyspy_score = "0.6"
 
-    query = f"REPLACE INTO labels (domain, calced_labels, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
+    query = f"REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
     cursor = db.cursor()
     cursor.execute(query)
     db.commit()
