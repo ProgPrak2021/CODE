@@ -61,9 +61,11 @@ def backend_main(domain_list):
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
 
+    newlabelsdb = database_playground.connect_new_labels()
+
     for domain in domain_list:
-        # query = f"SELECT label FROM domain_data WHERE domain=\"{domain}\" AND user_linking = \"{dict_to_String(preferences)}\";"
-        labels = None  # generic_sql_query(query, db)
+        query = f"SELECT calced_label FROM labels WHERE domain=\"{domain}\";"
+        labels = generic_sql_query(query, newlabelsdb)
 
         if not labels:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
