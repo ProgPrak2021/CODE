@@ -236,7 +236,7 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     data_summary = {
         'phishstats.db': {
             'score': '0',
-            'category': 'no info',
+            'category': 'no phishing',
             'phishing': 'false'
         }}
 
