@@ -89,7 +89,7 @@ def backend_main(domain_list):
     return json.dumps(data_summary)  # json.dumps(domain_dict)
 
 
-def saveCalcLabels(data_summary, domain):
+def saveCalcLabels(data_summary, domain, label):
     db = database_playground.connect_new_labels()
     # print(domain_dict)
 
@@ -104,9 +104,9 @@ def saveCalcLabels(data_summary, domain):
 
     privacyspy_score = str(data_summary[2]["privacyspy"]["score"])
 
-    privacyspy_score = "0.6"
+    #privacyspy_score = "0.6"
 
-    query = f"REPLACE INTO labels (domain, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
+    query = f"REPLACE INTO labels (domain, calced_labels, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
     cursor = db.cursor()
     cursor.execute(query)
     db.commit()
