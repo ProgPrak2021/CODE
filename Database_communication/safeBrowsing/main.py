@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main
-
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main, \
+    expert_mode
 
 app = Flask(__name__)
 CORS(app)
@@ -32,7 +32,7 @@ def receive_urls():
 
 
 @app.route('/sendPref/', methods=['POST'])
-def receivePref():
+def receivePref(): # currently only works for whotrackme prefs
     pref = request.data.decode('UTF-8')
     pref = pref.split("SPLIT")
     print(pref)
@@ -47,6 +47,15 @@ def receivePref():
         print(preferences)
 
     return ""
+
+
+@app.route('/switchExpertMode', methods=['POST'])
+def switchExpertMode():
+    global expert_mode
+    if expert_mode:
+        expert_mode = False
+    else:
+        expert_mode = True
 
 
 @app.route('/ids/', methods=['GET'])

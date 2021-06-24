@@ -66,6 +66,9 @@ function printLabels(output) {
             label = value
                 //console.log(label);
         }
+        if (key == "expert") {
+            expert_mode = value
+        }
         if (key == "tracker_count") {
             //console.log("key: " + key + " value: " + value)
             tracker = value
@@ -106,14 +109,13 @@ function printLabels(output) {
     var divs = document.getElementsByClassName("yuRUbf");
 
     for (var div of divs) {
-        var label, tracker, facebook, amazon
+        var label, expert_mode, tracker, facebook, amazon
         var domain = getDomain(div);
         //console.log(domain)
 
         traverse_JSON(output[domain], storeVar);
 
         //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
-        var expert_mode = true;
         if (expert_mode) { //this is for the expert mode
             expert_label = 6; // some number from 1 to 7
             var list_of_coin_order = get_correct_order(expert_label)

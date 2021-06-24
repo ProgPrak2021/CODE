@@ -5,6 +5,7 @@ import json
 from pprint import pprint
 
 preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
+expert_mode = False
 
 
 def fill_label_database(domain_dict, users):
@@ -75,7 +76,7 @@ def backend_main(domain_list):
             saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain)], domain, calced_label)
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
-            data_summary[domain] = {'label': calced_label}, whotracksme_score(domain,
+            data_summary[domain] = {'label': calced_label}, {'expert':expert_mode}, whotracksme_score(domain,
                                                                               unwanted_categories), phishstats_score(
                 domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
 
@@ -85,6 +86,7 @@ def backend_main(domain_list):
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
         else:
+            print(labels[0][0])
             domain_dict[domain] = labels[0][0]
 
     pprint(data_summary)
@@ -204,7 +206,7 @@ def privacyspy_score(domain):
             'score': '0',
             'name': '',
 
-            'rubric': {}
+            #'rubric': {}
 
         }}
 
@@ -216,7 +218,7 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
 
-            data_summary['privacyspy']['rubric'] = elem
+            #data_summary['privacyspy']['rubric'] = elem
 
     return data_summary
 
@@ -242,7 +244,7 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
             'phishing': 'false'
         }}
 
-    if (req == []):
+    if not req:
         return data_summary
 
     score = req[0][0]
