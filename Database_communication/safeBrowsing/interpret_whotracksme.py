@@ -70,7 +70,10 @@ def backend_main(domain_list):
 
         if not labels:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
-            calced_label = calc_label([whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
+            label_max = 3
+            if expert_mode:
+                label_max = 9
+            calced_label = calc_label(label_max ,[whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
                                        #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
             saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
@@ -116,7 +119,7 @@ def saveCalcLabels(data_summary, domain, label):
     db.commit()
 
 
-def calc_label(db_array):
+def calc_label(label_max, db_array):
     res = 0
     no_data = 0
     for db in db_array:
@@ -126,8 +129,8 @@ def calc_label(db_array):
     if res == 0:
         return 0
     res = res / (len(db_array) - no_data)
-    if res > 3:
-        res = 3
+    if res > label_max:
+        res = label_max
     if res != 0 and res.__round__() == 0:
         res = 1
     else:
@@ -161,7 +164,7 @@ def whotracksme_score(domain, unwanted_categories):
     amazon = False
     for cookie in trackers:
         for category in unwanted_categories:
-            if cookie in (category):
+            if cookie in category:
                 index += 2
         #if preferences["whotracksme"]:
         if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
