@@ -3,6 +3,7 @@ from flask import jsonify, config
 import database_playground
 import json
 from pprint import pprint
+import ast
 
 preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 expert_mode = False
@@ -65,10 +66,24 @@ def backend_main(domain_list):
     newlabelsdb = database_playground.connect_new_labels()
 
     for domain in domain_list:
-        query = f"SELECT calced_label FROM labels WHERE domain=\"{domain}\";"
-        labels = None #generic_sql_query(query, newlabelsdb)
 
-        if not labels:
+
+        query = f"SELECT name FROM columns;"
+
+        columns = generic_sql_query(query, newlabelsdb)
+
+
+        cnt = columns.__len__()
+        data_summary[domain] = []
+        for i in range(cnt):
+            col = columns[i]
+
+            query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+
+            partialDict = generic_sql_query(query, newlabelsdb)
+            data_summary[domain].append(partialDict)
+
+        if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
             label_max = 3
             if expert_mode:
@@ -88,9 +103,7 @@ def backend_main(domain_list):
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
-        else:
-            print(labels[0][0])
-            domain_dict[domain] = labels[0][0]
+
 
     pprint(data_summary)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
@@ -114,6 +127,11 @@ def saveCalcLabels(data_summary, domain, label):
             key = dictString[start:end-3]
 
         query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
+        cursor = db.cursor()
+        cursor.execute(query)
+        db.commit()
+
+        query = f"INSERT INTO columns (name) SELECT '{key}' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = '{key}');"
         cursor = db.cursor()
         cursor.execute(query)
         db.commit()
