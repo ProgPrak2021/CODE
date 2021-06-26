@@ -67,21 +67,22 @@ def backend_main(domain_list):
 
     for domain in domain_list:
 
-
-        query = f"SELECT name FROM columns;"
-
-        columns = generic_sql_query(query, newlabelsdb)
-
-
-        cnt = columns.__len__()
+        query = f"SELECT domain FROM dict where domain = '{domain}';"
+        doma = generic_sql_query(query, newlabelsdb)
         data_summary[domain] = []
-        for i in range(cnt):
-            col = columns[i]
 
-            query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+        if doma:
+            query = f"SELECT name FROM columns;"
+            columns = generic_sql_query(query, newlabelsdb)
+            cnt = columns.__len__()
+            for i in range(cnt):
+                col = columns[i]
 
-            partialDict = generic_sql_query(query, newlabelsdb)
-            data_summary[domain].append(partialDict)
+                query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+
+                partialDict = generic_sql_query(query, newlabelsdb)
+                data_summary[domain].append(partialDict[0])
+
 
         if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
@@ -106,7 +107,8 @@ def backend_main(domain_list):
 
 
     pprint(data_summary)
-    return json.dumps(data_summary)  # json.dumps(domain_dict)
+    dumpDatasum = json.dumps(data_summary)
+    return dumpDatasum  # json.dumps(domain_dict)
 
 
 def saveCalcLabels(data_summary, domain, label):
