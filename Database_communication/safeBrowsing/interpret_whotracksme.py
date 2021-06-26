@@ -276,7 +276,7 @@ def privacyspy_score(domain):
             'link': ''
 
         }}
-
+    
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
@@ -284,7 +284,8 @@ def privacyspy_score(domain):
             print(domain + " and score: " + str(elem['score']))
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
-            data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' +
+            data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
+
 
             #data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
 
