@@ -113,11 +113,12 @@ def saveCalcLabels(data_summary, domain, label):
         if(key[-3:] == '.db'):
             key = dictString[start:end-3]
 
+        query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
+        cursor = db.cursor()
+        cursor.execute(query)
+        db.commit()
+
         try:
-            query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
-            cursor = db.cursor()
-            cursor.execute(query)
-            db.commit()
 
             query = f"ALTER TABLE dict ADD \"{key}\" varchar(999);"
             cursor = db.cursor()
