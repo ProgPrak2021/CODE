@@ -273,19 +273,20 @@ def privacyspy_score(domain):
             'score': '0',
             'name': '',
 
-            'link': 'https://privacyspy.org/product/'
+            'link': ''
 
         }}
 
-    with open('rubric.json', encoding="utf8") as file:
+    with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
             print(domain + " and score: " + str(elem['score']))
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
+            data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' +
 
-            #data_summary['privacyspy']['rubric'] = elem
+            #data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
 
     return data_summary
 
