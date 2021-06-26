@@ -273,7 +273,7 @@ def privacyspy_score(domain):
             'score': '0',
             'name': '',
 
-            #'rubric': {}
+            'link': 'https://privacyspy.org/product/'
 
         }}
 
