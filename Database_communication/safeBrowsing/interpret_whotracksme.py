@@ -81,7 +81,9 @@ def backend_main(domain_list):
                 query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
 
                 partialDict = generic_sql_query(query, newlabelsdb)
-                data_summary[domain].append(partialDict[0])
+                strDict = (partialDict[0])[0]
+                newDict = json.loads(strDict)
+                data_summary[domain].append(newDict)
 
 
         if not data_summary[domain]:
@@ -92,12 +94,16 @@ def backend_main(domain_list):
             calced_label = calc_label(label_max ,[whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
                                        #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
-            saveCalcLabels([whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
-                                       privacyspy_score(domain)], domain, calced_label)
+
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
-            data_summary[domain] = {'label': calced_label}, {'expert':expert_mode}, whotracksme_score(domain,
+
+            dictionary = {'label': calced_label}, {'expert':expert_mode}, whotracksme_score(domain,
                                                                               unwanted_categories), phishstats_score(
                 domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
+
+            data_summary[domain] = dictionary
+
+            saveCalcLabels(dictionary,domain,calced_label)
 
             # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
