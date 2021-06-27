@@ -5,7 +5,8 @@ import json
 from pprint import pprint
 import ast
 
-preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
+preferences = {"whotracksme": ['Facebook', 'Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [],
+               "webrisk": []}
 expert_mode = False
 
 
@@ -85,32 +86,30 @@ def backend_main(domain_list):
                 newDict = json.loads(strDict)
                 data_summary[domain].append(newDict)
 
-
         if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
             label_max = 3
             if expert_mode:
                 label_max = 9
-            calced_label = calc_label(label_max ,[whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])#,
-                                       #privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
-
+            calced_label = calc_label(label_max,
+                                      [whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])  # ,
+            # privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
 
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
 
-            dictionary = {'label': calced_label}, {'expert':expert_mode}, whotracksme_score(domain,
-                                                                              unwanted_categories), phishstats_score(
+            dictionary = {'label': calced_label}, {'expert': expert_mode}, whotracksme_score(domain,
+                                                                                             unwanted_categories), phishstats_score(
                 domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
 
             data_summary[domain] = dictionary
 
-            saveCalcLabels(dictionary,domain,calced_label)
+            saveCalcLabels(dictionary, domain, calced_label)
 
             # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
-
 
     pprint(data_summary)
     dumpDatasum = json.dumps(data_summary)
@@ -131,8 +130,8 @@ def saveCalcLabels(data_summary, domain, label):
         start = dictString.find('"') + 1
         end = dictString.find('"', start)
         key = dictString[start:end]
-        if(key[-3:] == '.db'):
-            key = dictString[start:end-3]
+        if (key[-3:] == '.db'):
+            key = dictString[start:end - 3]
 
         query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
         cursor = db.cursor()
@@ -159,17 +158,13 @@ def saveCalcLabels(data_summary, domain, label):
 
         except:
 
-            #query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
+            # query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
             query = f"update dict set {key} = '{dictString}' where domain = '{domain}';"
 
             cursor = db.cursor()
             cursor.execute(query)
             db.commit()
             continue
-
-
-
-
 
     """whotracksme_label = data_summary[0]["whotracksme.db"]["score"]
     tracker_cnt = data_summary[0]["whotracksme.db"]["tracker_count"]
@@ -181,9 +176,6 @@ def saveCalcLabels(data_summary, domain, label):
     phishing_category = data_summary[1]["phishstats.db"]["category"]
 
     privacyspy_score = str(data_summary[2]["privacyspy"]["score"])"""
-
-
-
 
     """query = f"REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
     cursor = db.cursor()
@@ -213,8 +205,7 @@ def calc_label(label_max, db_array):
 
 def whotracksme_score(domain, unwanted_categories):
     # print(preferences)
-    query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
-
+    query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name, https FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
     db = database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
@@ -230,32 +221,47 @@ def whotracksme_score(domain, unwanted_categories):
     if preferences["whotracksme"]:
         if "disable" in preferences["whotracksme"]:
             return data_summary
-
+    max_index = 3
+    expert_weight = 1
+    if expert_mode:
+        expert_weight = 2.5  # multiplier for the expert mode
+        max_index = 9
+    facebook_amazon_weight = 0.5 * expert_weight
+    category_weight = 2 * expert_weight
+    https_weight = 1.5 * expert_weight
+    tracker_multiplier_weight = 0.1 * expert_weight
+    https_avg = 0
     index = 0
     facebook = False
     amazon = False
+    https_all_tracker = 0
     for cookie in trackers:
+        print(cookie[3])
         for category in unwanted_categories:
             if cookie in category:
-                index += 2
-        #if preferences["whotracksme"]:
+                index += category_weight
+        # if preferences["whotracksme"]:
         if "Facebook" in preferences["whotracksme"] and cookie.__contains__("Facebook"):
-            index += 0.5
+            index += facebook_amazon_weight
             facebook = True
         if "Amazon" in preferences["whotracksme"] and cookie.__contains__("Amazon"):
-            index += 0.5
+            index += facebook_amazon_weight
             amazon = True
+        https_all_tracker += cookie[3]
+    if trackers:
+        https_avg = https_all_tracker / len(trackers)
+        if https_avg < 0.7:  # means that less than 70 percent of the domains tracker use the https protocoll
+            index += https_weight
 
-    tracker_weight_multiplier = 0.1
-    #if preferences["whotracksme"]:
+    # if preferences["whotracksme"]:
     if "weight_tracker" in preferences["whotracksme"]:
-        tracker_weight_multiplier = 0.2
+        tracker_multiplier_weight = tracker_multiplier_weight * 2
 
     cookie_len = len(list(filter(lambda a: not a.__contains__("essential"), trackers)))
-    index += cookie_len * tracker_weight_multiplier
+    index += cookie_len * tracker_multiplier_weight
 
-    if index > 3:
-        index = 3
+    if index > max_index:
+        index = max_index
     if index != 0 and index.__round__() == 0:
         index = 1
     index = index.__round__()
@@ -264,13 +270,14 @@ def whotracksme_score(domain, unwanted_categories):
         data_summary['whotracksme.db']['trackers'] += [{  # Fill trackers array
             'name': i[0],
             'category': i[1],
-            'company': i[2]
+            'company': i[2],
         }]
 
     data_summary['whotracksme.db']['score'] = eval(str(index))
     data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
     data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
     data_summary['whotracksme.db']['amazon'] = eval(str(amazon))
+    data_summary['whotracksme.db']['https_avg'] = eval(str(https_avg))
 
     return data_summary
 
@@ -284,7 +291,7 @@ def privacyspy_score(domain):
             'link': ''
 
         }}
-    
+
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
@@ -294,11 +301,9 @@ def privacyspy_score(domain):
             data_summary['privacyspy']['name'] = elem['name']
             data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
 
-
-            #data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
+            # data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
 
     return data_summary
-
 
 
 def api_call(request, payload, body, type):
