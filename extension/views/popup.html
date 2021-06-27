@@ -4,21 +4,35 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/custom.css">
-  <title>New Tab</title>
+     <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <title>Pop-up</title>
 </head>
-<body>
-  <div class="container">
+<body style="min-width: 300px; min-height: 300px">
+  <div class="container-fluid" style="background-color: black;">
+    <div class="d-flex justify-content-center">
+      <p class="my-2" style="color: antiquewhite">
+       Thanks for using Code!</p>
+    </div>
+  </div>
+  <div class="container-fluid mt-3">
     <div class="row">
-      <div class="col-12">
-        <img src="/images/icon_128_clear.png" alt="code-logo">
-        <h1>Adrian stinkt</h1>
-        <h2 id="antwort"></h2>
+      <div class="col-10 offset-1 text-center">
+        <p>View more Options here</p>
+        <button class="btn btn-success font-weight-bold" style="background-color: rgb(118, 214, 40); color: black;" id="options">Advanced Settings</button>
       </div>
     </div>
   </div>
-</body>
-<script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.bundle.min.js"></script>
+
+  <div class="container-fluid" style="background-color: black;  position: absolute; bottom: 0px;">
+    <div class="d-flex">
+      <p class="my-2" style="color: antiquewhite">
+      <img src="../images/green_icon_16.png" alt="code logo " class="img-fluid mb-1"> Code</p>
+    </div>
+  </div>
+  
+	</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/popup.js"></script>
 </html>

@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.google.com/search?*"],
-      "js": ["js/jquery.min.js", "content.js", "privacyScore.js"],
+      "js": ["js/jquery.min.js", "content.js", "privacyScore.js", "js/popup.js"],
       "css":["/css/hardcoded_style.css"]
     }
   ],
