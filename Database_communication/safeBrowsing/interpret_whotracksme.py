@@ -3,6 +3,7 @@ from flask import jsonify, config
 import database_playground
 import json
 from pprint import pprint
+import ast
 
 preferences = {"whotracksme": ['Facebook','Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": []}
 expert_mode = False
@@ -65,10 +66,25 @@ def backend_main(domain_list):
     newlabelsdb = database_playground.connect_new_labels()
 
     for domain in domain_list:
-        query = f"SELECT calced_label FROM labels WHERE domain=\"{domain}\";"
-        labels = generic_sql_query(query, newlabelsdb)
 
-        if not labels:
+        query = f"SELECT domain FROM dict where domain = '{domain}';"
+        doma = generic_sql_query(query, newlabelsdb)
+        data_summary[domain] = []
+
+        if doma:
+            query = f"SELECT name FROM columns;"
+            columns = generic_sql_query(query, newlabelsdb)
+            cnt = columns.__len__()
+            for i in range(cnt):
+                col = columns[i]
+
+                query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+
+                partialDict = generic_sql_query(query, newlabelsdb)
+                data_summary[domain].append(partialDict[0])
+
+
+        if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
             label_max = 3
             if expert_mode:
@@ -88,19 +104,68 @@ def backend_main(domain_list):
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
-        else:
-            print(labels[0][0])
-            domain_dict[domain] = labels[0][0]
+
 
     pprint(data_summary)
-    return json.dumps(data_summary)  # json.dumps(domain_dict)
+    dumpDatasum = json.dumps(data_summary)
+    return dumpDatasum  # json.dumps(domain_dict)
 
 
 def saveCalcLabels(data_summary, domain, label):
     db = database_playground.connect_new_labels()
     # print(domain_dict)
 
-    whotracksme_label = data_summary[0]["whotracksme.db"]["score"]
+    lenList = data_summary.__len__()
+
+    for i in range(lenList):
+        dict = data_summary[i]
+
+        dictString = json.dumps(dict)
+
+        start = dictString.find('"') + 1
+        end = dictString.find('"', start)
+        key = dictString[start:end]
+        if(key[-3:] == '.db'):
+            key = dictString[start:end-3]
+
+        query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
+        cursor = db.cursor()
+        cursor.execute(query)
+        db.commit()
+
+        query = f"INSERT INTO columns (name) SELECT '{key}' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = '{key}');"
+        cursor = db.cursor()
+        cursor.execute(query)
+        db.commit()
+
+        try:
+
+            query = f"ALTER TABLE dict ADD \"{key}\" varchar(999);"
+            cursor = db.cursor()
+            cursor.execute(query)
+            db.commit()
+
+            query = f"update dict set {key} = '{dictString}' where domain = '{domain}';"
+
+            cursor = db.cursor()
+            cursor.execute(query)
+            db.commit()
+
+        except:
+
+            #query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
+            query = f"update dict set {key} = '{dictString}' where domain = '{domain}';"
+
+            cursor = db.cursor()
+            cursor.execute(query)
+            db.commit()
+            continue
+
+
+
+
+
+    """whotracksme_label = data_summary[0]["whotracksme.db"]["score"]
     tracker_cnt = data_summary[0]["whotracksme.db"]["tracker_count"]
     amzn = data_summary[0]["whotracksme.db"]["amazon"]
     fcbook = data_summary[0]["whotracksme.db"]["facebook"]
@@ -109,14 +174,15 @@ def saveCalcLabels(data_summary, domain, label):
     phishstats_label = data_summary[1]["phishstats.db"]["score"]
     phishing_category = data_summary[1]["phishstats.db"]["category"]
 
-    privacyspy_score = str(data_summary[2]["privacyspy"]["score"])
+    privacyspy_score = str(data_summary[2]["privacyspy"]["score"])"""
 
-    #privacyspy_score = "0.6"
 
-    query = f"REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
+
+
+    """query = f"REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
     cursor = db.cursor()
     cursor.execute(query)
-    db.commit()
+    db.commit()"""
 
 
 def calc_label(label_max, db_array):
@@ -209,19 +275,21 @@ def privacyspy_score(domain):
             'score': '0',
             'name': '',
 
-            #'rubric': {}
+            'link': ''
 
         }}
-
-    with open('rubric.json', encoding="utf8") as file:
+    
+    with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
             print(domain + " and score: " + str(elem['score']))
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
+            data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
 
-            #data_summary['privacyspy']['rubric'] = elem
+
+            #data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
 
     return data_summary
 
