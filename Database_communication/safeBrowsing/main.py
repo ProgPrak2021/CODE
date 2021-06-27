@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, jsonify, request
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
@@ -13,7 +15,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
     hardcoded_user_preference = ["pornvertising"]
-    urls = str(request.data)
+    input = str(request.data)
+    split_input = input.split("SPLITME")
+    urls = split_input[0]
+    pref_input = split_input[1]
+    expert_input = split_input[2]
+    global expert_mode, preferences
+    if expert_input[:-1] == "true":  # without last elem of string as this is just "'"
+        expert_mode = True
+    else:
+        expert_mode = False
+    print(preferences)
+    preferences = json.loads(pref_input)
+    print(expert_mode)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
@@ -29,33 +43,6 @@ def receive_urls():
     domains = backend_main(domains)
 
     return jsonify(domains)
-
-
-@app.route('/sendPref/', methods=['POST'])
-def receivePref(): # currently only works for whotrackme prefs
-    pref = request.data.decode('UTF-8')
-    pref = pref.split("SPLIT")
-    print(pref)
-    if preferences[pref[0]]:
-        if preferences[pref[0]].__contains__(pref[1]):
-            preferences[pref[0]].remove(pref[1])
-        else:
-            preferences[pref[0]].append(pref[1])
-            print(preferences)
-    else:
-        preferences[pref[0]] = [pref[1]]
-        print(preferences)
-
-    return ""
-
-
-@app.route('/switchExpertMode', methods=['POST'])
-def switchExpertMode():
-    global expert_mode
-    if expert_mode:
-        expert_mode = False
-    else:
-        expert_mode = True
 
 
 @app.route('/ids/', methods=['GET'])

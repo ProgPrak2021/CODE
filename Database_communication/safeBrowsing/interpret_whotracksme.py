@@ -20,7 +20,6 @@ def fill_label_database(domain_dict, users):
         cursor.execute(query)
         db.commit()
 
-
 def generic_sql_query(query, db):
     cursor = db.cursor()
     cursor.execute(query)

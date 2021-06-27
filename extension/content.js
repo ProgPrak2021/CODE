@@ -23,9 +23,27 @@ print methode/logik überarbeitet:
 -----------------------------------------------
 */
 
-
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
+preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+var expert = false
+
+function receivePrefs(datasource, preference) {
+    var index = preferences[datasource].indexOf(preference);
+    if (index !== -1) {
+        preferences[datasource].splice(index, 1)
+    } else {
+        preferences[datasource].append(preference)
+    }
+}
+
+function switchExpertMode() {
+    if (expert) {
+        expert = false
+    } else {
+        expert = true
+    }
+}
 
 function sendURLsToBackend(rootNode) {
     var elems = document.getElementsByClassName("yuRUbf");
@@ -53,9 +71,8 @@ xhttp.onreadystatechange = function() {
 var urls = sendURLsToBackend();
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-xhttp.send(urls);
+xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
 //})
-
 
 function printLabels(output) {
 
