@@ -13,7 +13,7 @@
     {
       "matches": ["https://*.google.com/search?*"],
       "js": ["js/jquery.min.js", "content.js", "privacyScore.js", "js/popup.js"],
-      "css":["/css/hardcoded_style.css"]
+      "css":["/css/label_hover_style.css"]
     }
   ],
   "chrome_url_overrides": {

@@ -1,41 +1,73 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700');
+/* Three image containers (use 25% for four, and 50% for two, etc) */
 
-
-.list .entry:hover{
-    /*background: #86ff3b;
-    box-shadow: 0 0 0 4px red;
-    background-color: red;
-    */
-
-
+.column {
+    float: left;
+    width: 33.33%;
 }
 
-.list .entry .content{
+.row {
+    margin-left: -53px;
+    margin-top: -2px;
+}
+
+h4{
+    margin: 0px;    
+}
+
+ul{
+    list-style: none;
+}
+
+/* Clear floats after image containers */
+
+.list .entry .content {
+    font-size: Helvetica, Arial, sans-serif;
     margin-left: -2.25em;
-    width: 115px;
+    width: 125px;
     padding: 0px;
-    margin-left: -110px;
+    margin-left: -100px;
     box-sizing: border-box;
-    border-radius: 0px; /*4*/
+    border-radius: 15px;
     visibility: hidden;
     opacity: 0;
     transition: 0.5s;
     transform: translateX(-50%) translateY(-50px);
-    border: solid 2px black;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    background: white;
 }
 
-.list .entry .content:before{
-/* content: '';
-position: absolute;
-width: 30px;
-height: 30px;
-bottom: 87px;
-left: 100px;
-transform: rotate(45deg); */
-
+.content li{
+    display: flex;
+    align-items: flex-end;
 }
 
-.list .entry:hover .content{
+.content span{
+    color: gray;
+}
+
+.inner {
+    padding: 10px;
+    font-size: 11px;
+}
+
+.icons {
+    width: 20px;
+    height: auto;
+    padding-right: 1px;
+    margin: 2px;
+}
+
+.list .entry .content:before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 87px;
+    left: 100px;
+    transform: rotate(45deg);
+}
+
+.list .entry:hover .content {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(0px);
@@ -45,16 +77,18 @@ transform: rotate(45deg); */
     margin: 0;
     padding: 0;
 }
+
 .list {
     margin-right: -2.5em;
     width: 30px;
     float: left;
     cursor: pointer;
 }
+
 .code-selector {
     width: 25px;
     float: left;
     margin-left: -2.25em;
     cursor: pointer;
-    margin-top:0.5em;
+    margin-top: 0.5em;
 }

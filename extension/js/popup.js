@@ -1,9 +1,11 @@
+const button = document.querySelector('#options')
 
-document.querySelector('#options').addEventListener('click', function() {
-  console.log("Here")
-  if (chrome.runtime.openOptionsPage) {
-    chrome.runtime.openOptionsPage();
-  } else {
-    window.open(chrome.runtime.getURL('options.html'));
-  }
-});
+if (button){
+  button.addEventListener('click', function() {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL('options.html'));
+    }
+  });
+}

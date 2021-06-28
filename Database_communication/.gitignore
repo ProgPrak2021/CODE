@@ -4,3 +4,4 @@ __pycache__/
 *.xml
 *.iml
 .idea
+.db
