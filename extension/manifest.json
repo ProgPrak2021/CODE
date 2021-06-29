@@ -6,7 +6,8 @@
   "background": "views/background.html",
 
   "web_accessible_resources": [
-    "images/*.png"
+    "images/*.png",
+    "views/options.html"
   ],
 
   "content_scripts": [
