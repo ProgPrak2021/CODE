@@ -7,7 +7,7 @@ import ast
 
 preferences = {"whotracksme": ['Facebook', 'Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [],
                "webrisk": []}
-expert_mode = False
+expert_mode = True
 
 
 def fill_label_database(domain_dict, users):
@@ -55,6 +55,7 @@ def dict_to_String(dict):
 
 
 def backend_main(domain_list):
+
     unwanted_categories = []  # just temporary
     # global config
     # config = dotenv_values(".env")  # take environment variables from .env.
@@ -66,6 +67,8 @@ def backend_main(domain_list):
     newlabelsdb = database_playground.connect_new_labels()
 
     for domain in domain_list:
+
+
 
         query = f"SELECT domain FROM dict where domain = '{domain}';"
         doma = generic_sql_query(query, newlabelsdb)
@@ -90,6 +93,7 @@ def backend_main(domain_list):
             label_max = 3
             if expert_mode:
                 label_max = 9
+
             calced_label = calc_label(label_max,
                                       [whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])  # ,
             # privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
@@ -100,6 +104,7 @@ def backend_main(domain_list):
                                                                                              unwanted_categories), phishstats_score(
                 domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
 
+            tilthubScore(domain)
             data_summary[domain] = dictionary
 
             saveCalcLabels(dictionary, domain, calced_label)
@@ -113,6 +118,26 @@ def backend_main(domain_list):
     pprint(data_summary)
     dumpDatasum = json.dumps(data_summary)
     return dumpDatasum  # json.dumps(domain_dict)
+
+
+
+def tilthubScore(domain):
+
+    split = domain.split(".")
+    name = split[0]
+
+    response = api_call("http://34.89.190.55:5000/api/task/", None, None, "GET")
+
+
+
+    length = len(response)
+    for i in range(length):
+        if response[i]['name'] == name:
+
+            break
+
+
+    return
 
 
 def saveCalcLabels(data_summary, domain, label):
@@ -315,7 +340,7 @@ def api_call(request, payload, body, type):
 
 def phishstats_score(domain):  # unfortunately this api is fucking slow
 
-    query = f"SELECT score from phish_score where URL like '%{domain}%'"
+    query = f"SELECT score, url from phish_score where URL like '%{domain}%'"
     db = database_playground.connect_phishcore_db()
     req = generic_sql_query(query, db)
     data_summary = {
@@ -328,28 +353,44 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     if not req:
         return data_summary
 
-    score = req[0][0]
+    length = req.__len__()
+    domainPresent = False
+
+    for i in range(length):
+
+        url = (req[i][1]).split("//")[1]
+        comparison = get_domain_by_url(url)
+        if domain == comparison:
+            domainPresent = True
+            break
+
+    if not domainPresent:
+        return data_summary
+
+    score = req[i][0]
 
     num = float(score.replace("\"", ""))
 
     if num <= 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "possibly phishing"
-        return data_summary
 
-    elif num <= 4:
+    elif num <= 4 and num > 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "sus"
-        return data_summary
 
-    data_summary['phishstats.db']['score'] = eval(str(3))
-
-    if num <= 6:
+    elif num <= 6 and num > 4:
+        data_summary['phishstats.db']['score'] = eval(str(3))
         data_summary['phishstats.db']['category'] = "probably phishing"
 
     else:
+        data_summary['phishstats.db']['score'] = eval(str(3))
         data_summary['phishstats.db']['category'] = "guaranteed phishing"
         data_summary['phishstats.db']['phishing'] = "True"
+
+
+    if expert_mode:
+        data_summary['phishstats.db']['score'] = eval(str(num))
 
     return data_summary
 
