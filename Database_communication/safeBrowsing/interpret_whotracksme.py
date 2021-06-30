@@ -128,6 +128,16 @@ def tilthubScore(domain):
 
     response = api_call("http://34.89.190.55:5000/api/task/", None, None, "GET")
 
+    data_summary = {
+        'tilthub': {
+            'score': '0',
+            'Data Disclosed': '',
+            'Third Country Transfers': '',
+            'Right to Withdraw Consent': '',
+            'Right to Complain': '',
+            'Right to Deletion': '',
+            'Changes of Purpose': '',
+        }}
 
 
     length = len(response)
