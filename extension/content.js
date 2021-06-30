@@ -22,11 +22,26 @@ print methode/logik überarbeitet:
 
 -----------------------------------------------
 */
+const icons = [
+        chrome.runtime.getURL('images/icons/google_icon.png'),
+        chrome.runtime.getURL('images/icons/oracle_icon.png'),     
+        chrome.runtime.getURL('images/icons/spy_icon.png'),
+        chrome.runtime.getURL('images/icons/facebook_icon.png'), 
+        chrome.runtime.getURL('images/icons/amazon_icon.png'),
+        chrome.runtime.getURL('images/icons/kaspersky_lab_icon.png'),
+        chrome.runtime.getURL('images/icons/wikimedia_icon.png'),
+        chrome.runtime.getURL('images/icons/bootstrap_cdn_icon.png'),
+        chrome.runtime.getURL('images/icons/microsoft_icon.png'),
+        chrome.runtime.getURL('images/icons/cloudflare_icon.png'),
+        chrome.runtime.getURL('images/icons/adobe_icon.png'),
+        chrome.runtime.getURL('images/icons/twitter_icon.png')
+    ]
 
 var result = $('.LC20lb').closest('div')
 var img = $('<img class="code-selector">');
 preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-var expert = false
+var expert = true
+ 
 
 function receivePrefs(datasource, preference) {
     var index = preferences[datasource].indexOf(preference);
@@ -56,7 +71,6 @@ function sendURLsToBackend(rootNode) {
     return urls;
 }
 
-//$('.code-selector').on('click', function(){
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -72,31 +86,27 @@ var urls = sendURLsToBackend();
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
 xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
-//})
 
 function printLabels(output) {
 
     function storeVar(key, value) {
-        //console.log(key)
         if (key == "label") {
-            //console.log("key: " + key + " value: " + value)
             label = value
-                //console.log(label);
         }
         if (key == "expert") {
             expert_mode = value
         }
         if (key == "tracker_count") {
-            //console.log("key: " + key + " value: " + value)
             tracker = value
         }
         if (key == "facebook") {
-            //console.log("key: " + key + " value: " + value)
             facebook = value
         }
         if (key == "amazon") {
-            //console.log("key: " + key + " value: " + value)
             amazon = value
+        }
+        if(key == "trackers"){
+            trackers = value
         }
     }
 
@@ -116,60 +126,64 @@ function printLabels(output) {
         [chrome.runtime.getURL('images/icons/gold_coin_128.png'), "none"]
     ]
     var labels = [
-        [chrome.runtime.getURL('images/siren.png'), "none"],
+        [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
         [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
         [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
     ]
 
-    var icons = [chrome.runtime.getURL('images/icons/google_icon.png'), chrome.runtime.getURL('images/icons/oracle_icon.png'), chrome.runtime.getURL('images/icons/spy_icon.png'), chrome.runtime.getURL('images/icons/facebook_icon.png'), chrome.runtime.getURL('images/icons/amazon_icon.png')]
+   
+
     var divs = document.getElementsByClassName("yuRUbf");
 
     for (var div of divs) {
-        var label, expert_mode, tracker, facebook, amazon
+        var label, expert_mode, tracker, facebook, amazon, trackers
         var domain = getDomain(div);
-        //console.log(domain)
 
+        
         traverse_JSON(output[domain], storeVar);
+       
+        var result = [];
+        for (let i = 0; i < Object.keys(trackers).length; i++){ 
+            result.push(trackers[i].company)
+        }
+        var companies = [...new Set(result)]
 
-        //console.log("label " + label + " tracker_count " + tracker + " facebook " + facebook)
-        if (expert_mode) { //this is for the expert mode
-            expert_label = 6; // some number from 1 to 7
-            var list_of_coin_order = get_correct_order(expert_label)
-            let i = 0;
-            var img_string = '';
-            one_coin_style = '.row{margin-left:auto;';
-            two_coins_style = '.row{position:relative;left:27px;';
-            while (list_of_coin_order[i] != -1) {
-                img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
-                i++;
-            }
+        const logos = get_logos_html(companies, result) //Get html for the icon images.
+        
+        if(label == 0 || trackers.length == 0){
 
-            if (facebook == true) {
-                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + '</div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            } else {
-                var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            }
-            if (i == 1) { // fix styling of less than three coins
-                apply_coin_style(one_coin_style);
-            } else if (i == 2) {
-                apply_coin_style(two_coins_style);
-            }
-        } else { // this is default mode 
+        var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="'+chrome.runtime.getURL("views/options.html")+'" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
+                popup.appendTo(div);
+        }else{
+            if (expert_mode) { //this is for the expert mode
+                expert_label = 6; // some number from 1 to 7
+                var list_of_coin_order = get_correct_order(expert_label)
+                let i = 0;
+                var img_string = '';
+                one_coin_style = '.row{margin-left:auto;';
+                two_coins_style = '.row{position:relative;left:27px;';
+                while (list_of_coin_order[i] != -1) {
+                    img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
+                    i++;
+                }
+                    var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class="content" style="position: absolute; top: 4em;"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>'+logos+'</div></div></div></div>');
+                    img.appendTo(div);
 
-            if (facebook == true) {
-                var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"><img class="icons" src="' + icons[3] + '"></div></div></div></div>');
-                img.appendTo(div);
-            } else {
-                var img = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>Trackers: ' + tracker + '</h2><h2> Including:</h2><img class="icons" src="' + icons[0] + '"></div></div></div></div>');
-                img.appendTo(div);
+                if (i == 1) { // fix styling of less than three coins
+                    apply_coin_style(one_coin_style);
+                } else if (i == 2) {
+                    apply_coin_style(two_coins_style);
+                }
+
+            } else { // this is default mode 
+                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>'+logos+'</div></div></div></div>');
+                popup.appendTo(div);
             }
         }
 
     }
-    $('head').append("<link rel=\"stylesheet\" href=\"/css/hardcoded_style.css\">");
+    $('head').append("<link type=\"text/css\" rel=\"stylesheet\" href=\"/css/label_hover_style.css\">");
 }
 
 function apply_coin_style(coin_style) {
@@ -238,9 +252,79 @@ function getDomain(div) {
 
 }
 
+function get_logos_html(v, list){
+    var result = '<ul>' 
+  
+    v.forEach(x =>{
+        switch(x) {
+            case "Facebook":
+                result += '<li><img class="icons" src="' + icons[3] + '"><span>Facebook</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Amazon":
+                result += '<li><img class="icons" src="' + icons[4] + '"><span>Amazon</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Google":
+                result += '<li><img class="icons" src="' + icons[0] + '"><span>Google</span><span class="percentage"> '+ get_percentage(x, list) + '</span></li>'
+                break;
+            case "Kaspersky Lab":
+                result += '<li><img class="icons" src="' + icons[5] + '"><span>Kaspersky</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Wikimedia Foundation":
+                result += '<li><img class="icons" src="' + icons[6] + '"><span>Wikimedia</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Microsoft":
+                result += '<li><img class="icons" src="' + icons[8] + '"><span>Microsoft</span><span class="percentage">' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "BootstrapCDN":
+                result += '<li><img class="icons" src="' + icons[7] + '"><span>Boots. CDN</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Cloudflare":
+                result += '<li><img class="icons" src="' + icons[9] + '"><span>Cloudflare</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Adobe":
+                result += '<li><img class="icons" src="' + icons[10] + '"><span>Adobe</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+            case "Twitter":
+                result += '<li><img class="icons" src="' + icons[11] + '"><span>Twitter</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                break;
+                }
+        }
+    )
+    let others = get_others_percentage(list)
+    if(others != "0"){
+        result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>"+others+"</span></li>"
+    }
+    
+    return result += "</ul>";      
+}      
+function get_percentage(name, list){
+    let counter = 0;
+    for(let i = 0; i < list.length; i++){
+        if(list[i] == name){
+            counter += 1;
+        }
+    }
+    if(counter != 0 && list.length != 0){
+        return Math.round(counter/list.length * 100) + "%"
+    } else {
+        return "0"
+    }
+}
 
-
-
+function get_others_percentage(list){
+    let counter = 0;
+    let companies = ['Facebook', 'Amazon', 'Google', 'Kaspersky Lab', 'Wikimedia Foundation', 'Microsoft', 'BootstrapCDN', 'Adobe', 'Cloudflare', 'Twitter']
+    for(let i = 0; i < list.length; i++){
+        if(!companies.includes(list[i])){
+            counter += 1;
+        }
+    }
+    if(counter != 0){
+        return Math.round(counter/list.length * 100) + "%"
+    }else{
+        return "0"
+    }
+}
 
 
 

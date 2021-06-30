@@ -6,14 +6,15 @@
   "background": "views/background.html",
 
   "web_accessible_resources": [
-    "images/*.png"
+    "images/*.png",
+    "views/options.html"
   ],
 
   "content_scripts": [
     {
       "matches": ["https://*.google.com/search?*"],
       "js": ["js/jquery.min.js", "content.js", "privacyScore.js", "js/popup.js"],
-      "css":["/css/hardcoded_style.css"]
+      "css":["/css/label_hover_style.css"]
     }
   ],
   "chrome_url_overrides": {
