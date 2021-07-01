@@ -333,7 +333,7 @@ def tosdr_score(domain):
         data_summary['tosdr']['name'] = elem['name']
         data_summary['tosdr']['name'] = 'https://tosdr.org/de/service/' + str(elem['id'])
 
-
+    return data_summary
 
 
 def privacyspy_score(domain):
