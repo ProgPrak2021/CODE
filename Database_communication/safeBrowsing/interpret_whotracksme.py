@@ -320,7 +320,10 @@ def whotracksme_score(domain, unwanted_categories):
 def tosdr_score(domain):
     data_summary = {
         'tosdr': {
+            'score': '',
+            'name': '',
 
+            'link': ''
         }}
 
     with open('tosdr.json', encoding="utf8") as file:
