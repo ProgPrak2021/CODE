@@ -317,6 +317,11 @@ def whotracksme_score(domain, unwanted_categories):
 
 # new database tosdr:https://tosdr.org/
 def tosdr_score(domain):
+    data_summary = {
+        'tosdr': {
+
+        }}
+
     with open('tosdr.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data['parameters']['services']:
