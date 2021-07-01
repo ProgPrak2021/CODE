@@ -331,6 +331,8 @@ def tosdr_score(domain):
     for elem in data['parameters']['services']:
         data_summary['tosdr']['score'] = elem['rating']
         data_summary['tosdr']['name'] = elem['name']
+        data_summary['tosdr']['name'] = 'https://tosdr.org/de/service/' + str(elem['id'])
+
 
 
 
