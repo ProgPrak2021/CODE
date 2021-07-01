@@ -315,6 +315,26 @@ def whotracksme_score(domain, unwanted_categories):
 
     return data_summary
 
+# new database tosdr:https://tosdr.org/
+#https://tosdr.org/de/service/230 Expert Mode
+def tosdr_score(domain):
+    data_summary = {
+        'tosdr': {
+            'score': '',
+            'name': '',
+
+            'link': ''
+        }}
+
+    with open('tosdr.json', encoding="utf8") as file:
+        data = json.load(file)
+    for elem in data['parameters']['services']:
+        data_summary['tosdr']['score'] = elem['rating']
+        data_summary['tosdr']['name'] = elem['name']
+        data_summary['tosdr']['name'] = 'https://tosdr.org/de/service/' + str(elem['id'])
+
+    return data_summary
+
 
 def privacyspy_score(domain):
     data_summary = {
