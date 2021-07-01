@@ -7,7 +7,7 @@ import ast
 
 preferences = {"whotracksme": ['Facebook', 'Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [],
                "webrisk": []}
-expert_mode = True
+expert_mode = False
 
 
 def fill_label_database(domain_dict, users):
@@ -74,19 +74,19 @@ def backend_main(domain_list):
         doma = generic_sql_query(query, newlabelsdb)
         data_summary[domain] = []
 
-        if doma:
-            query = f"SELECT name FROM columns;"
-            columns = generic_sql_query(query, newlabelsdb)
-            cnt = columns.__len__()
-            for i in range(cnt):
-                col = columns[i]
-
-                query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
-
-                partialDict = generic_sql_query(query, newlabelsdb)
-                strDict = (partialDict[0])[0]
-                newDict = json.loads(strDict)
-                data_summary[domain].append(newDict)
+        # if doma:
+        #     query = f"SELECT name FROM columns;"
+        #     columns = generic_sql_query(query, newlabelsdb)
+        #     cnt = columns.__len__()
+        #     for i in range(cnt):
+        #         col = columns[i]
+        #
+        #         query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+        #
+        #         partialDict = generic_sql_query(query, newlabelsdb)
+        #         strDict = (partialDict[0])[0]
+        #         newDict = json.loads(strDict)
+        #         data_summary[domain].append(newDict)
 
         if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
@@ -94,17 +94,16 @@ def backend_main(domain_list):
             if expert_mode:
                 label_max = 9
 
-            calced_label = calc_label(label_max,
-                                      [whotracksme_score(domain, unwanted_categories), phishstats_score(domain)])  # ,
-            # privacyspy_score(domain)])  # , google_safe_browsing_score(domain)])
+            calced_label = calc_label(label_max, [whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
+            privacyspy_score(domain), tosdr_score(domain)])  # , google_safe_browsing_score(domain)])
 
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
 
-            dictionary = {'label': calced_label}, {'expert': expert_mode}, whotracksme_score(domain,
-                                                                                             unwanted_categories), phishstats_score(
-                domain), privacyspy_score(domain)  # , google_safe_browsing_score(domain)
+            dictionary = {'label': calced_label}, {'expert': expert_mode}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain),\
+                         privacyspy_score(domain), tosdr_score(domain)  # , google_safe_browsing_score(domain)
 
-            tilthubScore(domain)
+            #tilthubScore(domain)
+
             data_summary[domain] = dictionary
 
             saveCalcLabels(dictionary, domain, calced_label)
@@ -115,7 +114,7 @@ def backend_main(domain_list):
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
 
-    pprint(data_summary)
+    #pprint(data_summary)
     dumpDatasum = json.dumps(data_summary)
     return dumpDatasum  # json.dumps(domain_dict)
 
@@ -270,7 +269,7 @@ def whotracksme_score(domain, unwanted_categories):
     amazon = False
     https_all_tracker = 0
     for cookie in trackers:
-        print(cookie[3])
+        #(cookie[3])
         for category in unwanted_categories:
             if cookie in category:
                 index += category_weight
@@ -315,25 +314,42 @@ def whotracksme_score(domain, unwanted_categories):
 
     return data_summary
 
+
+
 # new database tosdr:https://tosdr.org/
 #https://tosdr.org/de/service/230 Expert Mode
 def tosdr_score(domain):
     data_summary = {
         'tosdr': {
-            'score': '',
+            'score': '0',
             'name': '',
-
             'link': ''
         }}
 
     with open('tosdr.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data['parameters']['services']:
-        data_summary['tosdr']['score'] = elem['rating']
-        data_summary['tosdr']['name'] = elem['name']
-        data_summary['tosdr']['name'] = 'https://tosdr.org/de/service/' + str(elem['id'])
+        if domain in elem['urls']:
+
+            data_summary['tosdr']['score'] = map_tosdr_score(elem['rating'])
+            data_summary['tosdr']['name'] = elem['name']
+            data_summary['tosdr']['link'] = 'https://tosdr.org/de/service/' + str(elem['id'])
 
     return data_summary
+
+def map_tosdr_score(rating):
+    switcher = {
+        'A': 1,
+        'B': 2,
+        'C': 3,
+        'D': 4,
+        'E': 5
+    }
+    if switcher.get(rating, "0") != 0:
+        return (switcher.get(rating, "0") / 5) * 3
+    else:
+        return "0"
+
 
 
 def privacyspy_score(domain):
@@ -341,21 +357,16 @@ def privacyspy_score(domain):
         'privacyspy': {
             'score': '0',
             'name': '',
-
             'link': ''
-
         }}
 
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
-            print(domain + " and score: " + str(elem['score']))
             data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
             data_summary['privacyspy']['name'] = elem['name']
             data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
-
-            # data_summary['privacyspy']['rubric'] = https://privacyspy.org/product/
 
     return data_summary
 
@@ -454,7 +465,7 @@ def google_safe_browsing_score(domain):
                         "POST")
     # print(response)
     if response:
-        print(response)
+        #print(response)
         data_summary['safe_browsing_api.db']['score'] = 3
         data_summary['safe_browsing_api.db']['threatType'] = response['matches'][0]['threatType']
         data_summary['safe_browsing_api.db']['platform'] = response['matches'][0]['platformType']
