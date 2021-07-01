@@ -330,6 +330,8 @@ def tosdr_score(domain):
         data = json.load(file)
     for elem in data['parameters']['services']:
         data_summary['tosdr']['score'] = elem['rating']
+        data_summary['tosdr']['name'] = elem['name']
+
 
 
 def privacyspy_score(domain):
