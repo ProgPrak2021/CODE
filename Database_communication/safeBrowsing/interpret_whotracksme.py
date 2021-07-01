@@ -317,6 +317,10 @@ def whotracksme_score(domain, unwanted_categories):
 
 # new database tosdr:https://tosdr.org/
 def tosdr_score(domain):
+    with open('tosdr.json', encoding="utf8") as file:
+        data = json.load(file)
+    for elem in data['parameters']['services']:
+        print(elem['name'])
 
 
 def privacyspy_score(domain):
