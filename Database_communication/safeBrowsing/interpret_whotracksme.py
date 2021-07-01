@@ -315,6 +315,8 @@ def whotracksme_score(domain, unwanted_categories):
 
     return data_summary
 
+# new database tosdr:https://tosdr.org/
+
 
 def privacyspy_score(domain):
     data_summary = {
