@@ -316,6 +316,7 @@ def whotracksme_score(domain, unwanted_categories):
     return data_summary
 
 # new database tosdr:https://tosdr.org/
+#https://tosdr.org/de/service/230 Expert Mode
 def tosdr_score(domain):
     data_summary = {
         'tosdr': {
