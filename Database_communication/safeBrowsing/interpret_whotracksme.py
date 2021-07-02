@@ -75,19 +75,19 @@ def backend_main(domain_list):
         doma = generic_sql_query(query, newlabelsdb)
         data_summary[domain] = []
 
-        # if doma:
-        #     query = f"SELECT name FROM columns;"
-        #     columns = generic_sql_query(query, newlabelsdb)
-        #     cnt = columns.__len__()
-        #     for i in range(cnt):
-        #         col = columns[i]
-        #
-        #         query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
-        #
-        #         partialDict = generic_sql_query(query, newlabelsdb)
-        #         strDict = (partialDict[0])[0]
-        #         newDict = json.loads(strDict)
-        #         data_summary[domain].append(newDict)
+        """if doma:
+             query = f"SELECT name FROM columns;"
+             columns = generic_sql_query(query, newlabelsdb)
+             cnt = columns.__len__()
+             for i in range(cnt):
+                 col = columns[i]
+        
+                 query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+        
+                 partialDict = generic_sql_query(query, newlabelsdb)
+                 strDict = (partialDict[0])[0]
+                 newDict = json.loads(strDict)
+                 data_summary[domain].append(newDict)"""
 
         if not data_summary[domain]:
             # TODO. ACTUALLY CALCUTALTE THE LABEL
@@ -103,11 +103,13 @@ def backend_main(domain_list):
             dictionary = {'label': calced_label}, {'expert': expert_mode}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain),\
                          privacyspy_score(domain), tosdr_score(domain)  # , google_safe_browsing_score(domain)
 
-            #tilthubScore(domain)
+            tilthubScore(domain)
 
             data_summary[domain] = dictionary
 
-            saveCalcLabels(dictionary, domain, calced_label)
+            slice = dictionary[:1] + dictionary[2:]
+
+            saveCalcLabels(slice, domain, calced_label)
 
             # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
@@ -125,8 +127,13 @@ def tilthubScore(domain):
 
     split = domain.split(".")
     name = split[0]
+    #req = f"http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={{'meta.url' : '{name}'}}"
+    req2 = "http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt"
 
-    response = api_call("http://34.89.190.55:5000/api/task/", None, None, "GET")
+
+    response = requests.get(req2,auth=('admin', 'secret'))
+
+    tiltDict = json.loads(response.content)
 
     data_summary = {
         'tilthub': {
@@ -140,12 +147,13 @@ def tilthubScore(domain):
         }}
 
 
-    length = len(response)
+    length = len(tiltDict)
+    listOfIndices = []
     for i in range(length):
-        if response[i]['name'] == name:
-
-            break
-
+        url = tiltDict[i]['meta']['url'].split("//")[1]
+        calcedDomain = get_domain_by_url(url)
+        if get_domain_by_url(url) == domain:
+            listOfIndices.append(i)
 
     return
 
@@ -346,7 +354,7 @@ def map_tosdr_score(rating):
         'D': 4,
         'E': 5
     }
-    if switcher.get(rating, "0") != 0:
+    if switcher.get(rating, "0") != "0":
         return (switcher.get(rating, "0") / 5) * 3
     else:
         return "0"
