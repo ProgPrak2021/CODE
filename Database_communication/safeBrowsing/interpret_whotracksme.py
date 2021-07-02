@@ -7,7 +7,7 @@ import ast
 
 preferences = {"whotracksme": ['Facebook', 'Amazon'], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [],
                "webrisk": []}
-expert_mode = False
+expert_mode = True
 
 
 def fill_label_database(domain_dict, users):
@@ -55,6 +55,7 @@ def dict_to_String(dict):
 
 
 def backend_main(domain_list):
+    print(expert_mode)
 
     unwanted_categories = []  # just temporary
     # global config
