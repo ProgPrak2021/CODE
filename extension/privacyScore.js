@@ -1,3 +1,4 @@
+window.addEventListener("load" , function() {});
 
 chrome.storage.local.get(function(data){
     var labels = Object.values((data));
@@ -44,18 +45,21 @@ function getPrivacyInfo(score){
     return info;
 }
 
-var btn = document.getElementById("reset_stats");
-btn.addEventListener("click", function(){
-    chrome.storage.local.get(function(data){
-        if (Object.values(data).length===0) {
-            alert("Your storage is already empty");
-        } else {
-            chrome.storage.local.clear();
-            location.reload();
-        }
-    })
-})
 
+var btn = document.getElementById("reset_stats");
+
+if(btn) {
+    btn.addEventListener("click", function(){
+        chrome.storage.local.get(function(data){
+            if (Object.values(data).length===0) {
+                alert("Your storage is already empty");
+            } else {
+                chrome.storage.local.clear();
+                location.reload();
+            }
+        })
+    })
+}
 
 chrome.storage.onChanged.addListener(function () {
     location.reload();
