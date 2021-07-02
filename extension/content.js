@@ -83,6 +83,8 @@ xhttp.onreadystatechange = function () {
         var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
         console.log(output)
 
+        getVisitedUrls(output);
+
         printLabels(output)
 
     }
@@ -293,7 +295,25 @@ function get_others_percentage(list) {
     }
 }
 
+function getVisitedUrls(output){
+    const elems = document.querySelectorAll('.yuRUbf');
 
+    elems.forEach(element => {
+        element.addEventListener('click', (e) => { //TODO: Event Listener for right click + "open link in new tab"
+                var clickedUrl = new URL(element.children[0].href);
+                for (let site in output) {
+                    let value = output[site];
+                    let domain = clickedUrl.href;
+
+                    if (domain.includes(site)) {
+                        let label = value[0]['label'];
+                        chrome.storage.local.set({[site] : label});
+                    }
+                }
+            }
+        );
+    });
+}
 
 /* code dumpster
 -------------------------------------------------------------
