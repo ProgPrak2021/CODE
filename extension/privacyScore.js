@@ -3,7 +3,7 @@ chrome.storage.local.get(function(data){
     var goodLabels = 0; //green or gold
     var unknownLabels = 0;
 
-    console.log(labels);
+    //console.log(labels); UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
     for(var i = 0; i < labels.length; i++) {
         if (labels[i]===3){     //TODO: Two score formulas are needed: one for expert mode and one for normal mode
