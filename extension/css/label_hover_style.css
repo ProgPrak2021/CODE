@@ -6,17 +6,18 @@
 }
 
 .row {
-    margin-left: -53px;
+    margin-left: auto;
     margin-top: -2px;
 }
 
-h4{
-    margin: 0px;    
+h4 {
+    margin: 0px;
 }
 
-ul{
+ul {
     list-style: none;
 }
+
 
 /* Clear floats after image containers */
 
@@ -35,15 +36,14 @@ ul{
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
     background: white;
     z-index: 99999;
-
 }
 
-.content li{
+.content li {
     display: flex;
     align-items: flex-end;
 }
 
-.content span{
+.content span {
     color: gray;
 }
 
@@ -85,7 +85,7 @@ ul{
     margin-top: 0.5em;
 }
 
-.percentage{
+.percentage {
     display: inline-block;
     margin-left: auto;
     font-weight: bold;

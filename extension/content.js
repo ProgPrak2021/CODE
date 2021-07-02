@@ -126,9 +126,15 @@ function printLabels(output) {
     }
 
     var labels_expert = [
-        [chrome.runtime.getURL('images/icons/bronze_coin_128.png'), "none"],
-        [chrome.runtime.getURL('images/icons/silver_coin_128.png'), "none"],
-        [chrome.runtime.getURL('images/icons/gold_coin_128.png'), "none"]
+        [chrome.runtime.getURL('images/bronze_coin.png'), "none"],
+        [chrome.runtime.getURL('images/two_bronze_coins.png'), "none"],
+        [chrome.runtime.getURL('images/three_bronze_coins.png'), "none"],
+        [chrome.runtime.getURL('images/silver_coin.png'), "none"],
+        [chrome.runtime.getURL('images/two_silver_coins.png'), "none"],
+        [chrome.runtime.getURL('images/three_silver_coins.png'), "none"],
+        [chrome.runtime.getURL('images/golden_coin.png'), "none"],
+        [chrome.runtime.getURL('images/two_golden_coins.png'), "none"],
+        [chrome.runtime.getURL('images/three_golden_coins.png'), "none"]
     ]
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
@@ -163,24 +169,16 @@ function printLabels(output) {
         } else {
             if (expert_mode) { //this is for the expert mode
                 //expert_label = 6; // some number from 1 to 7
-                var list_of_coin_order = get_correct_order(label)
-                console.log(list_of_coin_order)
+                //var list_of_coin_order = get_correct_order(label)
                 let i = 0;
                 var img_string = '';
                 one_coin_style = '.row{margin-left:auto;';
                 two_coins_style = '.row{position:relative;left:27px;';
-                while (list_of_coin_order[i] != -1) {
-                    img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[list_of_coin_order[i]][0] + '"></div>';
-                    i++;
-                }
+
+                console.log("hdhdh")
+                img_string += '<div class="column"><img class="code-selector" src="' + labels_expert[label - 1][0] + '"></div>';
                 var img = $('<div class="list"> <div class="entry"><div class="row">' + img_string + ' </div> <div class="content" style="position: absolute; top: 4em;"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 img.appendTo(div);
-
-                if (i == 1) { // fix styling of less than three coins
-                    apply_coin_style(one_coin_style);
-                } else if (i == 2) {
-                    apply_coin_style(two_coins_style);
-                }
 
             } else { // this is default mode 
                 var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
@@ -214,7 +212,6 @@ function get_correct_order(label) {
     gold_coin:index 2
     label goes from 1 to 7 
     */
-    console.log(label);
     switch (label) {
         case 1:
             return [0, -1, -1]
