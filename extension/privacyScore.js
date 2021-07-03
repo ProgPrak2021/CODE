@@ -36,13 +36,14 @@ function sendURL(body) {
 }
 
 chrome.storage.local.get(function(data) {
-    var labels = Object.values((data));
-    var goodLabels = 0; //green or gold
-    var unknownLabels = 0;
+    let domains = Object.keys(data);
+    let labels = Object.values((data));
+    let goodLabels = 0; //green or gold
+    let unknownLabels = 0;
 
     //console.log(labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
-    for (var i = 0; i < labels.length; i++) {
+    for (let i = 0; i < labels.length; i++) {
         if (labels[i] >= 7) { //TODO: Two score formulas are needed: one for expert mode and one for normal mode
             goodLabels++;
         } else if (labels[i] === 0) {
@@ -51,9 +52,9 @@ chrome.storage.local.get(function(data) {
             continue;
         }
     }
-    var score = '';
+    let score = '';
 
-    const privacyScoreNumber = document.getElementById("privacyScore_number");
+    let privacyScoreNumber = document.getElementById("privacyScore_number");
     let privacyScoreInfo = document.getElementById("privacyScore_info");
 
     if (privacyScoreNumber && privacyScoreInfo) {
@@ -66,6 +67,19 @@ chrome.storage.local.get(function(data) {
             privacyScoreInfo.innerHTML = getPrivacyInfo(score);
         }
     }
+
+    let lastLabels = document.getElementById('recent_labels');
+    if (lastLabels) {
+        let listOfLabels = '';
+
+        for (let i = 0; i < domains.length; i++){
+            listOfLabels += domains[domains.length -1 - i] + ': ' + labels[labels.length -1 - i];
+            listOfLabels += '<br>';
+        }
+
+        lastLabels.innerHTML = listOfLabels;
+    }
+    console.log(labels + " " + domains);
 });
 
 
