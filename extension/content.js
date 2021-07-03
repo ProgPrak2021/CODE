@@ -262,7 +262,7 @@ function printLabels(output) {
     var divs = document.getElementsByClassName("yuRUbf");
 
     for (var div of divs) {
-        var label, tracker, facebook, amazon, trackers
+        var label, tracker, facebook, amazon, trackers;
         var domain = getDomain(div);
         traverse_JSON(output[domain], storeVar);
 
@@ -271,9 +271,9 @@ function printLabels(output) {
 
         var result = [];
         for (let i = 0; i < Object.keys(trackers).length; i++) {
-            result.push(trackers[i].company)
+            result.push(trackers[i].company);
         }
-        var companies = [...new Set(result)]
+        var companies = [...new Set(result)];
 
         const logos = get_logos_html(companies, result) //Get html for the icon images.
 

@@ -1,36 +1,42 @@
 window.addEventListener("load", function(event) {
-    document.getElementById("FacebookWTM").addEventListener('click', function() {
-        PageService.savePage("FacebookWTM", "change");
-    });
-    document.getElementById("AmazonWTM").addEventListener('click', function() {
-        PageService.savePage("AmazonWTM", "change");
-    });
-    document.getElementById("weight_trackerWTM").addEventListener('click', function() {
-        PageService.savePage("weight_trackerWTM", "change");
-    });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        PageService.savePage("disableWTM", "change");
-    });
-    document.getElementById("disablePrsspy").addEventListener('click', function() {
-        PageService.savePage("disablePrsspy", "change");
-    });
-    document.getElementById("disablePhish").addEventListener('click', function() {
-        PageService.savePage("disablePhish", "change");
-        //PageService.clearPages();
-    });
-    document.getElementById("diableGoogle").addEventListener('click', function() {
-        PageService.savePage("diableGoogle", "change");
-    });
-    document.getElementById("disableWebrisk").addEventListener('click', function() {
-        PageService.savePage("disableWebrisk", "change");
-    });
-    document.getElementById("coinLabel").addEventListener('click', function() {
-        PageService.savePage("coinLabel", "change");
-    });
-    document.getElementById("expertMode").addEventListener('click', function() {
-        PageService.savePage("expertMode", "change");
-    });
-});
+    if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
+        && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
+        && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
+        && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
+        && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
+        document.getElementById("FacebookWTM").addEventListener('click', function () {
+            PageService.savePage("FacebookWTM", "change");
+        });
+        document.getElementById("AmazonWTM").addEventListener('click', function () {
+            PageService.savePage("AmazonWTM", "change");
+        });
+        document.getElementById("weight_trackerWTM").addEventListener('click', function () {
+            PageService.savePage("weight_trackerWTM", "change");
+        });
+        document.getElementById("disableWTM").addEventListener('click', function () {
+            PageService.savePage("disableWTM", "change");
+        });
+        document.getElementById("disablePrsspy").addEventListener('click', function () {
+            PageService.savePage("disablePrsspy", "change");
+        });
+        document.getElementById("disablePhish").addEventListener('click', function () {
+            PageService.savePage("disablePhish", "change");
+            //PageService.clearPages();
+        });
+        document.getElementById("diableGoogle").addEventListener('click', function () {
+            PageService.savePage("diableGoogle", "change");
+        });
+        document.getElementById("disableWebrisk").addEventListener('click', function () {
+            PageService.savePage("disableWebrisk", "change");
+        });
+        document.getElementById("coinLabel").addEventListener('click', function () {
+            PageService.savePage("coinLabel", "change");
+        });
+        document.getElementById("expertMode").addEventListener('click', function () {
+            PageService.savePage("expertMode", "change");
+        });
+    }
+
 
 const PAGES_KEY = 'pages';
 
@@ -76,7 +82,7 @@ class PageService {
                 found = true;
                 break;
             }
-        } 
+        }
         console.log(pages)
         if(!found){
             updatedPages = [...pages, { key, newValue}];
@@ -114,7 +120,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     }
 });
 
-
+});
 
 /*
 If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
