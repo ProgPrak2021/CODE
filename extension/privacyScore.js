@@ -71,15 +71,18 @@ chrome.storage.local.get(function(data) {
     let lastLabels = document.getElementById('recent_labels');
     if (lastLabels) {
         let listOfLabels = '';
-
-        for (let i = 0; i < domains.length; i++){
-            listOfLabels += domains[domains.length -1 - i] + ': ' + labels[labels.length -1 - i];
-            listOfLabels += '<br>';
+        let count = 0;
+        for (let i = domains.length-1; i > 0; i--){
+            if (count < 3) {
+                listOfLabels += domains[domains.length -1 - i] + ': ' + labels[labels.length -1 - i];
+                listOfLabels += '<br>';
+                count++;
+            }
         }
 
         lastLabels.innerHTML = listOfLabels;
     }
-    console.log(labels + " " + domains);
+    //console.log(labels + " " + domains);
 });
 
 
