@@ -1,44 +1,35 @@
 window.addEventListener("load", function(event) {
     document.getElementById("FacebookWTM").addEventListener('click', function() {
-        //receivePrefs("Facebook");
+        PageService.savePage("FacebookWTM", "change");
     });
     document.getElementById("AmazonWTM").addEventListener('click', function() {
-        //receivePrefs("Amazon");
+        PageService.savePage("AmazonWTM", "change");
     });
     document.getElementById("weight_trackerWTM").addEventListener('click', function() {
-        //receivePrefs("weight_tracker");
+        PageService.savePage("weight_trackerWTM", "change");
     });
     document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+        PageService.savePage("disableWTM", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("disablePrsspy").addEventListener('click', function() {
+        PageService.savePage("disablePrsspy", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("disablePhish").addEventListener('click', function() {
+        PageService.savePage("disablePhish", "change");
+        //PageService.clearPages();
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("diableGoogle").addEventListener('click', function() {
+        PageService.savePage("diableGoogle", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("disableWebrisk").addEventListener('click', function() {
+        PageService.savePage("disableWebrisk", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("coinLabel").addEventListener('click', function() {
+        PageService.savePage("coinLabel", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
+    document.getElementById("expertMode").addEventListener('click', function() {
+        PageService.savePage("expertMode", "change");
     });
-    document.getElementById("disableWTM").addEventListener('click', function() {
-        //receivePrefs("disable");
-    });
-    disablePrsspy
-    disablePhish
-    diableGoogle
-    disableWebrisk
-    coinLabel
-    expertMode
-
 });
 
 const PAGES_KEY = 'pages';
@@ -63,21 +54,37 @@ class PageService {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
 
-                const researches = result.pages ? ? [];
+                const researches = result.pages ?? [];
                 resolve(researches);
             });
         });
     }
 
-    static savePage = async(title, url) => {
+    static savePage = async(key, value) => {
         const pages = await this.getPages();
-        const updatedPages = [...pages, { title, url }];
+        var updatedPages;
+        var new_pages;
+        var found = false;
+        var newValue = "true";
+        console.log(key)
+        //var new_pages = pages.filter(page =>page["key"] === key);
+        for (let i = 0;i<pages.length;i++){
+            if(pages[i]["key"]==key){
+                pages.splice(i,1);
+                //console.log(pages);
+                updatedPages = [...pages];
+                found = true;
+                break;
+            }
+        } 
+        console.log(pages)
+        if(!found){
+            updatedPages = [...pages, { key, newValue}];
+        }
 
         return toPromise((resolve, reject) => {
-
             chrome.storage.local.set({
-                [PAGES_KEY]: updatedPages
-            }, () => {
+                [PAGES_KEY]: updatedPages }, () => {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
                 resolve(updatedPages);
@@ -95,13 +102,6 @@ class PageService {
         });
     }
 }
-
-
-/*
-If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
-Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
-*/
-
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (var key in changes) {
         var storageChange = changes[key];
@@ -113,3 +113,10 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
             storageChange.newValue);
     }
 });
+
+
+
+/*
+If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
+Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
+*/

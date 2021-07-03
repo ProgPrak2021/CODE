@@ -22,6 +22,83 @@ print methode/logik überarbeitet:
 
 -----------------------------------------------
 */
+const PAGES_KEY = 'pages';
+
+const toPromise = (callback) => {
+    const promise = new Promise((resolve, reject) => {
+        try {
+            callback(resolve, reject);
+        } catch (err) {
+            reject(err);
+        }
+    });
+    return promise;
+}
+
+
+class PageService {
+
+    static getPages = () => {
+        return toPromise((resolve, reject) => {
+            chrome.storage.local.get([PAGES_KEY], (result) => {
+                if (chrome.runtime.lastError)
+                    reject(chrome.runtime.lastError);
+
+                const researches = result.pages ?? [];
+                resolve(researches);
+            });
+        });
+    }
+
+    static savePage = async(key, value) => {
+        const pages = await this.getPages();
+        var updatedPages;
+        var found = false;
+        for(var i = 0; i < pages.length; i++) {
+            if (pages[i]["key"] == key) {
+                pages[i]["value"] = value;
+                found = true;
+                break;
+            }
+        }
+        if (found){
+            updatedPages = [...pages];
+        }
+        else{
+            updatedPages = [...pages, { key, value }];
+        }
+
+        return toPromise((resolve, reject) => {
+            chrome.storage.local.set({
+                [PAGES_KEY]: updatedPages }, () => {
+                if (chrome.runtime.lastError)
+                    reject(chrome.runtime.lastError);
+                resolve(updatedPages);
+            });
+        });
+    }
+
+    static clearPages = () => {
+        return toPromise((resolve, reject) => {
+            chrome.storage.local.remove([PAGES_KEY], () => {
+                if (chrome.runtime.lastError)
+                    reject(chrome.runtime.lastError);
+                resolve();
+            });
+        });
+    }
+}
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    for (var key in changes) {
+        var storageChange = changes[key];
+        console.log('Storage key "%s" in namespace "%s" changed. ' +
+            'Old value was "%s", new value is "%s".',
+            key,
+            namespace,
+            storageChange.oldValue,
+            storageChange.newValue);
+    }
+});
 const icons = [
     chrome.runtime.getURL('images/icons/google_icon.png'),
     chrome.runtime.getURL('images/icons/oracle_icon.png'),
@@ -37,11 +114,46 @@ const icons = [
     chrome.runtime.getURL('images/icons/twitter_icon.png')
 ]
 
-var result = $('.LC20lb').closest('div')
+var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
-var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-var expert = true
+var preferences = { "whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+var expert = true;
+var coins_as_label = true;
 
+function readPages(){
+    const pages = PageService.getPages();
+    pages.then((res)=>{
+        console.log(res)
+       // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+        for (let i= 0;i<res.length;i++){
+            console.log(res[i]["key"])
+            if (res[i]["key"].includes("WTM")){
+                console.log(res[i]["key"])
+                preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
+            }
+            else if (res[i]["key"].includes("Prsspy")){
+                preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+            }
+            else if (res[i]["key"].includes("Phish")){
+                preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+            }
+            else if (res[i]["key"].includes("Google")){
+                preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+            }
+            else if (res[i]["key"].includes("Webrisk")){
+                preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+            }
+            else if (res[i]["key"].includes("expert")){
+                expert = res[i]["key"]
+            }
+            else if (res[i]["key"].includes("coin")){
+                coins_as_label = res[i]["key"]
+            }
+        }
+    });
+    
+
+}
 
 function receivePrefs(datasource, preference) {
     if (preferences === undefined) {
@@ -89,7 +201,9 @@ xhttp.onreadystatechange = function() {
 
     }
 };
+readPages();
 var urls = sendURLsToBackend();
+console.log(preferences);
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
 xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
@@ -313,6 +427,8 @@ function getVisitedUrls(output) {
         });
     });
 }
+
+
 
 /* code dumpster
 -------------------------------------------------------------

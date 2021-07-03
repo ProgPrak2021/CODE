@@ -24,7 +24,6 @@ function sendURL(body) {
             document.getElementById("printLabel").innerText = "The label for the domain " + first_key + " is " + output[first_key][0]["label"] + ".";
         }
     };
-    console.log("hf")
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.send(body);
