@@ -1,16 +1,43 @@
 window.addEventListener("load", function(event) {
-    document.getElementById("Facebook").addEventListener('click', function() {
-        receivePrefs("Facebook");
+    document.getElementById("FacebookWTM").addEventListener('click', function() {
+        //receivePrefs("Facebook");
     });
-    document.getElementById("Amazon").addEventListener('click', function() {
-        receivePrefs("Amazon");
+    document.getElementById("AmazonWTM").addEventListener('click', function() {
+        //receivePrefs("Amazon");
     });
-    document.getElementById("weight_tracker").addEventListener('click', function() {
-        receivePrefs("weight_tracker");
+    document.getElementById("weight_trackerWTM").addEventListener('click', function() {
+        //receivePrefs("weight_tracker");
     });
-    document.getElementById("disable").addEventListener('click', function() {
-        receivePrefs("disable");
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
     });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    document.getElementById("disableWTM").addEventListener('click', function() {
+        //receivePrefs("disable");
+    });
+    disablePrsspy
+    disablePhish
+    diableGoogle
+    disableWebrisk
+    coinLabel
+    expertMode
 
 });
 
@@ -20,8 +47,7 @@ const toPromise = (callback) => {
     const promise = new Promise((resolve, reject) => {
         try {
             callback(resolve, reject);
-        }
-        catch (err) {
+        } catch (err) {
             reject(err);
         }
     });
@@ -37,19 +63,21 @@ class PageService {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
 
-                const researches = result.pages ?? [];
+                const researches = result.pages ? ? [];
                 resolve(researches);
             });
         });
     }
 
-    static savePage = async (title, url) => {
+    static savePage = async(title, url) => {
         const pages = await this.getPages();
         const updatedPages = [...pages, { title, url }];
 
         return toPromise((resolve, reject) => {
 
-            chrome.storage.local.set({ [PAGES_KEY]: updatedPages }, () => {           
+            chrome.storage.local.set({
+                [PAGES_KEY]: updatedPages
+            }, () => {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
                 resolve(updatedPages);
@@ -76,12 +104,12 @@ Whenever anything changes in storage, that event fires. Here's sample code to li
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (var key in changes) {
-      var storageChange = changes[key];
-      console.log('Storage key "%s" in namespace "%s" changed. ' +
-                  'Old value was "%s", new value is "%s".',
-                  key,
-                  namespace,
-                  storageChange.oldValue,
-                  storageChange.newValue);
+        var storageChange = changes[key];
+        console.log('Storage key "%s" in namespace "%s" changed. ' +
+            'Old value was "%s", new value is "%s".',
+            key,
+            namespace,
+            storageChange.oldValue,
+            storageChange.newValue);
     }
-  });
+});
