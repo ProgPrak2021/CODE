@@ -77,7 +77,7 @@ function sendURLsToBackend(rootNode) {
 }
 
 var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function () {
+xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         // console.log(this.responseText)
         var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
@@ -117,12 +117,13 @@ function printLabels(output) {
     function traverse_JSON(obj, func) {
         for (var key in obj) {
             func.apply(this, [key, obj[key]]);
-            if (obj[key] !== null && typeof (obj[key]) == "object") {
+            if (obj[key] !== null && typeof(obj[key]) == "object") {
                 //going one step down in the object tree!!
                 traverse_JSON(obj[key], func);
             }
         }
     }
+
 
     var labels_expert = [
         [chrome.runtime.getURL('images/expert_icons/bronze_coin.png'), "none"],
@@ -134,9 +135,6 @@ function printLabels(output) {
         [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/three_silver_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
-
-
-
     ]
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
@@ -171,12 +169,12 @@ function printLabels(output) {
             popup.appendTo(div);
         } else {
             if (expert_mode) { //this is for the expert mode
-                expert_label = 6; // some number from 1 to 7
-                
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[expert_label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                //expert_label = 6; // some number from 1 to 7
+
+                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
-            
-               
+
+
             } else { // this is default mode 
                 var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
@@ -257,8 +255,7 @@ function get_logos_html(v, list) {
                 result += '<li><img class="icons" src="' + icons[11] + '"><span>Twitter</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
                 break;
         }
-    }
-    )
+    })
     let others = get_others_percentage(list)
     if (others != "0") {
         result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>" + others + "</span></li>"
@@ -266,6 +263,7 @@ function get_logos_html(v, list) {
 
     return result += "</ul>";
 }
+
 function get_percentage(name, list) {
     let counter = 0;
     for (let i = 0; i < list.length; i++) {
@@ -295,23 +293,24 @@ function get_others_percentage(list) {
     }
 }
 
-function getVisitedUrls(output){
+function getVisitedUrls(output) {
     const elems = document.querySelectorAll('.yuRUbf');
 
     elems.forEach(element => {
         element.addEventListener('click', (e) => { //TODO: Event Listener for right click + "open link in new tab"
-                var clickedUrl = new URL(element.children[0].href);
-                for (let site in output) {
-                    let value = output[site];
-                    let domain = clickedUrl.href;
+            var clickedUrl = new URL(element.children[0].href);
+            for (let site in output) {
+                let value = output[site];
+                let domain = clickedUrl.href;
 
-                    if (domain.includes(site)) {
-                        let label = value[0]['label'];
-                        chrome.storage.local.set({[site] : label});
-                    }
+                if (domain.includes(site)) {
+                    let label = value[0]['label'];
+                    chrome.storage.local.set({
+                        [site]: label
+                    });
                 }
             }
-        );
+        });
     });
 }
 
