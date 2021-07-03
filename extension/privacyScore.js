@@ -63,10 +63,10 @@ function getPrivacyInfo(score) {
     var info = "";
 
     if (score >= 66) {
-        info = "Good job! You took good care about your privacy in the past week: " +
+        info = "Good job! You took good care about your privacy: " +
             score + "% of your visited websites had a green label!";
     } else if (score < 66 && score >= 33) {
-        info = "Not bad! You did quite well in the past week: " +
+        info = "Not bad! You did quite well: " +
             score + "% of your visited websites had a green label";
     } else {
         info = "Could be better! Only " + score + "% of your visited websites had a green label. " +
