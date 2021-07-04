@@ -241,14 +241,17 @@ function printLabels(output) {
 
     var labels_expert = [
         [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/three_silver_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/two_silver_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/golden_coin.png'), "none"],
+
+        [chrome.runtime.getURL('images/expert_icons/three_silver_coins.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/two_silver_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/silver_coin.png'), "none"],
+
+        [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/bronze_coin.png'), "none"],
+
     ]
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
