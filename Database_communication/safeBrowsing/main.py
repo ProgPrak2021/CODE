@@ -1,21 +1,31 @@
 import json
-
 from flask import Flask, jsonify, request
 import database_playground
+from flask_mysqldb import MySQL
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main, \
-    expert_mode
+expert_mode
+
+
 
 app = Flask(__name__)
 CORS(app)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
+app.config['MYSQL_HOST'] = os.environ.get('CLOUD_SQL_HOST')
+app.config['MYSQL_USER'] = os.environ.get('CLOUD_SQL_USERNAME')
+app.config['MYSQL_PASSWORD'] = os.environ.get('CLOUD_SQL_PASSWORD')
+app.config['MYSQL_DB'] = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+mysql = MySQL(app)
 
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
     hardcoded_user_preference = ["pornvertising"]
     input = str(request.data)
+    print(input)
     split_input = input.split("SPLITME")
     urls = split_input[0]
     pref_input = split_input[1]

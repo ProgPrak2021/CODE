@@ -12,12 +12,11 @@ expert_mode = True
 
 def fill_label_database(domain_dict, users):
     db = database_playground.connect_db_labels()
-    # print(domain_dict)
     for key in domain_dict:
-        # print(key)
-        query = f"REPLACE INTO domain_data (domain, label, users) VALUES (\"{key}\", \"{domain_dict[key]}\", \"{users}\");"
+        # query = "REPLACE INTO domain_data (domain, label, users) VALUES (\"{key}\", \"{domain_dict[key]}\", \"{users}\");"
+        query = """REPLACE INTO domain_data (domain, label, users) VALUES (%s, %s, %s);"""
         cursor = db.cursor()
-        cursor.execute(query)
+        cursor.execute(query, key, domain_dict[key], users)
         db.commit()
 
 def generic_sql_query(query, db):
@@ -69,10 +68,11 @@ def backend_main(domain_list):
 
     for domain in domain_list:
 
-
-
-        query = f"SELECT domain FROM dict where domain = '{domain}';"
-        doma = generic_sql_query(query, newlabelsdb)
+       
+        query = """SELECT domain FROM dict where domain = %s;"""
+        cursor = newlabelsdb.cursor()
+        cursor.execute(query, (domain,))
+        doma = cursor.fetchall()
         data_summary[domain] = []
 
         """if doma:
@@ -81,10 +81,13 @@ def backend_main(domain_list):
              cnt = columns.__len__()
              for i in range(cnt):
                  col = columns[i]
-        
-                 query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
-        
-                 partialDict = generic_sql_query(query, newlabelsdb)
+    
+                 query = "SELECT %s FROM dict where domain = %s;"
+                
+                cursor = newlabelsdb.cursor()
+                cursor.execute(query, (col[0], domain))
+                    
+                 partialDict = cursor.fetchall()
                  strDict = (partialDict[0])[0]
                  newDict = json.loads(strDict)
                  data_summary[domain].append(newDict)"""
@@ -111,7 +114,7 @@ def backend_main(domain_list):
 
             saveCalcLabels(slice, domain, calced_label)
 
-            # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
+            # domain_dict[domain] = data_summary[domain][0]["whotracksme_db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
             # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
@@ -174,44 +177,53 @@ def saveCalcLabels(data_summary, domain, label):
         key = dictString[start:end]
         if (key[-3:] == '.db'):
             key = dictString[start:end - 3]
+        dictString = dictString.replace('"', "'")    
 
-        query = f"INSERT INTO dict (domain) SELECT '{domain}' WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = '{domain}');"
+        #  query = "INSERT INTO dict (domain) SELECT \"{domain}\" WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = \"{domain}\");"
+        query = """INSERT INTO dict (domain) SELECT %s WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = %s);"""
         cursor = db.cursor()
-        cursor.execute(query)
+        cursor.execute(query, (domain, domain))
         db.commit()
 
-        query = f"INSERT INTO columns (name) SELECT '{key}' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = '{key}');"
+        # query = f"INSERT INTO columns (name) SELECT \"{key}\" WHERE NOT EXISTS (SELECT name FROM columns WHERE name = \"{key}\");"
+        query = """INSERT INTO columns (name) SELECT %s WHERE NOT EXISTS (SELECT name FROM columns WHERE name = %s);"""
         cursor = db.cursor()
-        cursor.execute(query)
+        cursor.execute(query, (key, key))
         db.commit()
 
         try:
 
-            query = f"ALTER TABLE dict ADD \"{key}\" varchar(999);"
+            # query = f"ALTER TABLE dict ADD \"{key}\" TEXT;"
+            query = """ALTER TABLE dict ADD %s TEXT;""" % (key,)
             cursor = db.cursor()
             cursor.execute(query)
             db.commit()
 
-            query = f"update dict set {key} = '{dictString}' where domain = '{domain}';"
+            
+            # query = f"update dict set {key} = \"{dictString}\" where domain = \"{domain}\";"
+            query = """Update dict set %s = %%s WHERE domain = %%s""" % (key,)
 
             cursor = db.cursor()
-            cursor.execute(query)
+            cursor.execute(query, (dictString, domain))
             db.commit()
 
         except:
 
             # query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
-            query = f"update dict set {key} = '{dictString}' where domain = '{domain}';"
+            
+            # query = f"update dict set {key} = \"{dictString}\" where domain = '{domain}';"
+            # query = """Update dict set %s = %s where domain = %s;"""
 
+            query = """Update dict set %s = %%s WHERE domain = %%s""" % (key,)
             cursor = db.cursor()
-            cursor.execute(query)
+            cursor.execute(query, (dictString, domain))
             db.commit()
             continue
 
-    """whotracksme_label = data_summary[0]["whotracksme.db"]["score"]
-    tracker_cnt = data_summary[0]["whotracksme.db"]["tracker_count"]
-    amzn = data_summary[0]["whotracksme.db"]["amazon"]
-    fcbook = data_summary[0]["whotracksme.db"]["facebook"]
+    """whotracksme_label = data_summary[0]["whotracksme_db"]["score"]
+    tracker_cnt = data_summary[0]["whotracksme_db"]["tracker_count"]
+    amzn = data_summary[0]["whotracksme_db"]["amazon"]
+    fcbook = data_summary[0]["whotracksme_db"]["facebook"]
 
 
     phishstats_label = data_summary[1]["phishstats.db"]["score"]
@@ -219,9 +231,9 @@ def saveCalcLabels(data_summary, domain, label):
 
     privacyspy_score = str(data_summary[2]["privacyspy"]["score"])"""
 
-    """query = f"REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (\"{domain}\", \"{label}\" , \"{whotracksme_label}\", \"{tracker_cnt}\", \"{fcbook}\", \"{amzn}\", \"{phishstats_label}\", \"{phishing_category}\" , \"{privacyspy_score}\");"
+    """query = "REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (%s, %s , %s, %s, %s, %s, %s, %s , %s);"
     cursor = db.cursor()
-    cursor.execute(query)
+    cursor.execute(query, (domain, label, whotracksme_label, tracker_cnt, fcbook, amzn, phishstats_label, phishing_category, privacy_score))
     db.commit()"""
 
 
@@ -251,9 +263,9 @@ def whotracksme_score(domain, unwanted_categories):
     db = database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
-    # TODO: CREATE WHOTRACKSME.db DATA SUMMARY (information package)
+    # TODO: CREATE whotracksme_db DATA SUMMARY (information package)
     data_summary = {
-        'whotracksme.db': {
+        'whotracksme_db': {
             'score': '0',
             'tracker_count': '0',
             'facebook': '',
@@ -309,17 +321,17 @@ def whotracksme_score(domain, unwanted_categories):
     index = index.__round__()
 
     for i in trackers:
-        data_summary['whotracksme.db']['trackers'] += [{  # Fill trackers array
+        data_summary['whotracksme_db']['trackers'] += [{  # Fill trackers array
             'name': i[0],
             'category': i[1],
             'company': i[2],
         }]
 
-    data_summary['whotracksme.db']['score'] = eval(str(index))
-    data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
-    data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
-    data_summary['whotracksme.db']['amazon'] = eval(str(amazon))
-    data_summary['whotracksme.db']['https_avg'] = eval(str(https_avg))
+    data_summary['whotracksme_db']['score'] = eval(str(index))
+    data_summary['whotracksme_db']['tracker_count'] = eval(str(len(trackers)))
+    data_summary['whotracksme_db']['facebook'] = eval(str(facebook))
+    data_summary['whotracksme_db']['amazon'] = eval(str(amazon))
+    data_summary['whotracksme_db']['https_avg'] = eval(str(https_avg))
 
     return data_summary
 

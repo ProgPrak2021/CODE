@@ -1,4 +1,5 @@
 import sqlite3
+from main import mysql
 
 
 def connect_db():
@@ -16,5 +17,5 @@ def connect_phishcore_db():
     return sqlite3.connect('phishstats.db')
 
 def connect_new_labels():
-    return sqlite3.connect('newlabels.db')
+    return mysql.connection
 
