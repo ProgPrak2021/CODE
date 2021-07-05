@@ -117,16 +117,14 @@ const icons = [
 var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
 var preferences = { "whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-var expert = true;
-var coins_as_label = true;
+var expert = false;
+var coins_as_label = false;
 
 function readPages(){
     const pages = PageService.getPages();
     pages.then((res)=>{
-        console.log(res)
        // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
         for (let i= 0;i<res.length;i++){
-            console.log(res[i]["key"])
             if (res[i]["key"].includes("WTM")){
                 console.log(res[i]["key"])
                 preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
@@ -183,7 +181,6 @@ function sendURLsToBackend(rootNode) {
     for (var i of elems) {
         var url = new URL(i.children[0].href);
         urls += url;
-        console.log("urls " + url);
     }
     return urls;
 }
@@ -193,8 +190,6 @@ xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         // console.log(this.responseText)
         var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-        console.log(output)
-
         getVisitedUrls(output);
 
         printLabels(output)
@@ -203,7 +198,6 @@ xhttp.onreadystatechange = function() {
 };
 readPages();
 var urls = sendURLsToBackend();
-console.log(preferences);
 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
 xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
 xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
@@ -278,17 +272,13 @@ function printLabels(output) {
         const logos = get_logos_html(companies, result) //Get html for the icon images.
 
         if (label == 0 || trackers.length == 0) {
-            console
             var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
             popup.appendTo(div);
         } else {
             if (expert_mode) { //this is for the expert mode
                 //expert_label = 6; // some number from 1 to 7
-                console.log(label)
                 var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
-
-
             } else { // this is default mode 
                 var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
