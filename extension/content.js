@@ -116,42 +116,49 @@ const icons = [
 
 var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
-var preferences = { "whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
 var expert = true;
 var coins_as_label = true;
 
-function readPages(){
-    const pages = PageService.getPages();
-    pages.then((res)=>{
-        console.log(res)
-       // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-        for (let i= 0;i<res.length;i++){
-            console.log(res[i]["key"])
-            if (res[i]["key"].includes("WTM")){
-                console.log(res[i]["key"])
-                preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
-            }
-            else if (res[i]["key"].includes("Prsspy")){
-                preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Phish")){
-                preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Google")){
-                preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Webrisk")){
-                preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("expert")){
-                expert = res[i]["key"]
-            }
-            else if (res[i]["key"].includes("coin")){
-                coins_as_label = res[i]["key"]
-            }
+function getPreferences(){
+    var pref_promise = new Promise(
+        function(resolve, reject){
+            var preferences = { "whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+            const pages = PageService.getPages();
+            pages.then((res)=>{
+                console.log(res)
+               // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+                for (let i= 0;i<res.length;i++){
+                    console.log(res[i]["key"])
+                    if (res[i]["key"].includes("WTM")){
+                        console.log(res[i]["key"])
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
+                    }
+                    else if (res[i]["key"].includes("Prsspy")){
+                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("Phish")){
+                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("Google")){
+                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("Webrisk")){
+                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("expert")){
+                        expert = res[i]["key"]
+                    }
+                    else if (res[i]["key"].includes("coin")){
+                        coins_as_label = res[i]["key"]
+                    }
+                }
+                if (preferences != undefined){
+                    resolve(preferences)
+                }
+            });
         }
-    });
-    
+    );
+    return pref_promise
 
 }
 
@@ -201,12 +208,14 @@ xhttp.onreadystatechange = function() {
 
     }
 };
-readPages();
+var preferences_promise = getPreferences();
 var urls = sendURLsToBackend();
-console.log(preferences);
-xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
-xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
+preferences_promise.then((res)=>{
+    console.log(res)
+    xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+    xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.send(urls + "SPLITME" + JSON.stringify(res) + "SPLITME" + expert);
+})
 
 function printLabels(output) {
 

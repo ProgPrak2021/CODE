@@ -3,8 +3,7 @@ import json
 from flask import Flask, jsonify, request
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main, \
-    expert_mode
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, backend_main,change_prefs,change_expert \
 
 app = Flask(__name__)
 CORS(app)
@@ -20,14 +19,13 @@ def receive_urls():
     urls = split_input[0]
     pref_input = split_input[1]
     expert_input = split_input[2]
-    global expert_mode, preferences
     if expert_input[:-1] == "true":  # without last elem of string as this is just "'"
-        expert_mode = True
+        change_expert(True)
     else:
-        expert_mode = False
-    print(preferences)
+        change_expert(False)
     preferences = json.loads(pref_input)
-    print(expert_mode)
+    change_prefs(preferences)
+    print(json.loads(pref_input))
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
