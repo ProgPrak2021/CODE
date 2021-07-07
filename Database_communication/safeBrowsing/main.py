@@ -3,7 +3,8 @@ import json
 from flask import Flask, jsonify, request
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, backend_main,change_prefs,change_expert \
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, backend_main, change_prefs, \
+    change_expert
 
 app = Flask(__name__)
 CORS(app)
@@ -13,6 +14,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
+    default_preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
+                           "phishstats": [],
+                           "webrisk": []}
     hardcoded_user_preference = ["pornvertising"]
     input = str(request.data)
     split_input = input.split("SPLITME")
@@ -23,9 +27,11 @@ def receive_urls():
         change_expert(True)
     else:
         change_expert(False)
-    preferences = json.loads(pref_input)
-    change_prefs(preferences)
-    print(json.loads(pref_input))
+    if "no Preferences" in pref_input:
+        change_expert(default_preferences)
+    else:
+        preferences = json.loads(pref_input)
+        change_prefs(preferences)
     if urls.__contains__("http://"):
         print("unsafe web protocol found")
     urls = urls.split("https://")
