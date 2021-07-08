@@ -1,30 +1,29 @@
-window.addEventListener("load", function() {
-    if(document.getElementById("submitButton")) {
-        document.getElementById("submitButton").addEventListener("click", function () {
-            console.log("jsjs");
-            url = document.getElementById("url").value;
-            var hardcoded_preference = {
-                "whotracksme": ["Facebook", "Amazon"],
-                "privacyspy": [],
-                "google_safeBrowsing": [],
-                "phishstats": [],
-                "webrisk": []
-            }
-            // call a method that looks for preferences stored in storage api
-            var hardcoded_expert_mode = false
-            var body = url + "SPLITME" + JSON.stringify(hardcoded_preference) + "SPLITME" + hardcoded_expert_mode
-            sendURL(body);
-        })
-    }
-});
+if(document.getElementById("submitButton")) {
+    document.getElementById("submitButton").addEventListener("click", function () {
+        console.log("jsjs");
+        let url = document.getElementById("url").value;
+        let hardcoded_preference = {
+            "whotracksme": ["Facebook", "Amazon"],
+            "privacyspy": [],
+            "google_safeBrowsing": [],
+            "phishstats": [],
+            "webrisk": []
+        };
+        // call a method that looks for preferences stored in storage api
+        let hardcoded_expert_mode = false;
+        let body = url + "SPLITME" + JSON.stringify(hardcoded_preference) + "SPLITME" + hardcoded_expert_mode;
+        sendURL(body);
+    });
+}
+
 
 function sendURL(body) {
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            // console.log(this.responseText)
-            var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-            first_key = Object.keys(output)[0]
+            // console.log(this.responseText);
+            let output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+            let first_key = Object.keys(output)[0];
             console.log(output[first_key][0]["label"]);
             document.getElementById("calcLabel").style.display = "block";
             document.getElementById("printLabel").innerText = "The label for the domain " + first_key + " is " + output[first_key][0]["label"] + ".";
@@ -41,15 +40,13 @@ chrome.storage.local.get(function(data) {
     let goodLabels = 0; //green or gold
     let unknownLabels = 0;
 
-    //console.log(labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+    //console.log(domains + ': ' + labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
     for (let i = 0; i < labels.length; i++) {
-        if (labels[i] >= 7) { //TODO: Two score formulas are needed: one for expert mode and one for normal mode
+        if (labels[i] <= 3) { //both, green and gold labels are calculated
             goodLabels++;
         } else if (labels[i] === 0) {
             unknownLabels++;
-        } else {
-            continue;
         }
     }
     let score = '';
@@ -68,45 +65,49 @@ chrome.storage.local.get(function(data) {
         }
     }
 
-    let lastLabels = document.getElementById('recent_labels');
-    if (lastLabels) {
+    if (document.getElementById('recent_labels')) {
         let listOfLabels = '';
         let count = 0;
-        for (let i = domains.length-1; i > 0; i--){
+        for (let i = 0; i <= domains.length-1; i++){
             if (count < 3) {
-                listOfLabels += domains[domains.length -1 - i] + ': ' + labels[labels.length -1 - i];
+                listOfLabels += domains[i] + ': ' + labels[i];
                 listOfLabels += '<br>';
                 count++;
             }
         }
-
-        lastLabels.innerHTML = listOfLabels;
+        document.getElementById('recent_labels').innerHTML = listOfLabels;
     }
-    //console.log(labels + " " + domains);
+
+    if (document.getElementById('all_labels')) {
+        let listOfLabels = '';
+        for (let i = 3; i <= domains.length-1; i++){
+            listOfLabels += domains[i] + ': ' + labels[i];
+            listOfLabels += '<br>';
+        }
+        document.getElementById('all_labels').innerHTML = listOfLabels;
+    }
 });
 
 
 function getPrivacyInfo(score) {
-    var info = "";
+    let info = "";
 
     if (score >= 66) {
         info = "Good job! You took good care about your privacy: " +
-            score + "% of your visited websites had a green label!";
+            score + "% of your visited websites had a good label!";
     } else if (score < 66 && score >= 33) {
         info = "Not bad! You did quite well: " +
-            score + "% of your visited websites had a green label";
+            score + "% of your visited websites had a good label.";
     } else {
-        info = "Could be better! Only " + score + "% of your visited websites had a green label. " +
+        info = "Could be better! Only " + score + "% of your visited websites had a good label. " +
             "Next time take a look at the label before you open the page."
     }
     return info;
 }
 
 
-var btn = document.getElementById("reset_stats");
-
-if (btn) {
-    btn.addEventListener("click", function() {
+if (document.getElementById("reset_stats")) {
+    document.getElementById("reset_stats").addEventListener("click", function() {
         chrome.storage.local.get(function(data) {
             if (Object.values(data).length === 0) {
                 alert("Your storage is already empty");
@@ -114,10 +115,6 @@ if (btn) {
                 chrome.storage.local.clear();
                 location.reload();
             }
-        })
-    })
+        });
+    });
 }
-
-chrome.storage.onChanged.addListener(function() {
-    location.reload();
-});
