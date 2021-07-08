@@ -19,9 +19,9 @@ print methode/logik überarbeitet:
 #author simon
 
 
-
 -----------------------------------------------
 */
+
 const PAGES_KEY = 'pages';
 
 const toPromise = (callback) => {
@@ -99,6 +99,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
             storageChange.newValue);
     }
 });
+
 const icons = [
     chrome.runtime.getURL('images/icons/google_icon.png'),
     chrome.runtime.getURL('images/icons/oracle_icon.png'),
@@ -129,14 +130,15 @@ function getPreferences(){
                 var prefs_given = false;
                 // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
                 for (let i= 0;i<res.length;i++){
-                    console.log(res[i]["key"])
+                    //console.log(res[i]["key"])
                     prefs_given = true;
+
                     if (res[i]["key"].includes("WTM")){
-                        console.log(res[i]["key"])
+                        //console.log(res[i]["key"])
                         preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
                     }
                     else if (res[i]["key"].includes("Prsspy")){
-                        console.log("jdjd")
+                        //console.log("jdjd")
                         preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Phish")){
@@ -184,6 +186,7 @@ function receivePrefs(datasource, preference) {
     console.log(preferences)
 }
 
+
 function switchExpertMode() {
     if (expert) {
         expert = false
@@ -219,12 +222,12 @@ xhttp.onreadystatechange = function() {
 var preferences_promise = getPreferences();
 var urls = sendURLsToBackend();
 preferences_promise.then((res)=>{
-    console.log(res)
+    //console.log(res)
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    console.log(JSON.stringify(res))
-    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert":expert}));
+    //console.log(JSON.stringify(res))
+    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert": expert}));
 })
 
 function printLabels(output) {
