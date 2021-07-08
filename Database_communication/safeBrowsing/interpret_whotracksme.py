@@ -106,14 +106,15 @@ def backend_main(domain_list):
             calced_label = calc_label(label_max,
                                       [whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain),
-                                       tosdr_score(domain)])  # , google_safe_browsing_score(domain)])
+                                       tosdr_score(domain),
+                                       tilthubScore(domain)])  # , google_safe_browsing_score(domain)])
 
             # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
 
             dictionary = {'label': calced_label}, {'expert': str(expert_mode)}, whotracksme_score(domain,
                                                                                              unwanted_categories), phishstats_score(
                 domain), \
-                         privacyspy_score(domain), tosdr_score(domain)  # , google_safe_browsing_score(domain)
+                         privacyspy_score(domain), tosdr_score(domain), tilthubScore(domain)  # , google_safe_browsing_score(domain)
 
             tilthubScore(domain)
 
@@ -147,11 +148,11 @@ def tilthubScore(domain):
     data_summary = {
         'tilthub': {
             'score': '0',
-            'Data Disclosed': '',#
-            'Third Country Transfers': '',#
+            'Data Disclosed': '',
+            'Third Country Transfers': '',
             'Right to Withdraw Consent': '',
-            'Right to Complain': '', #
-            'Data Protection Officer': '', #
+            'Right to Complain': '',
+            'Data Protection Officer': '',
             'Right to Data Portability': '',
             'Right to Information': '',
             'Right to Rectification or Deletion': '',
@@ -213,7 +214,7 @@ def tilthubScore(domain):
 
     data_summary['tilthub']['score'] = str(calcedScore)
 
-    return
+    return data_summary
 
 
 def saveCalcLabels(data_summary, domain, label):
