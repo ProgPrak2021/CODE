@@ -60,7 +60,7 @@ chrome.storage.local.get(function(data) {
             privacyScoreNumber.innerHTML = '¯\\_(ツ)_/¯';
             privacyScoreInfo.innerHTML = 'Nothing to show yet.';
         } else {
-            score = Math.round(goodLabels / (labels.length - unknownLabels) * 100);
+            score = Math.round(goodLabels / (labels.length-1 - unknownLabels) * 100);
             privacyScoreNumber.innerHTML = score.toString() + '%';
             privacyScoreInfo.innerHTML = getPrivacyInfo(score);
         }
