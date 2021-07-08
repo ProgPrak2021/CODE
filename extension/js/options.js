@@ -1,43 +1,45 @@
 window.addEventListener("load", function(event) {
-    if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
-        && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
-        && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
-        && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
-        && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
-        document.getElementById("FacebookWTM").addEventListener('click', function () {
-            PageService.savePage("FacebookWTM", "change");
-        });
-        document.getElementById("AmazonWTM").addEventListener('click', function () {
-            PageService.savePage("AmazonWTM", "change");
-        });
-        document.getElementById("weight_trackerWTM").addEventListener('click', function () {
-            PageService.savePage("weight_trackerWTM", "change");
-        });
-        document.getElementById("disableWTM").addEventListener('click', function () {
-            PageService.savePage("disableWTM", "change");
-        });
-        document.getElementById("disablePrsspy").addEventListener('click', function () {
-            PageService.savePage("disablePrsspy", "change");
-        });
-        document.getElementById("disablePhish").addEventListener('click', function () {
-            PageService.savePage("disablePhish", "change");
-        });
-        document.getElementById("diableGoogle").addEventListener('click', function () {
-            PageService.savePage("diableGoogle", "change");
-        });
-        document.getElementById("disableWebrisk").addEventListener('click', function () {
-            PageService.savePage("disableWebrisk", "change");
-        });
-        document.getElementById("coinLabel").addEventListener('click', function () {
-            PageService.savePage("coinLabel", "change");
-        });
-        document.getElementById("expertMode").addEventListener('click', function () {
-            PageService.savePage("expertMode", "change");
-        });
+
+    const setUpEventListeners =  function(){
+        if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
+            && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
+            && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
+            && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
+            && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
+            console.log("jfjdfjfjd")
+            document.getElementById("FacebookWTM").addEventListener('click', function () {
+                PageService.savePage("FacebookWTM", "change");
+            });
+            document.getElementById("AmazonWTM").addEventListener('click', function () {
+                PageService.savePage("AmazonWTM", "change");
+            });
+            document.getElementById("weight_trackerWTM").addEventListener('click', function () {
+                PageService.savePage("weight_trackerWTM", "change");
+            });
+            document.getElementById("disableWTM").addEventListener('click', function () {
+                PageService.savePage("disableWTM", "change");
+            });
+            document.getElementById("disablePrsspy").addEventListener('click', function () {
+                PageService.savePage("disablePrsspy", "change");
+            });
+            document.getElementById("disablePhish").addEventListener('click', function () {
+                PageService.savePage("disablePhish", "change");
+            });
+            document.getElementById("diableGoogle").addEventListener('click', function () {
+                PageService.savePage("diableGoogle", "change");
+            });
+            document.getElementById("disableWebrisk").addEventListener('click', function () {
+                PageService.savePage("disableWebrisk", "change");
+            });
+            document.getElementById("coinLabel").addEventListener('click', function () {
+                PageService.savePage("coinLabel", "change");
+            });
+            document.getElementById("expertMode").addEventListener('click', function () {
+                PageService.savePage("expertMode", "change");
+            });
+        }
     }
-    function clickButtons(){
-        //document.getElementById("AmazonWTM").click(); // should be automatically activated
-        //document.getElementById("FacebookWTM").click();
+    function clickButtons(callback){ // function is called at last 
 
         const pages = PageService.getPages();
         pages.then((res)=>{
@@ -45,6 +47,7 @@ window.addEventListener("load", function(event) {
             for (let i= 0;i<res.length;i++){
                 document.getElementById(res[i]["key"]).click();
             }
+            callback(); // set up event listeners activating correct buttons
         })
     }
 
@@ -86,7 +89,8 @@ window.addEventListener("load", function(event) {
             //var new_pages = pages.filter(page =>page["key"] === key);
             for (let i = 0;i<pages.length;i++){
                 if(pages[i]["key"]==key){
-                    pages.splice(i,1);
+                    var index = pages.indexOf(pages[i])
+                    pages.splice(index,1);
                     //console.log(pages);
                     updatedPages = [...pages];
                     found = true;
@@ -129,7 +133,7 @@ window.addEventListener("load", function(event) {
                 storageChange.newValue);
         }
     });
-    clickButtons();
+    clickButtons(setUpEventListeners);
 });
 
 /*
