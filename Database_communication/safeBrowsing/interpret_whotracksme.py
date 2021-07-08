@@ -147,21 +147,71 @@ def tilthubScore(domain):
     data_summary = {
         'tilthub': {
             'score': '0',
-            'Data Disclosed': '',
-            'Third Country Transfers': '',
+            'Data Disclosed': '',#
+            'Third Country Transfers': '',#
             'Right to Withdraw Consent': '',
-            'Right to Complain': '',
-            'Right to Deletion': '',
-            'Changes of Purpose': '',
+            'Right to Complain': '', #
+            'Data Protection Officer': '', #
+            'Right to Data Portability': '',
+            'Right to Information': '',
+            'Right to Rectification or Deletion': '',
+            'Automated Decision Making': '',
         }}
 
     length = len(tiltDict)
-    listOfIndices = []
+    #listOfIndices = []
+    if expert_mode:
+        adder = 1
+    else:
+        adder = 0.3
+    calcedScore = 0
     for i in range(length):
         url = tiltDict[i]['meta']['url'].split("//")[1]
         calcedDomain = get_domain_by_url(url)
-        if get_domain_by_url(url) == domain:
-            listOfIndices.append(i)
+        if calcedDomain == domain:
+            tiltInfos = tiltDict[i]
+
+            data_summary['tilthub']['Right to Complain'] = str(tiltInfos['rightToComplain']['available'])
+            if not tiltInfos['rightToComplain']['available']:
+                calcedScore+=adder
+
+            data_summary['tilthub']['Data Protection Officer'] = str(tiltInfos['dataProtectionOfficer']['name'])
+            if tiltInfos['dataProtectionOfficer']['name'] == None:
+                calcedScore+=adder
+
+            data_summary['tilthub']['Third Country Transfers'] = str(len(tiltInfos['thirdCountryTransfers']))
+            if not len(tiltInfos['thirdCountryTransfers']) > 1:
+                calcedScore += adder
+
+            data_summary['tilthub']['Right to Withdraw Consent'] = str(tiltInfos['rightToWithdrawConsent']['available'])
+            if not tiltInfos['rightToWithdrawConsent']['available']:
+                calcedScore += adder
+
+            data_summary['tilthub']['Right to Data Portability'] = str(tiltInfos['rightToDataPortability']['available'])
+            if not tiltInfos['rightToDataPortability']['available']:
+                calcedScore += adder
+
+            data_summary['tilthub']['Right to Information'] = str(tiltInfos['rightToInformation']['available'])
+            if not tiltInfos['rightToInformation']['available']:
+                calcedScore += adder
+
+            data_summary['tilthub']['Right to Rectification or Deletion'] = str(tiltInfos['rightToRectificationOrDeletion']['available'])
+            if not tiltInfos['rightToRectificationOrDeletion']['available']:
+                calcedScore += adder
+
+            data_summary['tilthub']['Automated Decision Making'] = str(tiltInfos['automatedDecisionMaking']['inUse'])
+            if not tiltInfos['automatedDecisionMaking']['inUse']:
+                calcedScore += adder
+
+            """data_summary['tilthub']['Data Disclosed'] = str(tiltInfos['rightToComplain']['available'])
+            if tiltInfos['rightToComplain']['available']:
+                calcedScore += adder"""
+            break
+
+    if not expert_mode:
+        calcedScore = int(round(calcedScore))
+
+    data_summary['tilthub']['score'] = str(calcedScore)
 
     return
 
