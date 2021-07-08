@@ -136,16 +136,17 @@ function getPreferences(){
                         preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
                     }
                     else if (res[i]["key"].includes("Prsspy")){
-                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        console.log("jdjd")
+                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Phish")){
-                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["phishstats"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Google")){
-                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Webrisk")){
-                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["webrisk"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("expert")){
                         expert = true
@@ -155,7 +156,7 @@ function getPreferences(){
                     }
                 }
                 if (preferences != undefined ){
-                    if(prefs_given){
+                    if(!prefs_given){
                         var d = {"no Preferences":"test"}
                         resolve(d)
                     }else{
@@ -221,8 +222,9 @@ preferences_promise.then((res)=>{
     console.log(res)
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     console.log(JSON.stringify(res))
-    xhttp.send(urls + "SPLITME" + JSON.stringify(res) + "SPLITME" + expert);
+    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert":expert}));
 })
 
 function printLabels(output) {
