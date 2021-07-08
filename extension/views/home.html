@@ -15,61 +15,85 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-sm bg-dark text-light justify-content-center">
-        <h3> Privacy Summary </h3>
-    </nav>
+<nav class="navbar navbar-expand-sm bg-dark text-light justify-content-center">
+    <h3> Privacy Summary </h3>
+</nav>
 
-    <div class="container-sm pt-3 p-3 text-dark text-center">
-        <div class="row justify-content-center">
-            <h1 class="display-1">
-                <div id="privacyScore_number"></div>
-            </h1>
-        </div>
-        <div class="row justify-content-center">
-            <div id="privacyScore_info">
-            </div>
-        </div>
-        <button type="submit" id="reset_stats" class="btn-check btn-light">Reset Statistics</button>
+<div class="container-sm pt-3 p-3 text-dark text-center">
+    <div class="row justify-content-center">
+        <h1 class="display-1">
+            <div id="privacyScore_number"></div>
+        </h1>
     </div>
+    <div class="row justify-content-center">
+        <div id="privacyScore_info">
+        </div>
+    </div>
+    <button type="submit" id="reset_stats" class="btn btn-light" title="Reset Statistics">&#10006;</button>
+</div>
 
-    <div class="container-sm pt-3 p-3 text-center rounded">
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <h3>Labels in your score:</h3>
-                <div id="recent_labels"></div>
-            </div>
-            <div class="col-4">
-                <!-- <form method="post" action="">-->
-                <div class="form-group">
-                    <h3><label for="url">Create new label:</label>
-                        <!--<h3>or..get info on domain (from CODE.db)</h3><br></h3>-->
+<div class="container-sm pt-3 p-3 text-center rounded">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h3>Labels in your score:</h3>
+            <div id="recent_labels"></div>
+            <button data-toggle="collapse" data-target="#all_labels" class="btn btn-check btn-dark">Show more</button>
+            <div id="all_labels" class="collapse">  </div>
+        </div>
+        <div class="col-4">
+            <!-- <form method="post" action="">-->
+            <div class="form-group">
+                <h3><label for="url">Create new label:</label>
+                    <!--<h3>or..get info on domain (from CODE.db)</h3><br></h3>-->
                     <!-- NOTE: als Idee um Informationen einr domain anzufragen und darzustellen-->
                     <input type="url" class="form-control" placeholder="Enter url" id="url">
-                </div>
-                <div id="calcLabel">
-                    <p id="printLabel"></p>
-                </div>
-                <button type="submit" id="submitButton" class="btn-check btn-dark">Create</button>
-                <!--  </form>-->
             </div>
+            <div id="calcLabel">
+                <p id="printLabel"></p>
+            </div>
+            <button type="submit" id="submitButton" class="btn rainbow rainbow-5">Create</button>
+            <!--  </form>-->
         </div>
-        <div class="row p-5 justify-content-center">
-            <div class="col-8">
-                <a href="#how" class="btn btn-dark" data-toggle="collapse">How does it work?</a>
-                <div id="how" class="collapse">
-                    Everytime you search something on the Internet you might open multiple websites to get desired information. The amound of data those websites collect of you is often not even close to be equal to the use you get from the website. Maybe you were less than
-                    a minute on the website or you did not even want to click on it, but it already got information about you. Those can be trackers and trackers follow you through the internet.<br> With Privacy Labels provided by
-                    CODE you don't ever have to worry about trackers- simply take a glimpse on the label next to the website before you click on it. If you see a green one - you are free to click on it. If there is a yellow one, you should take a look
-                    on the additional information next to it, to see which trackers are hiding behind the website. And should you see a red one, you better do not click on it. It's simple like a traffic light!<br> You can also hover over the label to
-                    see more information about it and why it got its color.<br> Be safe and take care of your privacy with CODE!
+    </div>
+    <div class="row p-5 justify-content-center">
+        <div class="col-8">
+            <a href="#how" class="btn btn-dark" data-toggle="collapse">How does it work?</a>
+            <div id="how" class="collapse">
+                Everytime you search something on the Internet you might open multiple websites to get desired information.
+                Privacy Labels provided by CODE help you to navigate through all those websites simply as with a traffic light.
+                We pre-check the websites for trackers, spyware, and malware for you, so you don't have to worry about it anymore.
+                You can also hover over the label to see more information about it and why it got its color.<br>
+                Be safe and take care of your privacy with CODE!
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-6">
+                        <h6>Standard icons</h6>
+                        <img src="../images/green_icon_32.png"> 1
+                        <img src="../images/yellow_icon_32.png"> 2
+                        <img src="../images/red_icon_32.png">3
+                    </div>
+                    <div class="col-6">
+                        <h6>Expert icons</h6>
+                        <img src="../images/expert_icons/three_golden_coins.png" height="32"> 1
+                        <img src="../images/expert_icons/three_silver_coins.png" height="32"> 4
+                        <img src="../images/expert_icons/three_bronze_coins.png" height="32"> 7<br>
+                        <img src="../images/expert_icons/two_golden_coins.png" height="32"> 2
+                        <img src="../images/expert_icons/two_silver_coins.png" height="32"> 5
+                        <img src="../images/expert_icons/two_bronze_coins.png" height="32"> 8<br>
+                        <img src="../images/expert_icons/one_golden_coin.png" height="32"> 3
+                        <img src="../images/expert_icons/one_silver_coin.png" height="32"> 6
+                        <img src="../images/expert_icons/one_bronze_coin.png" height="32"> 9<br>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <nav class="navbar navbar-expand-sm fixed-bottom bg-dark text-light justify-content-center">
-        provided by CODE <img src="../images/green_icon_32.png" height="32" width="32" alt="logo" /></nav>
-    <script src="../privacyScore.js"></script>
+<nav class="navbar navbar-expand-sm fixed-bottom bg-dark text-light justify-content-center">
+    provided by CODE <img src="../images/green_icon_32.png" height="32" width="32" alt="logo" /></nav>
+<script src="../privacyScore.js"></script>
 </body>
 
 </html>
