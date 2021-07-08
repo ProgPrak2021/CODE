@@ -1,82 +1,41 @@
-/*
-window.addEventListener("load", function (event) {
-    document.getElementById("Facebook").addEventListener('click', function () {
-        receivePrefs("Facebook");
-    });
-    document.getElementById("Amazon").addEventListener('click', function () {
-        receivePrefs("Amazon");
-    });
-    document.getElementById("weight_tracker").addEventListener('click', function () {
-        receivePrefs("weight_tracker");
-    });
-    document.getElementById("disable").addEventListener('click', function () {
-        receivePrefs("disable");
-    });
-
-});
-*/
-
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-        console.log(this.responseText)
+window.addEventListener("load", function(event) {
+    if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
+        && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
+        && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
+        && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
+        && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
+        document.getElementById("FacebookWTM").addEventListener('click', function () {
+            PageService.savePage("FacebookWTM", "change");
+        });
+        document.getElementById("AmazonWTM").addEventListener('click', function () {
+            PageService.savePage("AmazonWTM", "change");
+        });
+        document.getElementById("weight_trackerWTM").addEventListener('click', function () {
+            PageService.savePage("weight_trackerWTM", "change");
+        });
+        document.getElementById("disableWTM").addEventListener('click', function () {
+            PageService.savePage("disableWTM", "change");
+        });
+        document.getElementById("disablePrsspy").addEventListener('click', function () {
+            PageService.savePage("disablePrsspy", "change");
+        });
+        document.getElementById("disablePhish").addEventListener('click', function () {
+            PageService.savePage("disablePhish", "change");
+            //PageService.clearPages();
+        });
+        document.getElementById("diableGoogle").addEventListener('click', function () {
+            PageService.savePage("diableGoogle", "change");
+        });
+        document.getElementById("disableWebrisk").addEventListener('click', function () {
+            PageService.savePage("disableWebrisk", "change");
+        });
+        document.getElementById("coinLabel").addEventListener('click', function () {
+            PageService.savePage("coinLabel", "change");
+        });
+        document.getElementById("expertMode").addEventListener('click', function () {
+            PageService.savePage("expertMode", "change");
+        });
     }
-};
-
-
-/* START
-######################################################################################################
-*/
-
-document.addEventListener('DOMContentLoaded', async () => {
-
-    const facebook = document.getElementsByClassName("btn-facebook")
-
-    const buttons = document.getElementsByName("toggle")
-    for (var elem of buttons) {
-        console.log(elem.className.split(" ")[0])
-    }
-
-    facebook[0].addEventListener("click", tester, false);
-    function tester() {
-        if (this.classList.contains("active")) {
-            this.classList.remove("active");
-        } else {
-            this.classList.add("active");
-            console.log("works")
-            PageService.savePage("facebook", "true")
-            PageService.savePage("amazon", "true")
-
-
-        }
-    };
-
-
-
-    //store var
-
-    await sendPages();
-
-
-});
-
-
-const sendPages = async () => {
-    const visitedPages = await PageService.getPages();
-    console.log(visitedPages)
-
-    visitedPages.forEach(page => {
-        console.log(page)
-    });
-}
-
-
-xhttp.open("POST", "http://127.0.0.1:5000/receive_preferences", true); //Flask projekt muss am laufen sein 
-xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-xhttp.send("[Facebook: true, Amazon: false, ....]");
-
-
-
 
 
 const PAGES_KEY = 'pages';
@@ -85,8 +44,7 @@ const toPromise = (callback) => {
     const promise = new Promise((resolve, reject) => {
         try {
             callback(resolve, reject);
-        }
-        catch (err) {
+        } catch (err) {
             reject(err);
         }
     });
@@ -108,13 +66,31 @@ class PageService {
         });
     }
 
-    static savePage = async (button, clicked) => {
+    static savePage = async(key, value) => {
         const pages = await this.getPages();
-        const updatedPages = [...pages, { button, clicked }];
+        var updatedPages;
+        var new_pages;
+        var found = false;
+        var newValue = "true";
+        console.log(key)
+        //var new_pages = pages.filter(page =>page["key"] === key);
+        for (let i = 0;i<pages.length;i++){
+            if(pages[i]["key"]==key){
+                pages.splice(i,1);
+                //console.log(pages);
+                updatedPages = [...pages];
+                found = true;
+                break;
+            }
+        }
+        console.log(pages)
+        if(!found){
+            updatedPages = [...pages, { key, newValue}];
+        }
 
         return toPromise((resolve, reject) => {
-
-            chrome.storage.local.set({ [PAGES_KEY]: updatedPages }, () => {
+            chrome.storage.local.set({
+                [PAGES_KEY]: updatedPages }, () => {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
                 resolve(updatedPages);
@@ -132,14 +108,7 @@ class PageService {
         });
     }
 }
-
-
-/*
-If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
-Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
-*/
-
-chrome.storage.onChanged.addListener(function (changes, namespace) {
+chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (var key in changes) {
         var storageChange = changes[key];
         console.log('Storage key "%s" in namespace "%s" changed. ' +
@@ -150,3 +119,10 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
             storageChange.newValue);
     }
 });
+
+});
+
+/*
+If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
+Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
+*/
