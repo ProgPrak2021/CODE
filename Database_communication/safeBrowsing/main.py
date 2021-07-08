@@ -1,10 +1,10 @@
 import json
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 import database_playground
 from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main, \
-    expert_mode
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, backend_main, change_prefs, \
+    change_expert
 
 app = Flask(__name__)
 CORS(app)
@@ -14,23 +14,35 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
-    hardcoded_user_preference = ["pornvertising"]
-    input = str(request.data)
-    split_input = input.split("SPLITME")
-    urls = split_input[0]
-    pref_input = split_input[1]
-    expert_input = split_input[2]
-    global expert_mode, preferences
-    if expert_input[:-1] == "true":  # without last elem of string as this is just "'"
-        expert_mode = True
+    default_preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
+                           "phishstats": [],
+                           "webrisk": []}
+   # hardcoded_user_preference = ["pornvertising"]
+    input = request.json
+    #failure handling
+    if input["urls"] is None:
+        resp = make_response("No urls", 404)
+        return resp
+    if input["preferences"] is None:
+        resp = make_response("No preferences", 404)
+        return resp
+    if input["expert"] is None:
+        resp = make_response("No expert", 404)
+        return resp
+    #apply given input
+    print("jdjdj")
+    if input["expert"]:
+        change_expert(True)
     else:
-        expert_mode = False
-    print(preferences)
-    preferences = json.loads(pref_input)
-    print(expert_mode)
-    if urls.__contains__("http://"):
+        change_expert(False)
+    if "no Preferences" in input["preferences"]:
+        print(input["preferences"])
+    else:
+        print(input["preferences"])
+        change_prefs(json.loads(input["preferences"]))
+    if input["urls"].__contains__("http://"):
         print("unsafe web protocol found")
-    urls = urls.split("https://")
+    urls = input["urls"].split("https://")
     urls.pop(0)
     ###
     # full_urls = collect_full_urls(urls)
