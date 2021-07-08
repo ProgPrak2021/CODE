@@ -11,7 +11,7 @@ if(document.getElementById("submitButton")) {
         };
         // call a method that looks for preferences stored in storage api
         let hardcoded_expert_mode = false;
-        let body = url + "SPLITME" + JSON.stringify(hardcoded_preference) + "SPLITME" + hardcoded_expert_mode;
+        let body = JSON.stringify({"urls": url, "preferences": JSON.stringify(hardcoded_preference), "expert":hardcoded_expert_mode})
         sendURL(body);
     });
 }
@@ -30,6 +30,7 @@ function sendURL(body) {
         }
     };
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.send(body);
 }

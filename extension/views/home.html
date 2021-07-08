@@ -11,11 +11,6 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script src="../privacyScore.js"></script>
-    <script>
-        chrome.storage.onChanged.addListener(function() {
-            location.reload();
-        });
-    </script>
 </head>
 
 <body>
@@ -34,7 +29,7 @@
         <div id="privacyScore_info">
         </div>
     </div>
-    <button type="submit" id="reset_stats" class="btn-check btn-light">Reset Statistics</button>
+    <button type="submit" id="reset_stats" class="btn btn-light" title="Reset Statistics">&#10006;</button>
 </div>
 
 <div class="container-sm pt-3 p-3 text-center rounded">
@@ -42,8 +37,8 @@
         <div class="col-4">
             <h3>Labels in your score:</h3>
             <div id="recent_labels"></div>
-            <a href="#all_labels" class="btn btn-dark" data-toggle="collapse">All Labels</a>
-            <div id="all_labels" class="collapse"><div id="hi"></div></div>
+            <button data-toggle="collapse" data-target="#all_labels" class="btn btn-check btn-dark">Show more</button>
+            <div id="all_labels" class="collapse">  </div>
         </div>
         <div class="col-4">
             <!-- <form method="post" action="">-->
@@ -56,8 +51,7 @@
             <div id="calcLabel">
                 <p id="printLabel"></p>
             </div>
-            <button type="submit" id="submitButton" class="btn-check btn-dark">Create</button>
-            <!--  </form>-->
+            <button type="submit" id="submitButton" class="btn rainbow rainbow-5">Create</button>
         </div>
     </div>
     <div class="row p-5 justify-content-center">

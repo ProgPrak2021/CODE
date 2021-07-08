@@ -127,7 +127,7 @@ function getPreferences(){
             pages.then((res)=>{
                 console.log(res)
                 var prefs_given = false;
-               // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+                // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
                 for (let i= 0;i<res.length;i++){
                     console.log(res[i]["key"])
                     prefs_given = true;
@@ -136,16 +136,17 @@ function getPreferences(){
                         preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
                     }
                     else if (res[i]["key"].includes("Prsspy")){
-                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        console.log("jdjd")
+                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Phish")){
-                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["phishstats"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Google")){
-                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Webrisk")){
-                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["webrisk"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("expert")){
                         expert = true
@@ -155,7 +156,7 @@ function getPreferences(){
                     }
                 }
                 if (preferences != undefined ){
-                    if(prefs_given){
+                    if(!prefs_given){
                         var d = {"no Preferences":"test"}
                         resolve(d)
                     }else{
@@ -221,8 +222,9 @@ preferences_promise.then((res)=>{
     console.log(res)
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     console.log(JSON.stringify(res))
-    xhttp.send(urls + "SPLITME" + JSON.stringify(res) + "SPLITME" + expert);
+    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert":expert}));
 })
 
 function printLabels(output) {
@@ -257,6 +259,7 @@ function printLabels(output) {
 
 
     var labels_expert = [
+        [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
@@ -273,7 +276,15 @@ function printLabels(output) {
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+
         [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+
+        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
+        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
         [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
     ]
 
@@ -286,7 +297,7 @@ function printLabels(output) {
         var domain = getDomain(div);
         traverse_JSON(output[domain], storeVar);
 
-        expert_mode = true
+        let expert_mode = false;
 
 
         var result = [];
@@ -295,22 +306,19 @@ function printLabels(output) {
         }
         var companies = [...new Set(result)];
 
-        const logos = get_logos_html(companies, result) //Get html for the icon images.
+        const logos = get_logos_html(companies, result); //Get html for the icon images.
 
-        if (label == 0 || trackers.length == 0) {
-            console
+        if (trackers.length == 0) {
             var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
             popup.appendTo(div);
         } else {
             if (expert_mode) { //this is for the expert mode
                 //expert_label = 6; // some number from 1 to 7
-                console.log(label)
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                //console.log(label)
+                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
-
-
-            } else { // this is default mode 
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+            } else { // this is default mode
+                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);
             }
         }
@@ -433,15 +441,13 @@ function getVisitedUrls(output) {
     elems.forEach(element => {
         element.addEventListener('click', (e) => { //TODO: Event Listener for right click + "open link in new tab"
             var clickedUrl = new URL(element.children[0].href);
-            for (let site in output) {
+            for (site in output) {
                 let value = output[site];
                 let domain = clickedUrl.href;
 
                 if (domain.includes(site)) {
                     let label = value[0]['label'];
-                    chrome.storage.local.set({
-                        [site]: label
-                    });
+                    chrome.storage.local.set({[site]: label});
                 }
             }
         });
