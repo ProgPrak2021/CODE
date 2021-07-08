@@ -45,7 +45,9 @@ window.addEventListener("load", function(event) {
         pages.then((res)=>{
             console.log(res);
             for (let i= 0;i<res.length;i++){
-                document.getElementById(res[i]["key"]).click();
+                if(document.getElementById(res[i]["key"])){
+                    document.getElementById(res[i]["key"]).click();
+                }
             }
             callback(); // set up event listeners activating correct buttons
         })
