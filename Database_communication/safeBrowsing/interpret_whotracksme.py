@@ -447,6 +447,9 @@ def privacyspy_score(domain):
             'name': '',
             'link': ''
         }}
+    if preferences["privacyspy"]:
+        if "disablePrsspy" in preferences["privacyspy"]:
+            return data_summary
 
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
@@ -478,10 +481,12 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
             'category': 'no phishing',
             'phishing': 'false'
         }}
-
     if not req:
         return data_summary
 
+    if preferences["phishstats"]:
+        if "disablePhish" in preferences["phishstats"]:
+            return data_summary
     length = req.__len__()
     domainPresent = False
 
@@ -531,6 +536,10 @@ def google_safe_browsing_score(domain):
             'platform': '',
 
         }}
+    if preferences["google_safeBrowsing"]:
+        if "diableGoogle" in preferences["google_safeBrowsing"]:
+            return data_summary
+
     body = {
         "client": {
             "clientId": "ProgPrak",
@@ -561,6 +570,16 @@ def google_safe_browsing_score(domain):
 
 
 def web_risk_api_score(domain):
+    data_summary = {
+        'safe_browsing_api': {
+            'score': '0',
+            'threatType': '',
+            'platform': '',
+
+        }}
+    if preferences["google_safeBrowsing"]:
+        if "diableGoogle" in preferences["google_safeBrowsing"]:
+            return data_summary
     url = "https://wot-web-risk-and-safe-browsing.p.rapidapi.com/targets"
 
     querystring = {"t": domain}
