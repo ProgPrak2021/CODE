@@ -156,6 +156,9 @@ function getPreferences(){
                     else if (res[i]["key"].includes("coin")){
                         coins_as_label = true
                     }
+                    else if (res[i]["key"].includes("weight_https") && expert == true){
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
+                    }
                 }
                 if (preferences != undefined ){
                     if(!prefs_given){
@@ -222,7 +225,7 @@ xhttp.onreadystatechange = function() {
 var preferences_promise = getPreferences();
 var urls = sendURLsToBackend();
 preferences_promise.then((res)=>{
-    //console.log(res)
+    console.log(JSON.stringify(res));
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");

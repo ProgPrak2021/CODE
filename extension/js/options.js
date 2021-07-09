@@ -36,6 +36,10 @@ window.addEventListener("load", function(event) {
             document.getElementById("expertMode").addEventListener('click', function () {
                 PageService.savePage("expertMode", "change");
             });
+            document.getElementById("weight_https").addEventListener('click', function () {
+                PageService.savePage("weight_https", "change");
+            });
+            
         }
     }
     function clickButtons(callback){ // function is called at last 

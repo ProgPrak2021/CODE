@@ -371,7 +371,7 @@ def whotracksme_score(domain, unwanted_categories):
             index += facebook_amazon_weight
             amazon = True
         https_all_tracker += cookie[3]
-    if trackers:
+    if trackers and "weight_httpsWTM" in preferences["whotracksme"]:
         https_avg = https_all_tracker / len(trackers)
         if https_avg < 0.7:  # means that less than 70 percent of the domains tracker use the https protocoll
             index += https_weight
