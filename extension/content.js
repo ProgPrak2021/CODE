@@ -117,7 +117,7 @@ const icons = [
 
 var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
-var expert = true;
+var expert = false;
 var coins_as_label = true;
 
 function getPreferences(){
