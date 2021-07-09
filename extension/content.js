@@ -118,7 +118,7 @@ const icons = [
 var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
 var expert = false;
-var coins_as_label = true;
+var coins_as_label = false;
 
 function getPreferences(){
     var pref_promise = new Promise(
@@ -222,10 +222,12 @@ xhttp.onreadystatechange = function() {
 
     }
 };
+
 var preferences_promise = getPreferences();
+
 var urls = sendURLsToBackend();
 preferences_promise.then((res)=>{
-    console.log(JSON.stringify(res));
+    //console.log(JSON.stringify(res));
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -264,7 +266,7 @@ function printLabels(output) {
     }
 
 
-    var labels_expert = [
+    var coins_expert = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
@@ -277,21 +279,20 @@ function printLabels(output) {
         [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
-
     ]
+
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-
         [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
         [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
+    ]
+
+    var coins_default= [
+        [chrome.runtime.getURL('images/not_found.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
     ]
 
 
@@ -302,9 +303,6 @@ function printLabels(output) {
         var label, tracker, facebook, amazon, trackers;
         var domain = getDomain(div);
         traverse_JSON(output[domain], storeVar);
-
-        let expert_mode = false;
-
 
         var result = [];
         for (let i = 0; i < Object.keys(trackers).length; i++) {
@@ -318,11 +316,16 @@ function printLabels(output) {
             var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
             popup.appendTo(div);
         } else {
-            if (expert_mode) { //this is for the expert mode
-                //expert_label = 6; // some number from 1 to 7
-                //console.log(label)
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
-                popup.appendTo(div);
+
+            if (coins_as_label) { 
+                if(expert){
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup.appendTo(div);
+                } else {
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_default[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup.appendTo(div);
+                }
+               
             } else { // this is default mode
                 var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 popup.appendTo(div);

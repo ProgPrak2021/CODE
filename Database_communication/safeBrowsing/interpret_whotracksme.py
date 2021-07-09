@@ -9,8 +9,7 @@ preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "g
                "phishstats": [],
                "webrisk": []}
 
-#expert_mode = False
-
+expert_mode = False
 
 def change_prefs(prefs):
     global preferences
@@ -70,28 +69,30 @@ def backend_main(domain_list):
 
     newlabelsdb = database_playground.connect_new_labels()
 
+
     for domain in domain_list:
 
-        #query = f"SELECT domain FROM dict where domain = '{domain}' AND preferences = '{json.dumps(preferences)}';"
-        #doma = generic_sql_query(query, newlabelsdb)
+        query = f"SELECT domain FROM dict where domain = '{domain}' AND preferences = '{json.dumps(preferences)}';"
+        doma = generic_sql_query(query, newlabelsdb)
         data_summary[domain] = []
 
-        """if doma:
-             query = f"SELECT name FROM columns;"
-             columns = generic_sql_query(query, newlabelsdb)
-             cnt = columns.__len__()
-             for i in range(cnt):
-                 col = columns[i]
+        if doma and not expert_mode:
+            query = f"SELECT name FROM columns;"
+            columns = generic_sql_query(query, newlabelsdb)
+            cnt = columns.__len__()
+            for i in range(cnt):
+                col = columns[i]
         
-                 query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+                query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
         
-                 partialDict = generic_sql_query(query, newlabelsdb)
-                 strDict = (partialDict[0])[0]
-                 newDict = json.loads(strDict)
-                 data_summary[domain].append(newDict)"""
+                partialDict = generic_sql_query(query, newlabelsdb)
+                strDict = (partialDict[0])[0]
+                newDict = json.loads(strDict)
+                data_summary[domain].append(newDict)
 
         if not data_summary[domain]:
             label_max = 3
+
             if expert_mode:
                 label_max = 9
 
@@ -106,10 +107,10 @@ def backend_main(domain_list):
             dictionary = {'label': calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), \
                          privacyspy_score(domain), tosdr_score(domain), tilthubScore(domain)  # , google_safe_browsing_score(domain)
 
-
             data_summary[domain] = dictionary
 
-            saveCalcLabels(dictionary, domain, calced_label)
+            if not expert_mode:
+                saveCalcLabels(dictionary, domain, calced_label)
 
             # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
@@ -269,7 +270,6 @@ def whotracksme_score(domain, unwanted_categories):
             return data_summary
     max_index = 3
     expert_weight = 1
-    print("expert", expert_mode)
 
     if expert_mode:
         expert_weight = 2.5  # multiplier for the expert mode

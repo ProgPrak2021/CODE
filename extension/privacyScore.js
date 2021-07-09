@@ -45,7 +45,7 @@ chrome.storage.local.get(function(data) {
     let goodLabels = 0; //green or gold
     let unknownLabels = 0;
 
-    console.log(domains + ': ' + labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+   // console.log(domains + ': ' + labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
     for (let i = 0; i < labels.length; i++) {
         if (labels[i] <= 3) { //both, green and gold labels are calculated
