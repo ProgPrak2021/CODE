@@ -242,6 +242,7 @@ preferences_promise.then((res)=>{
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     //console.log(JSON.stringify(res))
+    console.log(expert)
     xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert": expert}));
 })
 
@@ -295,7 +296,7 @@ function printLabels(output) {
 
         [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
     ]
 
     var labels = [
@@ -307,16 +308,8 @@ function printLabels(output) {
     var labels_coins = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
-
         [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
-
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
     ]
 
     var coins_default= [
@@ -336,6 +329,7 @@ function printLabels(output) {
         traverse_JSON(output[domain], storeVar);
 
         var result = [];
+        //console.log(domain);
         for (let i = 0; i < Object.keys(trackers).length; i++) {
             result.push(trackers[i].company);
         }
@@ -347,12 +341,12 @@ function printLabels(output) {
             var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
             popup.appendTo(div);
         } else {
-            if (coins_as_label) { 
-                if(expert){
+            if (expert) { 
+                if(coins_as_label){
                     var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                     popup.appendTo(div);
                 } else {
-                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_default[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                     popup.appendTo(div);
                 }
                
@@ -361,7 +355,8 @@ function printLabels(output) {
                     var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 }
                 else {
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    console.log(label)
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
                 }
                 popup.appendTo(div);
             }
