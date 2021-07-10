@@ -6,8 +6,9 @@ from pprint import pprint
 import ast
 
 preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
-               "phishstats": [],
-               "webrisk": []}
+                           "phishstats": [],
+                           "tosdr": [],
+                           "Tilthub": []}
 
 expert_mode = False
 
