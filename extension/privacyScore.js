@@ -2,21 +2,17 @@ if(document.getElementById("submitButton")) {
     document.getElementById("submitButton").addEventListener("click", function () {
         console.log("jsjs");
         let url = document.getElementById("url").value;
-        if (url) {
-            let hardcoded_preference = {
-                "whotracksme": ["Facebook", "Amazon"],
-                "privacyspy": [],
-                "google_safeBrowsing": [],
-                "phishstats": [],
-                "webrisk": []
-            };
-            // call a method that looks for preferences stored in storage api
-            let hardcoded_expert_mode = false;
-            let body = JSON.stringify({"urls": url, "preferences": JSON.stringify(hardcoded_preference), "expert":hardcoded_expert_mode})
-            sendURL(body);
-        } else {
-            alert('Please paste a url first.');
-        }
+        let hardcoded_preference = {
+            "whotracksme": ["Facebook", "Amazon"],
+            "privacyspy": [],
+            "google_safeBrowsing": [],
+            "phishstats": [],
+            "webrisk": []
+        };
+        // call a method that looks for preferences stored in storage api
+        let hardcoded_expert_mode = false;
+        let body = JSON.stringify({"urls": url, "preferences": JSON.stringify(hardcoded_preference), "expert":hardcoded_expert_mode})
+        sendURL(body);
     });
 }
 
@@ -45,7 +41,7 @@ chrome.storage.local.get(function(data) {
     let goodLabels = 0; //green or gold
     let unknownLabels = 0;
 
-   // console.log(domains + ': ' + labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+    //console.log(domains + ': ' + labels); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
     for (let i = 0; i < labels.length; i++) {
         if (labels[i] <= 3) { //both, green and gold labels are calculated

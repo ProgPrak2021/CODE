@@ -1,11 +1,12 @@
 window.addEventListener("load", function(event) {
-       
     const setUpEventListeners =  function(){
+        console.log("jjfjffjfj")
         if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
             && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
             && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
-            && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
-            && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
+            && document.getElementById("diableGoogle") && document.getElementById("disableTosdr")
+            && document.getElementById("disableTilthub") && document.getElementById("coinLabel")
+            && document.getElementById("expertMode")) {
             document.getElementById("FacebookWTM").addEventListener('click', function () {
                 PageService.savePage("FacebookWTM", "change");
             });
@@ -16,6 +17,7 @@ window.addEventListener("load", function(event) {
                 PageService.savePage("weight_trackerWTM", "change");
             });
             document.getElementById("disableWTM").addEventListener('click', function () {
+                console.log("2hdhdh")
                 PageService.savePage("disableWTM", "change");
             });
             document.getElementById("disablePrsspy").addEventListener('click', function () {
@@ -27,8 +29,11 @@ window.addEventListener("load", function(event) {
             document.getElementById("diableGoogle").addEventListener('click', function () {
                 PageService.savePage("diableGoogle", "change");
             });
-            document.getElementById("disableWebrisk").addEventListener('click', function () {
-                PageService.savePage("disableWebrisk", "change");
+            document.getElementById("disableTosdr").addEventListener('click', function () {
+                PageService.savePage("disableTosdr", "change");
+            });
+            document.getElementById("disableTilthub").addEventListener('click', function () {
+                PageService.savePage("disableTilthub", "change");
             });
             document.getElementById("coinLabel").addEventListener('click', function () {
                 PageService.savePage("coinLabel", "change");

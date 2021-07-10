@@ -124,7 +124,7 @@ var coins_as_label = false;
 function getPreferences(){
     var pref_promise = new Promise(
         function(resolve, reject){
-            var preferences = { "whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+            var preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [],"phishstats": [], "tosdr": [], "Tilthub": []}
             const pages = PageService.getPages();
             pages.then((res)=>{
                 const contains_https = res.find(elem => elem == "weight_https");
@@ -157,8 +157,11 @@ function getPreferences(){
                     else if (res[i]["key"].includes("Google")){
                         preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
-                    else if (res[i]["key"].includes("Webrisk")){
-                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["webrisk"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    else if (res[i]["key"].includes("Tosdr")){
+                        preferences["tosdr"].indexOf(res[i]["key"]) === -1 ? preferences["tosdr"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("Tilthub")){
+                        preferences["Tilthub"].indexOf(res[i]["key"]) === -1 ? preferences["Tilthub"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("expert")){
                         expert = true
