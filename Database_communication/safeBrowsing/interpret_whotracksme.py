@@ -435,12 +435,15 @@ def tosdr_score(domain):
 
 
 def map_tosdr_score(rating):
+    label_max = 3
+    if expert_mode:
+        label_max = 9
     switcher = {
-        'A': 1,
-        'B': 2,
-        'C': 3,
-        'D': 4,
-        'E': 5
+        'A': 1 * label_max/5,  # +0.1 as it is not supposed to be 0 elem['score']) * label_max/10
+        'B': 2 * label_max/5,
+        'C': 3 * label_max/5,
+        'D': 4 * label_max/5,
+        'E': 5 * label_max/5
     }
     if switcher.get(rating, "0") != "0":
         return (switcher.get(rating, "0") / 5) * 3
@@ -458,12 +461,14 @@ def privacyspy_score(domain):
     if preferences["privacyspy"]:
         if "disablePrsspy" in preferences["privacyspy"]:
             return data_summary
-
+    label_max = 3
+    if expert_mode:
+        label_max = 9
     with open('privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
-            data_summary['privacyspy']['score'] = ((elem['score'] - 10) * - 1) / 3
+            data_summary['privacyspy']['score'] = (10 - elem['score']) * label_max/10
             data_summary['privacyspy']['name'] = elem['name']
             data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
 
@@ -512,8 +517,12 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
     score = req[i][0]
 
     num = float(score.replace("\"", ""))
-
-    if num <= 2:
+    '''
+    If there is a result in the database the domain is definetely sus. Therefore, we ignore the label and return the wort label right away.
+    
+    
+    
+        if num <= 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "possibly phishing"
 
@@ -532,6 +541,13 @@ def phishstats_score(domain):  # unfortunately this api is fucking slow
 
     if expert_mode:
         data_summary['phishstats.db']['score'] = eval(str(num))
+    '''
+    data_summary['phishstats.db']['category'] = "Be aware of phishing"
+
+    if expert_mode:
+        data_summary['phishstats.db']['score'] = eval(str(9))
+    else:
+        data_summary['phishstats.db']['score'] = eval(str(3))
 
     return data_summary
 
@@ -541,8 +557,7 @@ def google_safe_browsing_score(domain):
         'safe_browsing_api': {
             'score': '0',
             'threatType': '',
-            'platform': '',
-
+            'platform': ''
         }}
     if preferences["google_safeBrowsing"]:
         if "diableGoogle" in preferences["google_safeBrowsing"]:
