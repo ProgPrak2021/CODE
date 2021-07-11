@@ -53,6 +53,7 @@ def receive_urls():
     domains = list(dict.fromkeys(domains))
 
     domains = backend_main(domains)
+    
 
     return jsonify(domains)
 
@@ -93,4 +94,5 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
+    x = datetime.datetime.now()
     app.run(debug=True)
