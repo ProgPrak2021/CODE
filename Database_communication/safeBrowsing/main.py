@@ -58,7 +58,7 @@ def receive_urls():
     if(abs((y-x).days) > 3):
         solditems = requests.get('https://api.tosdr.org/all-services/v1/') 
         data = solditems.json()
-        with open('imak.json', 'w') as f:
+        with open('tosdr.json', 'w') as f:
             json.dump(data, f)
 
         
