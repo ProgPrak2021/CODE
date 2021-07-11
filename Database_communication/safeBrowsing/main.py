@@ -64,7 +64,7 @@ def receive_urls():
         
         solditems = requests.get('https://privacyspy.org/api/v2/index.json') 
         data = solditems.json()
-        with open('imak.json', 'w') as f:
+        with open('privacyspy.json', 'w') as f:
             json.dump(data, f)
         
 
