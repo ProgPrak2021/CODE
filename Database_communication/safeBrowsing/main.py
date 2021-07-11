@@ -53,6 +53,12 @@ def receive_urls():
     domains = list(dict.fromkeys(domains))
 
     domains = backend_main(domains)
+    y = datetime.datetime.now()
+
+    if(abs((y-x).days) > 3):
+        print("")
+        
+
     
 
     return jsonify(domains)
