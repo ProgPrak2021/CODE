@@ -58,7 +58,7 @@ def receive_urls():
     domains = backend_main(domains)
     y = datetime.datetime.now()
 
-    if(abs((y-x).days) > 3):
+    if(abs((y-x).days) >= 3):
         solditems = requests.get('https://api.tosdr.org/all-services/v1/') 
         data = solditems.json()
         with open('tosdr.json', 'w') as f:
