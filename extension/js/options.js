@@ -1,12 +1,12 @@
 window.addEventListener("load", function(event) {
-
     const setUpEventListeners =  function(){
+        console.log("jjfjffjfj")
         if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
             && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
             && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
-            && document.getElementById("diableGoogle") && document.getElementById("disableWebrisk")
-            && document.getElementById("coinLabel") && document.getElementById("expertMode")) {
-            console.log("jfjdfjfjd")
+            && document.getElementById("diableGoogle") && document.getElementById("disableTosdr")
+            && document.getElementById("disableTilthub") && document.getElementById("coinLabel")
+            && document.getElementById("expertMode")) {
             document.getElementById("FacebookWTM").addEventListener('click', function () {
                 PageService.savePage("FacebookWTM", "change");
             });
@@ -17,6 +17,7 @@ window.addEventListener("load", function(event) {
                 PageService.savePage("weight_trackerWTM", "change");
             });
             document.getElementById("disableWTM").addEventListener('click', function () {
+                console.log("2hdhdh")
                 PageService.savePage("disableWTM", "change");
             });
             document.getElementById("disablePrsspy").addEventListener('click', function () {
@@ -28,8 +29,11 @@ window.addEventListener("load", function(event) {
             document.getElementById("diableGoogle").addEventListener('click', function () {
                 PageService.savePage("diableGoogle", "change");
             });
-            document.getElementById("disableWebrisk").addEventListener('click', function () {
-                PageService.savePage("disableWebrisk", "change");
+            document.getElementById("disableTosdr").addEventListener('click', function () {
+                PageService.savePage("disableTosdr", "change");
+            });
+            document.getElementById("disableTilthub").addEventListener('click', function () {
+                PageService.savePage("disableTilthub", "change");
             });
             document.getElementById("coinLabel").addEventListener('click', function () {
                 PageService.savePage("coinLabel", "change");
@@ -37,13 +41,17 @@ window.addEventListener("load", function(event) {
             document.getElementById("expertMode").addEventListener('click', function () {
                 PageService.savePage("expertMode", "change");
             });
+            document.getElementById("weight_https").addEventListener('click', function () {
+                PageService.savePage("weight_https", "change");
+            });
+            
         }
     }
     function clickButtons(callback){ // function is called at last 
 
         const pages = PageService.getPages();
         pages.then((res)=>{
-            console.log(res);
+            //console.log(res);
             for (let i= 0;i<res.length;i++){
                 if(document.getElementById(res[i]["key"])){
                     document.getElementById(res[i]["key"]).click();
@@ -87,7 +95,7 @@ window.addEventListener("load", function(event) {
             var new_pages;
             var found = false;
             var newValue = "true";
-            console.log(key)
+            //console.log(key)
             //var new_pages = pages.filter(page =>page["key"] === key);
             for (let i = 0;i<pages.length;i++){
                 if(pages[i]["key"]==key){
@@ -142,3 +150,5 @@ window.addEventListener("load", function(event) {
 If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
 Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
 */
+
+

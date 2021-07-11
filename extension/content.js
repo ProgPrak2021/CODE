@@ -19,9 +19,9 @@ print methode/logik überarbeitet:
 #author simon
 
 
-
 -----------------------------------------------
 */
+
 const PAGES_KEY = 'pages';
 
 const toPromise = (callback) => {
@@ -99,6 +99,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
             storageChange.newValue);
     }
 });
+
 const icons = [
     chrome.runtime.getURL('images/icons/google_icon.png'),
     chrome.runtime.getURL('images/icons/oracle_icon.png'),
@@ -116,27 +117,38 @@ const icons = [
 
 var result = $('.LC20lb').closest('div');
 var img = $('<img class="code-selector">');
-var expert = true;
-var coins_as_label = true;
+
+var expert = false;
+var coins_as_label = false;
 
 function getPreferences(){
     var pref_promise = new Promise(
         function(resolve, reject){
-            var preferences = { "whotracksme": [], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+            var preferences = {"whotracksme": [], "privacyspy": [], "google_safeBrowsing": [],"phishstats": [], "tosdr": [], "Tilthub": []}
             const pages = PageService.getPages();
             pages.then((res)=>{
+                const contains_https = res.find(elem => elem == "weight_https");
+                const contains_coin_label = res.find(elem => elem == "coin");
+                if(contains_https){ // If the attribute is set it has to be come after the expert mode. Otherwise it might be ignored since the expert mode is not set yet
+                    res.splice(res.indexOf("weight_https"),1); //remove element
+                    res.push("weight_https"); //append it to end of list
+                }
+                if(!contains_coin_label){
+                    coins_as_label = false;
+                }
                 console.log(res)
                 var prefs_given = false;
                 // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
                 for (let i= 0;i<res.length;i++){
-                    console.log(res[i]["key"])
+                    //console.log(res[i]["key"])
                     prefs_given = true;
+
                     if (res[i]["key"].includes("WTM")){
-                        console.log(res[i]["key"])
+                        //console.log(res[i]["key"])
                         preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
                     }
                     else if (res[i]["key"].includes("Prsspy")){
-                        console.log("jdjd")
+                        //console.log("jdjd")
                         preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("Phish")){
@@ -145,14 +157,20 @@ function getPreferences(){
                     else if (res[i]["key"].includes("Google")){
                         preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
-                    else if (res[i]["key"].includes("Webrisk")){
-                        preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["webrisk"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    else if (res[i]["key"].includes("Tosdr")){
+                        preferences["tosdr"].indexOf(res[i]["key"]) === -1 ? preferences["tosdr"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    }
+                    else if (res[i]["key"].includes("Tilthub")){
+                        preferences["Tilthub"].indexOf(res[i]["key"]) === -1 ? preferences["Tilthub"].push(res[i]["key"]) : console.log("Preference is set already.")
                     }
                     else if (res[i]["key"].includes("expert")){
                         expert = true
                     }
                     else if (res[i]["key"].includes("coin")){
                         coins_as_label = true
+                    }
+                    else if (res[i]["key"].includes("weight_https") && expert == true){
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
                     }
                 }
                 if (preferences != undefined ){
@@ -183,6 +201,7 @@ function receivePrefs(datasource, preference) {
     }
     console.log(preferences)
 }
+
 
 function switchExpertMode() {
     if (expert) {
@@ -216,15 +235,18 @@ xhttp.onreadystatechange = function() {
 
     }
 };
+
 var preferences_promise = getPreferences();
+
 var urls = sendURLsToBackend();
 preferences_promise.then((res)=>{
-    console.log(res)
+    //console.log(JSON.stringify(res));
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    console.log(JSON.stringify(res))
-    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert":expert}));
+    //console.log(JSON.stringify(res))
+    console.log(expert)
+    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert": expert}));
 })
 
 function printLabels(output) {
@@ -245,6 +267,13 @@ function printLabels(output) {
         if (key == "trackers") {
             trackers = value
         }
+        if (key == "expert") {
+            if (value == "False"){
+                expert_from_backend = false
+            }else{
+                expert_from_backend = true;
+            }
+        }
     }
 
     function traverse_JSON(obj, func) {
@@ -258,7 +287,7 @@ function printLabels(output) {
     }
 
 
-    var labels_expert = [
+    var coins_expert = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
@@ -270,22 +299,27 @@ function printLabels(output) {
 
         [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
         [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
-
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
     ]
+
     var labels = [
         [chrome.runtime.getURL('images/not_found.png'), "none"],
         [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-
         [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
         [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
+    ]
+    var labels_coins = [
+        [chrome.runtime.getURL('images/not_found.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
+    ]
+
+    var coins_default= [
+        [chrome.runtime.getURL('images/not_found.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
+        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
     ]
 
 
@@ -293,14 +327,12 @@ function printLabels(output) {
     var divs = document.getElementsByClassName("yuRUbf");
 
     for (var div of divs) {
-        var label, tracker, facebook, amazon, trackers;
+        var label, tracker, facebook, amazon, trackers, expert_from_backend;
         var domain = getDomain(div);
         traverse_JSON(output[domain], storeVar);
 
-        let expert_mode = false;
-
-
         var result = [];
+        //console.log(domain);
         for (let i = 0; i < Object.keys(trackers).length; i++) {
             result.push(trackers[i].company);
         }
@@ -312,13 +344,23 @@ function printLabels(output) {
             var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
             popup.appendTo(div);
         } else {
-            if (expert_mode) { //this is for the expert mode
-                //expert_label = 6; // some number from 1 to 7
-                //console.log(label)
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
-                popup.appendTo(div);
+            if (expert) { 
+                if(coins_as_label){
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup.appendTo(div);
+                } else {
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup.appendTo(div);
+                }
+               
             } else { // this is default mode
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                if(coins_as_label){
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                }
+                else {
+                    console.log(label)
+                    var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                }
                 popup.appendTo(div);
             }
         }

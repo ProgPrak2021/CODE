@@ -19,21 +19,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 def receive_urls():
     default_preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
                            "phishstats": [],
-                           "webrisk": []}
-   # hardcoded_user_preference = ["pornvertising"]
+                           "tosdr": [],
+                           "Tilthub": []}
     input = request.json
+
     #failure handling
     if input["urls"] is None:
-        resp = make_response("No urls", 404)
+        resp = make_response("No urls", 400)
         return resp
     if input["preferences"] is None:
-        resp = make_response("No preferences", 404)
+        resp = make_response("No preferences", 400)
         return resp
     if input["expert"] is None:
-        resp = make_response("No expert", 404)
+        resp = make_response("No expert", 400)
         return resp
+
     #apply given input
-    print("jdjdj")
     if input["expert"]:
         change_expert(True)
     else:
@@ -45,6 +46,7 @@ def receive_urls():
         change_prefs(json.loads(input["preferences"]))
     if input["urls"].__contains__("http://"):
         print("unsafe web protocol found")
+
     urls = input["urls"].split("https://")
     urls.pop(0)
     ###

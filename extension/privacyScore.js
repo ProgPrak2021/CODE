@@ -21,12 +21,18 @@ function sendURL(body) {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            var labels = [
+                [chrome.runtime.getURL('images/not_found.png')],
+                [chrome.runtime.getURL('images/green_icon_32.png')],
+                [chrome.runtime.getURL('images/yellow_icon_32.png')],
+                [chrome.runtime.getURL('images/red_icon_32.png')]
+            ]
             // console.log(this.responseText);
             let output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
             let first_key = Object.keys(output)[0];
-            console.log(output[first_key][0]["label"]);
             document.getElementById("calcLabel").style.display = "block";
-            document.getElementById("printLabel").innerText = "The label for the domain " + first_key + " is " + output[first_key][0]["label"] + ".";
+            var img = labels[output[first_key][1]["label"]]
+            document.getElementById("printLabel").innerHTML = "The label for the domain " + first_key + " is <img src= "+img+" > </img>.";
         }
     };
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
