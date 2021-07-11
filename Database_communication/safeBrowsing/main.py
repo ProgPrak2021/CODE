@@ -60,6 +60,12 @@ def receive_urls():
         data = solditems.json()
         with open('imak.json', 'w') as f:
             json.dump(data, f)
+
+        
+        solditems = requests.get('https://privacyspy.org/api/v2/index.json') 
+        data = solditems.json()
+        with open('imak.json', 'w') as f:
+            json.dump(data, f)
         
 
     
