@@ -1670,6 +1670,11 @@
    .options-webrisk-img {
      border-radius: 20px;
    }
+
+   .options-tilt-img{
+    border-radius: 20px; 
+    height: 83px; 
+   }
    
    .div-block-3 {
      padding-right: 20px;
@@ -2079,6 +2084,9 @@
        padding-right: 0px;
        padding-bottom: 0px;
      }
+
+    
+
    
      .no-margin {
        margin: 0px;
