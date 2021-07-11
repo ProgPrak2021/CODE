@@ -1673,7 +1673,8 @@
 
    .options-tilt-img{
     border-radius: 20px; 
-    height: 83px; 
+    height: 83px;
+    width: 400px; 
    }
    
    .div-block-3 {
@@ -1999,6 +2000,12 @@
    
    .hero-privacy-img {
      padding-top: 5px;
+   }
+
+   .hero-tilt-img{
+     height: 45px;
+     position: relative;
+     right: 30px;
    }
    
    .section-hero-color {
