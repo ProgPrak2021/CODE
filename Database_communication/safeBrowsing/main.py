@@ -60,6 +60,7 @@ def receive_urls():
     domains = backend_main(domains)
     y = datetime.datetime.now()
 
+    global x
     if(abs((y-x).days) >= 3):
 
         x = datetime.datetime.now()
