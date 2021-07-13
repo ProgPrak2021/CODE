@@ -32,6 +32,7 @@ function sendURL(body) {
             let first_key = Object.keys(output)[0];
             document.getElementById("calcLabel").style.display = "block";
             var img = labels[output[first_key][1]["label"]]
+            console.log(output[first_key][1])
             document.getElementById("printLabel").innerHTML = "The label for the domain " + first_key + " is <img src= "+img+" > </img>.";
         }
     };
