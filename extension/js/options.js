@@ -1,6 +1,6 @@
 window.addEventListener("load", function(event) {
     const setUpEventListeners =  function(){
-        console.log("jjfjffjfj")
+        //console.log("jjfjffjfj")
         if (document.getElementById("FacebookWTM") && document.getElementById("AmazonWTM")
             && document.getElementById("weight_trackerWTM") && document.getElementById("disableWTM")
             && document.getElementById("disablePrsspy") && document.getElementById("disablePhish")
@@ -51,27 +51,26 @@ window.addEventListener("load", function(event) {
 
         const pages = PageService.getPages();
         pages.then((res)=>{
-            //console.log(res);
+            console.log(res);
             for (let i= 0;i<res.length;i++){
                 if(document.getElementById(res[i]["key"])){
                     document.getElementById(res[i]["key"]).click();
                 }
             }
             callback(); // set up event listeners activating correct buttons
-        })
+        });
     }
 
     const PAGES_KEY = 'pages';
 
     const toPromise = (callback) => {
-        const promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try {
                 callback(resolve, reject);
             } catch (err) {
                 reject(err);
             }
         });
-        return promise;
     }
 
 
@@ -91,15 +90,15 @@ window.addEventListener("load", function(event) {
 
         static savePage = async(key, value) => {
             const pages = await this.getPages();
-            var updatedPages;
-            var new_pages;
-            var found = false;
-            var newValue = "true";
+            let updatedPages;
+            let new_pages;
+            let found = false;
+            const newValue = "true";
             //console.log(key)
             //var new_pages = pages.filter(page =>page["key"] === key);
             for (let i = 0;i<pages.length;i++){
                 if(pages[i]["key"]==key){
-                    var index = pages.indexOf(pages[i])
+                    const index = pages.indexOf(pages[i]);
                     pages.splice(index,1);
                     //console.log(pages);
                     updatedPages = [...pages];
@@ -133,8 +132,8 @@ window.addEventListener("load", function(event) {
         }
     }
     chrome.storage.onChanged.addListener(function(changes, namespace) {
-        for (var key in changes) {
-            var storageChange = changes[key];
+        for (let key in changes) {
+            const storageChange = changes[key];
             console.log('Storage key "%s" in namespace "%s" changed. ' +
                 'Old value was "%s", new value is "%s".',
                 key,
@@ -145,10 +144,3 @@ window.addEventListener("load", function(event) {
     });
     clickButtons(setUpEventListeners);
 });
-
-/*
-If you're interested in tracking changes made to a data object, you can add a listener to its onChanged event. 
-Whenever anything changes in storage, that event fires. Here's sample code to listen for saved changes:
-*/
-
-
