@@ -8,9 +8,19 @@ CODE is a browser extension for the Chrome-Browser. It allows users to get a qui
 
 ## Functionality
 Let's summarize the core functionality features of the extension.
+Simply said the browser extension scans all results of a google search result and prints a label next to it. However, while that is totally true there is actually more functionalities implemented in the extension. 
+In order to structure all functionalities you can divide program into five different parts: 
+* The algorithm responsible for the label calculation
+* The different labels
+* Our Home page and most importantly the options page.
+* The Privacy Support
+* Our Backend as API 
+
+### Our Backend as API
+When implementing the Browser extension it was important to us to strictly divide the frontend part from the logical part meaning the actual calculation of the labels. Our goal was to build an independent backend that does not care where the request is coming from. This way we can also offer to use our backend as an API. A detailed documentation of our API can be found [here](https://app.swaggerhub.com/apis/WebProgramming/ApiDocumentation/1.0.0). 
 ### Extension (TO DO)
 Lorem ipsum...
-### Algorithm (TO DO)
+### Algorithm (TO DO) 
 Lorem ipsum...
 ### Expert Mode (TO DO) Ali
 Lorem impsum...
@@ -78,5 +88,11 @@ Website: https://privacyspy.org/
 (Are we actually using the google safe api?)
 **Google Safe Browsing API:** Safe Browsing is a Google service that contains a lists of unsafe web resources, which Google also keeps up to date. Examples of unsafe web resources are social engineering sites (phishing and deceptive sites) and sites that host malware or unwanted software. 
 Website: https://developers.google.com/safe-browsing 
+
+## Label calculation
+For each url we ask every datasource for information regarding this domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores. Of course, we do not include datasources that do not offer information on a domain in the last step. 
+Following we will explain the method to calculate a score for each domain: 
+### WhoTracksMe
+gh
 ## Overview (TO DO)
 ### Chances & Concerns (TO DO)
