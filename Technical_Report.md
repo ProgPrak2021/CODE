@@ -90,9 +90,21 @@ Website: https://privacyspy.org/
 Website: https://developers.google.com/safe-browsing 
 
 ## Label calculation
-For each url we ask every datasource for information regarding this domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores. Of course, we do not include datasources that do not offer information on a domain in the last step. 
+For each url we ask every datasource for information regarding this specific domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores and this way have calculated a custom score for each domain. Of course, we do not include datasources that do not offer information on a domain. 
 Following we will explain the method to calculate a score for each domain: 
 ### WhoTracksMe
 gh
+### PrivacySpy
+
+### Phishstats
+
+### Google SafeBrowsing
+As the SafeBrowsing API by Google only stores unsafe domains that are mostly worse than most of the categories we concentrate on when asking the other datasources for information we decided that being in the list must have a big impact on the score. Therefore, our score calculation for this datasource is one of the simplest: If there is any information provided for regarding a domain, we give it the worst score, e.g. depending on the mode it is either 3 or 9. If, however, there is no information we return a score of 0(meaning not found). 
+This can seem rather unfair towards the domains as there is no way they can receive a good label in this function. However, not existing in this API is not something that should be rewarded as it is expected.
+
+### Tosdr
+
+### Tilt
+
 ## Overview (TO DO)
 ### Chances & Concerns (TO DO)

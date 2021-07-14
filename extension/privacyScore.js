@@ -39,7 +39,7 @@ function sendURL(body) {
             let output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
             let first_key = Object.keys(output)[0];
             document.getElementById("calcLabel").style.display = "block";
-            let img = labels[output[first_key][1]["label"]];
+            let img = labels[output[first_key][0]["label"]];
             console.log(output[first_key][1]);
             if (output[first_key][1]["label"] === 0) {
                 document.getElementById("printLabel").innerHTML = "Sorry, we don't have a label for this url yet.";

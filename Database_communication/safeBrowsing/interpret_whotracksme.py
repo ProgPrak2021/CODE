@@ -81,6 +81,7 @@ def backend_main(domain_list):
             query = f"SELECT name FROM columns;"
             columns = generic_sql_query(query, newlabelsdb)
             cnt = columns.__len__()
+            dontAdd = True
             for i in range(cnt):
                 col = columns[i]
         
@@ -89,6 +90,9 @@ def backend_main(domain_list):
                 partialDict = generic_sql_query(query, newlabelsdb)
                 strDict = (partialDict[0])[0]
                 newDict = json.loads(strDict)
+                if dontAdd: # removes first elem of dict
+                    dontAdd = False
+                    continue
                 data_summary[domain].append(newDict)
 
         if not data_summary[domain]:
@@ -483,7 +487,7 @@ def api_call(request, payload, body, type):
     return response.json()
 
 
-def phishstats_score(domain):  # unfortunately this api is fucking slow
+def phishstats_score(domain):
 
     query = f"SELECT score, url from phish_score where URL like '%{domain}%'"
     db = database_playground.connect_phishcore_db()
