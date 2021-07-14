@@ -63,10 +63,15 @@ chrome.storage.local.get(function(data) {
 
     //console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < values.length-1; i++) {
         if (values[i] !== 'pages') {all_labels++;}
-        if (values[i] <= 3) {goodLabels++;
-        } else if (values[i] === 0) {unknownLabels++;}
+        if (!(3 < values[i])) {
+            if (values[i] === 0) {
+                unknownLabels++;
+                continue;
+            }
+            goodLabels++;
+        }
     }
     let score = '';
 
@@ -74,11 +79,11 @@ chrome.storage.local.get(function(data) {
     let privacyScoreInfo = document.getElementById("privacyScore_info");
 
     if (privacyScoreNumber && privacyScoreInfo) {
-        if (values.length === 0) {
+        if (all_labels === 0) {
             privacyScoreNumber.innerHTML = '¯\\_(ツ)_/¯';
             privacyScoreInfo.innerHTML = 'Nothing to show yet.';
         } else {
-            score = Math.round(goodLabels / (values.length - unknownLabels) * 100);
+            score = Math.round(goodLabels / (all_labels - unknownLabels) * 100);
             privacyScoreNumber.innerHTML = score.toString() + '%';
             privacyScoreInfo.innerHTML = getPrivacyInfo(score);
         }
@@ -86,13 +91,14 @@ chrome.storage.local.get(function(data) {
 
     if (document.getElementById('all_labels')) {
         let listOfLabels = '';
-        for (let i = 3; i <= keys.length-1; i++){
+        for (let i = 0; i <= all_labels; i++){
             if(keys[i] !== 'pages'){
                 listOfLabels += keys[i] + ': ' + values[i] + '<br>';
             }
         }
         document.getElementById('all_labels').innerHTML = listOfLabels;
     }
+    //console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
 });
 
 
