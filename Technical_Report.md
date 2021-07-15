@@ -41,7 +41,7 @@ There are two more fields: an overview about recently calculated labels and a fo
 Since the Homepage summarizes the core functionality of the extension and informs users about it, it is simply called: **Privacy Summary**.
 
 ## Technical Details in a Nutshell
-### Data sources (Adrian)
+### Data sources
 **WhotracksMe:** This database is part of an open-source project. It was created using the Cliqz browser and extension, and the chrome's Ghostery extension, whose main objective is to block and protect users from tracking. It includes more than 6,000 of the most popular websites and it includes detailed information the following elements: 
  * Categories
  * Companies 
@@ -61,6 +61,7 @@ On top of that, this database is being updated every month. Whic is a very impor
  Website: https://www.whotracks.me  
  Based on: https://arxiv.org/abs/1804.08959 
 
+### APIs
 
 **Phishstats:** It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Luckily enough, they also let us download from their webpage a csv file, that is being updated every 90 minutes, with phishing URLs from the past 30 days.
 For each domain, it has the following information: 
@@ -71,7 +72,6 @@ For each domain, it has the following information:
   
 Website: https://phishstats.info/ 
 
-### APIs (Adrian)
 **PrivacySpy:** To continue the line of open source projects devoted to privacy, we have now the PrivacySpy project. 
 The creators are devoted to the "Privacy Matters"-Philosophy, and this is why they compiled a list of the most used websites worldwide. And they have assigned a score to each one of them. Score is again 0-10. This time is 10 the website with the best positive result.
 In order to calculate the score, they use following criterias: 
@@ -93,9 +93,22 @@ Website: https://privacyspy.org/
  
 Website: https://developers.google.com/safe-browsing 
 
-**Terms Of Service Didn't Read:** 
+**Terms Of Service Didn't Read:** This is also a project that started in 2011, which has the goal of "eliminating" the biggest lie of the Internet: "I have read the terms and conditions and I accept them". It has now a big community that are responsible of analyzing and interpreting the terms and conditions of the most used websites worldwide. 
+The way it works is by granting each website a score, (A-E). A being the best one. And the score is based in a thorough anaylsis. It is an open community, and everyone can help submitting "cases" based on the terms and conditions or privacy policy of the website. At the end, just a few people can accept this cases and include them in the score. 
+Example of cases are: 
+  * Private messages can be read
+  * Your browsing history can be viewed by the service
+  * Third-party cookies are used for advertising
+  * Your account can be deleted without prior notice and without a reason
 
-**TiltHub:** As stated in their description, Tilt-hub is a document storage for transparency information specified in the Transparency Information Language and is part of the Transparency Information Language and Toolkit. It provides a structured and machine-readable transparency information document about Websites. Even though it does not have a big database, the transparency documents that it provides makes it exceptionally easy to 
+Actually, Tilthub would be a Tool that could be helpful for them and also benefit from the work of this organisation. As both approaches do the same thing, but for different outcomes. One wants a score out of it, and te other one to put in a structure format. 
+
+
+Website: https://tosdr.org/ 
+
+**TiltHub:** As stated in their description, Tilt-hub is a document storage for transparency information specified in the Transparency Information Language and is part of the Transparency Information Language and Toolkit. It provides a structured and machine-readable transparency information document about Websites. Even though it does not have (yet) a big database, the transparency documents that it provides makes it exceptionally easy to read the most important information from the privacy policy. 
+
+Website: https://github.com/Transparency-Information-Language/tilt-hub 
 
 ## Label calculation
 For each url we ask every datasource for information regarding this specific domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores and this way have calculated a custom score for each domain. Of course, we do not include datasources that do not offer information on a domain. 
@@ -116,4 +129,6 @@ This can seem rather unfair towards the domains as there is no way they can rece
 
 
 ## Overview (TO DO)
+![image](https://lisztos.s3.amazonaws.com/images/code_overview.png)
+
 ### Chances & Concerns (TO DO)
