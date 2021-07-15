@@ -6,7 +6,18 @@
 ## About CODE
 CODE is a browser extension for the Chrome-Browser. It allows users to get a quick overview about the information website track before they even open the website. With small labels next to the search results in Google they can easily decide whether to open a website or not.
 
+Most people don't have the patience to read privacy policies. But privacy is important, and we shouldn't just trust that products are treating our data right. CODE uses a consistent rubric to grade privacy.
+
+Most privacy policies are convoluted—sometimes even intentionally so. They can be difficult to read, and even more difficult to comprehend. Rarely do they provide actionable insight into protecting one's data.
+
+Making matters worse, companies are often only held accountable for their privacy practices when a data breach occurs or when they experience fallout from mishandling user data (think Facebook's Cambridge Analytica scandal, for example).
+
+If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. Because privacy matters.
+
+
 ## Functionality
+CODE makes privacy policies more convenient and accessible for those who simply don't have the time—or patience—to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
+
 Let's summarize the core functionality features of the extension.
 Simply said the browser extension scans all results of a google search result and prints a label next to it. However, while that is totally true there is actually more functionalities implemented in the extension. 
 In order to structure all functionalities you can divide program into five different parts: 
