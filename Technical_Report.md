@@ -15,6 +15,8 @@ Making matters worse, companies are often only held accountable for their privac
 If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. Because privacy matters.
 
 
+
+
 ## Functionality
 CODE makes privacy policies more convenient and accessible for those who simply don't have the time—or patience—to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
 
@@ -30,9 +32,13 @@ In order to structure all functionalities you can divide program into five diffe
 ### Our Backend as API
 When implementing the Browser extension it was important to us to strictly divide the frontend part from the logical part meaning the actual calculation of the labels. Our goal was to build an independent backend that does not care where the request is coming from. This way we can also offer to use our backend as an API. A detailed documentation of our API can be found [here](https://app.swaggerhub.com/apis/WebProgramming/ApiDocumentation/1.0.0). 
 ### Extension (TO DO)
-Lorem ipsum...
+We offer a free, open-source browser extension that displays the CODE rating of the sites of your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
+
+The extension is available for Chrome. Its source code is open source.
+
+The source code is available at <--->.
 ### Algorithm (TO DO) 
-Lorem ipsum...
+Lorem impsum...
 ### Expert Mode (TO DO) Ali
 Lorem impsum...
 
@@ -143,3 +149,4 @@ This can seem rather unfair towards the domains as there is no way they can rece
 ![image](https://lisztos.s3.amazonaws.com/images/code_overview.png)
 
 ### Chances & Concerns (TO DO)
+
