@@ -41,34 +41,38 @@ There are two more fields: an overview about recently calculated labels and a fo
 Since the Homepage summarizes the core functionality of the extension and informs users about it, it is simply called: **Privacy Summary**.
 
 ## Technical Details in a Nutshell
-### Data sources (TO DO)
-**Whotracks.me:** This database is part of an open-source project. It was created using the Cliqz browser and extension, and the chrome's Ghostery extension, whose main objective is to block and protect users from tracking. It includes more than 6,000 of the most popular websites and it includes detailed information the following elements: 
+### Data sources (Adrian)
+**WhotracksMe:** This database is part of an open-source project. It was created using the Cliqz browser and extension, and the chrome's Ghostery extension, whose main objective is to block and protect users from tracking. It includes more than 6,000 of the most popular websites and it includes detailed information the following elements: 
  * Categories
  * Companies 
  * Domains
  * Trackers
  * Sites
+
 Similarly, it has statistics from each domain, for example: 
  * Average number of requests made to the tracker per page
  * Proportion of pages where a unique identifier (UID) was detected in the query string parameters sent with a request to this tracker.
  * Proportion of pages where the tracker only used HTTPS traffic
  * Average number of requests made to the tracker with tracking (cookie or query string) per page
-On top of that, this database is being updated every month. Whic is a very important factor for us, because they information is the one we display in our pop up when hovering the CODE-label of a website.
-We put a great value in this database, because it is not only the most complete one, but it is also been used as based database fo rother projects like... ?  
+  
+On top of that, this database is being updated every month. Whic is a very important factor for us, because their information is the one we display in our pop up when hovering the CODE-label of a website.
 
- Website: https://www.whotracks.me 
+
+ Website: https://www.whotracks.me  
  Based on: https://arxiv.org/abs/1804.08959 
 
 
-**Phishstats:**It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Luckily enough, they also let us download from their webpage a csv file, that is being updated every 90 minutes, with phishing URLs from the past 30 days.
+**Phishstats:** It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Luckily enough, they also let us download from their webpage a csv file, that is being updated every 90 minutes, with phishing URLs from the past 30 days.
 For each domain, it has the following information: 
 * IP
 * Score. 1 - 10. Being 10 the highest Phishing risk.
 * URL
 * Date
+  
 Website: https://phishstats.info/ 
 
-**PrivacySpy:**To continue the line of open source projects devoted to privacy, we have now the PrivacySpy project. 
+### APIs (Adrian)
+**PrivacySpy:** To continue the line of open source projects devoted to privacy, we have now the PrivacySpy project. 
 The creators are devoted to the "Privacy Matters"-Philosophy, and this is why they compiled a list of the most used websites worldwide. And they have assigned a score to each one of them. Score is again 0-10. This time is 10 the website with the best positive result.
 In order to calculate the score, they use following criterias: 
 * Data Handling, for example:
@@ -84,10 +88,14 @@ In order to calculate the score, they use following criterias:
 Finally, they allow the public to download the data, which made it easier for us to integrate it to our server. Even though the database is not as big as previous data sources, it puts a great amount of work in calculating the scores. this is why we decided to include it in our label calculation. 
 
 Website: https://privacyspy.org/ 
-### APIs (TO DO)
-(Are we actually using the google safe api?)
-**Google Safe Browsing API:** Safe Browsing is a Google service that contains a lists of unsafe web resources, which Google also keeps up to date. Examples of unsafe web resources are social engineering sites (phishing and deceptive sites) and sites that host malware or unwanted software. 
+
+**Google Safe Browsing API:** Safe Browsing is a Google service that contains a lists of unsafe web resources, which Google also keeps up to date. Examples of unsafe web resources are social engineering sites (phishing and deceptive sites) and sites that host malware or unwanted software. Based on the fact, that Google is a very reliable source, we included it in our project.
+ 
 Website: https://developers.google.com/safe-browsing 
+
+**Terms Of Service Didn't Read:** 
+
+**TiltHub:** As stated in their description, Tilt-hub is a document storage for transparency information specified in the Transparency Information Language and is part of the Transparency Information Language and Toolkit. It provides a structured and machine-readable transparency information document about Websites. Even though it does not have a big database, the transparency documents that it provides makes it exceptionally easy to 
 
 ## Label calculation
 For each url we ask every datasource for information regarding this specific domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores and this way have calculated a custom score for each domain. Of course, we do not include datasources that do not offer information on a domain. 
@@ -105,6 +113,7 @@ This can seem rather unfair towards the domains as there is no way they can rece
 ### Tosdr
 
 ### Tilt
+
 
 ## Overview (TO DO)
 ### Chances & Concerns (TO DO)
