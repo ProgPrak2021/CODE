@@ -1,40 +1,78 @@
-/* COMMENTS / NOTES / DOCUMENTATION / ...
------------------------------------------------
-NOTE: Please refer to local images with chrome.runtime.getURL('images/[name].png')
-Access rights already granted in manifest.json
-questions to diana. <3
+const coins_expert = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
 
+    [chrome.runtime.getURL('images/expert_icons/three_silver_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/two_silver_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
 
-print methode/logik überarbeitet:
+    [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
+];
 
-- alle domains werden jetzt erkannt (auch mit 'shop.','de.', etc. Prefix)
-- obsoleter Aufruf aller domains für jedes Element behoben
-- doppelte domains werden jetzt erkannt
-- sirene.png per default --> KEIN DATENBANK EINTRAG GEFUNDEN 
-- printLabels() wird nur 1 mal für die gesamte Darstellung aufgerufen 
-- var output ist unser Anhaltspunkt für die Zuordung der Labels
-- jede geladene Domain sucht sich die entsprechenden Informationen aus der Liste (var output)
-- Laden der Labels ist nun kein @click event mehr 
+const labels = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
+];
+const labels_expert = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
 
-#author simon
+];
 
+const labels_coins = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"]
+];
 
+const coins_default = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
+    [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
+];
 
------------------------------------------------
-*/
+const icons = [
+    chrome.runtime.getURL('images/icons/google_icon.png'),
+    chrome.runtime.getURL('images/icons/oracle_icon.png'),
+    chrome.runtime.getURL('images/icons/spy_icon.png'),
+    chrome.runtime.getURL('images/icons/facebook_icon.png'),
+    chrome.runtime.getURL('images/icons/amazon_icon.png'),
+    chrome.runtime.getURL('images/icons/kaspersky_lab_icon.png'),
+    chrome.runtime.getURL('images/icons/wikimedia_icon.png'),
+    chrome.runtime.getURL('images/icons/bootstrap_cdn_icon.png'),
+    chrome.runtime.getURL('images/icons/microsoft_icon.png'),
+    chrome.runtime.getURL('images/icons/cloudflare_icon.png'),
+    chrome.runtime.getURL('images/icons/adobe_icon.png'),
+    chrome.runtime.getURL('images/icons/twitter_icon.png')
+];
+
 const PAGES_KEY = 'pages';
 
 const toPromise = (callback) => {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
             callback(resolve, reject);
         } catch (err) {
             reject(err);
         }
     });
-    return promise;
 }
-
 
 class PageService {
 
@@ -50,27 +88,27 @@ class PageService {
         });
     }
 
-    static savePage = async(key, value) => {
+    static savePage = async (key, value) => {
         const pages = await this.getPages();
-        var updatedPages;
-        var found = false;
-        for(var i = 0; i < pages.length; i++) {
-            if (pages[i]["key"] == key) {
+        let updatedPages;
+        let found = false;
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i]["key"] === key) {
                 pages[i]["value"] = value;
                 found = true;
                 break;
             }
         }
-        if (found){
+        if (found) {
             updatedPages = [...pages];
-        }
-        else{
-            updatedPages = [...pages, { key, value }];
+        } else {
+            updatedPages = [...pages, {key, value}];
         }
 
         return toPromise((resolve, reject) => {
             chrome.storage.local.set({
-                [PAGES_KEY]: updatedPages }, () => {
+                [PAGES_KEY]: updatedPages
+            }, () => {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
                 resolve(updatedPages);
@@ -88,6 +126,8 @@ class PageService {
         });
     }
 }
+
+/*
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (var key in changes) {
         var storageChange = changes[key];
@@ -99,66 +139,92 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
             storageChange.newValue);
     }
 });
-const icons = [
-    chrome.runtime.getURL('images/icons/google_icon.png'),
-    chrome.runtime.getURL('images/icons/oracle_icon.png'),
-    chrome.runtime.getURL('images/icons/spy_icon.png'),
-    chrome.runtime.getURL('images/icons/facebook_icon.png'),
-    chrome.runtime.getURL('images/icons/amazon_icon.png'),
-    chrome.runtime.getURL('images/icons/kaspersky_lab_icon.png'),
-    chrome.runtime.getURL('images/icons/wikimedia_icon.png'),
-    chrome.runtime.getURL('images/icons/bootstrap_cdn_icon.png'),
-    chrome.runtime.getURL('images/icons/microsoft_icon.png'),
-    chrome.runtime.getURL('images/icons/cloudflare_icon.png'),
-    chrome.runtime.getURL('images/icons/adobe_icon.png'),
-    chrome.runtime.getURL('images/icons/twitter_icon.png')
-]
+*/
 
-var result = $('.LC20lb').closest('div');
-var img = $('<img class="code-selector">');
-var preferences = { "whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-var expert = false;
-var coins_as_label = false;
+let result = $('.LC20lb').closest('div');
+let img = $('<img class="code-selector">');
 
-function readPages(){
-    const pages = PageService.getPages();
-    pages.then((res)=>{
-       // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
-        for (let i= 0;i<res.length;i++){
-            if (res[i]["key"].includes("WTM")){
-                console.log(res[i]["key"])
-                preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"]+" is set already.")
-            }
-            else if (res[i]["key"].includes("Prsspy")){
-                preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Phish")){
-                preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Google")){
-                preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("Webrisk")){
-                preferences["webrisk"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log("Preference is set already.")
-            }
-            else if (res[i]["key"].includes("expert")){
-                expert = res[i]["key"]
-            }
-            else if (res[i]["key"].includes("coin")){
-                coins_as_label = res[i]["key"]
-            }
+let expert = false;
+let coins_as_label = false;
+
+function getPreferences() {
+    return new Promise(
+        function (resolve, reject) {
+            const preferences = {
+                "whotracksme": [],
+                "privacyspy": [],
+                "google_safeBrowsing": [],
+                "phishstats": [],
+                "tosdr": [],
+                "Tilthub": []
+            };
+            const pages = PageService.getPages();
+            pages.then((res) => {
+                const contains_https = res.find(elem => elem === "weight_https");
+                const contains_coin_label = res.find(elem => elem === "coin");
+                if (contains_https) { // If the attribute is set it has to be come after the expert mode. Otherwise it might be ignored since the expert mode is not set yet
+                    res.splice(res.indexOf("weight_https"), 1); //remove element
+                    res.push("weight_https"); //append it to end of list
+                }
+                if (!contains_coin_label) {
+                    coins_as_label = false;
+                }
+                //console.log(res)
+                let prefs_given = false;
+                // var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+                for (let i = 0; i < res.length; i++) {
+                    //console.log(res[i]["key"])
+                    prefs_given = true;
+
+                    if (res[i]["key"].includes("WTM")) {
+                        //console.log(res[i]["key"])
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.")
+                    } else if (res[i]["key"].includes("Prsspy")) {
+                        //console.log("jdjd")
+                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    } else if (res[i]["key"].includes("Phish")) {
+                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["phishstats"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    } else if (res[i]["key"].includes("Google")) {
+                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    } else if (res[i]["key"].includes("Tosdr")) {
+                        preferences["tosdr"].indexOf(res[i]["key"]) === -1 ? preferences["tosdr"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    } else if (res[i]["key"].includes("Tilthub")) {
+                        preferences["Tilthub"].indexOf(res[i]["key"]) === -1 ? preferences["Tilthub"].push(res[i]["key"]) : console.log("Preference is set already.")
+                    } else if (res[i]["key"].includes("expert")) {
+                        expert = true
+                    } else if (res[i]["key"].includes("coin")) {
+                        coins_as_label = true
+                    } else if (res[i]["key"].includes("weight_https") && expert === true) {
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.")
+                    }
+                }
+                if (preferences !== undefined) {
+                    if (!prefs_given) {
+                        const d = {"no Preferences": "test"};
+                        resolve(d)
+                    } else {
+                        resolve(preferences)
+                    }
+                }
+            });
         }
-    });
-    
+    )
 
 }
+
 
 function receivePrefs(datasource, preference) {
     if (preferences === undefined) {
         console.log("is undefined")
-        var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+        var preferences = {
+            "whotracksme": ["Facebook", "Amazon"],
+            "privacyspy": [],
+            "google_safeBrowsing": [],
+            "phishstats": [],
+            "webrisk": []
+        }
     }
-    var index = preferences[datasource].indexOf(preference);
+    const index = preferences[datasource].indexOf(preference);
     if (index !== -1) {
         preferences[datasource].splice(index, 1)
     } else {
@@ -168,137 +234,126 @@ function receivePrefs(datasource, preference) {
 }
 
 function switchExpertMode() {
-    if (expert) {
-        expert = false
-    } else {
-        expert = true
-    }
+    expert = !expert;
 }
 
-function sendURLsToBackend(rootNode) {
-    var elems = document.getElementsByClassName("yuRUbf");
-    var urls = "";
-    for (var i of elems) {
-        var url = new URL(i.children[0].href);
+function sendURLsToBackend() {
+    const elems = document.getElementsByClassName("yuRUbf");
+    let urls = "";
+    for (let i of elems) {
+        const url = new URL(i.children[0].href);
         urls += url;
+        //console.log("urls " + url);
     }
     return urls;
 }
 
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+const xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
         // console.log(this.responseText)
-        var output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
-        getVisitedUrls(output);
-
-        printLabels(output)
-
+        const output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+        //console.log(output)
+        getVisitedUrls(output); //for privacy score
+        printLabels(output);
     }
 };
-readPages();
-var urls = sendURLsToBackend();
-xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
-xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-xhttp.send(urls + "SPLITME" + JSON.stringify(preferences) + "SPLITME" + expert);
+
+const preferences_promise = getPreferences();
+
+let urls = sendURLsToBackend();
+preferences_promise.then((res) => {
+    //console.log(JSON.stringify(res));
+    xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+    xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    //console.log(JSON.stringify(res))
+    //console.log(expert);
+    xhttp.send(JSON.stringify({"urls": urls, "preferences": JSON.stringify(res), "expert": expert}));
+})
 
 function printLabels(output) {
 
     function storeVar(key, value) {
-        if (key == "label") {
-            label = value
+        if (key === "label") {
+            label = value;
         }
-        if (key == "tracker_count") {
-            tracker = value
+        if (key === "tracker_count") {
+            tracker = value;
         }
-        if (key == "facebook") {
-            facebook = value
+        if (key === "facebook") {
+            facebook = value;
         }
-        if (key == "amazon") {
-            amazon = value
+        if (key === "amazon") {
+            amazon = value;
         }
-        if (key == "trackers") {
-            trackers = value
+        if (key === "trackers") {
+            trackers = value;
+        }
+        if (key === "expert") {
+            expert_from_backend = value !== "False";
         }
     }
 
     function traverse_JSON(obj, func) {
-        for (var key in obj) {
+        for (let key in obj) {
             func.apply(this, [key, obj[key]]);
-            if (obj[key] !== null && typeof(obj[key]) == "object") {
+            if (obj[key] !== null && typeof (obj[key]) == "object") {
                 //going one step down in the object tree!!
                 traverse_JSON(obj[key], func);
             }
         }
     }
 
+    const divs = document.getElementsByClassName("yuRUbf");
 
-    var labels_expert = [
-        [chrome.runtime.getURL('images/expert_icons/three_golden_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/two_golden_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_golden_coin.png'), "none"],
-
-        [chrome.runtime.getURL('images/expert_icons/three_silver_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/two_silver_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_silver_coin.png'), "none"],
-
-        [chrome.runtime.getURL('images/expert_icons/three_bronze_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/two_bronze_coins.png'), "none"],
-        [chrome.runtime.getURL('images/expert_icons/one_bronze_coin.png'), "none"],
-
-    ]
-    var labels = [
-        [chrome.runtime.getURL('images/not_found.png'), "none"],
-        [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
-        [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
-        [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
-    ]
-
-
-
-    var divs = document.getElementsByClassName("yuRUbf");
-
-    for (var div of divs) {
-        var label, tracker, facebook, amazon, trackers;
-        var domain = getDomain(div);
+    for (let div of divs) {
+        var label, tracker, facebook, amazon, trackers, expert_from_backend, popup;
+        const domain = getDomain(div);
         traverse_JSON(output[domain], storeVar);
 
-        expert_mode = true
-
-
-        var result = [];
+        const result = [];
+        //console.log(domain);
         for (let i = 0; i < Object.keys(trackers).length; i++) {
             result.push(trackers[i].company);
         }
-        var companies = [...new Set(result)];
+        const companies = [...new Set(result)];
 
-        const logos = get_logos_html(companies, result) //Get html for the icon images.
+        const logos_expert = get_logos_html_expert(companies, result); //Get html for the icon images.
+        const logos_normal = get_logos_html_normal(companies, result); //Get html for the icon images.
 
-        if (label == 0 || trackers.length == 0) {
-            var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
-            popup.appendTo(div);
+
+        if (trackers.length === 0) {
+            popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
         } else {
-            if (expert_mode) { //this is for the expert mode
-                //expert_label = 6; // some number from 1 to 7
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels_expert[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
-                popup.appendTo(div);
-            } else { // this is default mode 
-                var popup = $('<div class="list"> <div class="entry"><img class="code-selector" src="' + labels[label - 1][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
-                popup.appendTo(div);
+            if (expert) {
+                if (coins_as_label) {
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
+                } else {
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
+                }
+
+            } else { // this is default mode
+                if (coins_as_label) {
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
+                } else {
+                    console.log(label)
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
+                }
             }
         }
-
+        popup.appendTo(div);
     }
-    $('head').append("<link type=\"text/css\" rel=\"stylesheet\" href=\"/css/label_hover_style.css\">");
+    $('head').append("<link type=\"text/css\" rel=\"stylesheet\" href=\"css/label_hover_style.css\">");
 }
 
 function apply_coin_style(coin_style) {
-    head = document.head || document.getElementsByTagName('head')[0],
+    let head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
 
     head.appendChild(style);
 
-    style.type = 'text/css';
+    style = 'text/css';
     if (style.styleSheet) {
         // This is required for IE8 and below.
         style.styleSheet.cssText = coin_style;
@@ -308,80 +363,155 @@ function apply_coin_style(coin_style) {
 }
 
 function getDomain(div) {
-    var url = JSON.stringify(div.children[0].href)
+    let url = JSON.stringify(div.children[0].href);
     if (url.includes("https://")) {
-        url = url.replace("https://", "")
+        url = url.replace("https://", "");
     } else {
-        console.log("---- http protocol found ----")
-        return ""
+        console.log("---- http protocol found ----");
+        return "";
     }
-    url = url.split("/")[0]
-    url_split = url.split(".")
+    url = url.split("/")[0];
+    let url_split = url.split(".");
     if (url_split.length >= 3) {
-        url_split.shift()
+        url_split.shift();
     }
-    url = url_split.join(".")
-    url = url.replace('"', "")
-    return url
-
+    url = url_split.join(".").replace('"', "");
+    return url;
 }
 
-function get_logos_html(v, list) {
-    var result = '<ul>'
+function get_logos_html_expert(v, list) {
+    let result = '<ul>';
 
     v.forEach(x => {
         switch (x) {
             case "Facebook":
-                result += '<li><img class="icons" src="' + icons[3] + '"><span>Facebook</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Facebook icon" src="' + icons[3] + '"><span>Facebook</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Amazon":
-                result += '<li><img class="icons" src="' + icons[4] + '"><span>Amazon</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Amazon icon" src="' + icons[4] + '"><span>Amazon</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Google":
-                result += '<li><img class="icons" src="' + icons[0] + '"><span>Google</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Google icon" src="' + icons[0] + '"><span>Google</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Kaspersky Lab":
-                result += '<li><img class="icons" src="' + icons[5] + '"><span>Kaspersky</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Kaspersky icon" src="' + icons[5] + '"><span>Kaspersky</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Wikimedia Foundation":
-                result += '<li><img class="icons" src="' + icons[6] + '"><span>Wikimedia</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Wikimedia icon" src="' + icons[6] + '"><span>Wikimedia</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Microsoft":
-                result += '<li><img class="icons" src="' + icons[8] + '"><span>Microsoft</span><span class="percentage">' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Microsoft icon" src="' + icons[8] + '"><span>Microsoft</span><span class="percentage">' + get_percentage(x, list) + '</span></li>';
                 break;
             case "BootstrapCDN":
-                result += '<li><img class="icons" src="' + icons[7] + '"><span>Boots. CDN</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Boots. CDN icon" src="' + icons[7] + '"><span>Boots. CDN</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Cloudflare":
-                result += '<li><img class="icons" src="' + icons[9] + '"><span>Cloudflare</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Cloudflare icon" src="' + icons[9] + '"><span>Cloudflare</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Adobe":
-                result += '<li><img class="icons" src="' + icons[10] + '"><span>Adobe</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Adobe icon" src="' + icons[10] + '"><span>Adobe</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
             case "Twitter":
-                result += '<li><img class="icons" src="' + icons[11] + '"><span>Twitter</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>'
+                result += '<li><img class="icons" alt="Twitter icon" src="' + icons[11] + '"><span>Twitter</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
+                break;
+        }
+    });
+    let others = get_others_percentage(list);
+    if (others !== "0") {
+        result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>" + others + "</span></li>";
+    }
+    return result += "</ul>";
+}
+
+function get_logos_html_normal(v, list) {
+    let result = '<ul><li>';
+    let counter = 0;
+    v.forEach(x => {
+        switch (x) {
+            case "Facebook":
+                result += '<img class="icons" alt="Facebook icon" src="' + icons[3] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Amazon":
+                result += '<img class="icons" alt="Amazon icon" src="' + icons[4] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Google":
+                result += '<img class="icons" alt="Google icon" src="' + icons[0] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Kaspersky Lab":
+                result += '<img class="icons" alt="Kaspersky icon" src="' + icons[5] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Wikimedia Foundation":
+                result += '<img class="icons" alt="Wikimedia icon" src="' + icons[6] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Microsoft":
+                result += '<img class="icons" alt="Microsoft icon" src="' + icons[8] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "BootstrapCDN":
+                result += '<img class="icons" alt="Boots. CDN icon" src="' + icons[7] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Cloudflare":
+                result += '<img class="icons" alt="Cloudflare icon" src="' + icons[9] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Adobe":
+                result += '<img class="icons" alt="Adobe icon" src="' + icons[10] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
+                break;
+            case "Twitter":
+                result += '<img class="icons" alt="Twitter icon" src="' + icons[11] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
         }
     })
-    let others = get_others_percentage(list)
-    if (others != "0") {
-        result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>" + others + "</span></li>"
-    }
+    result += "</li></ul>";
+    return result
+}
 
-    return result += "</ul>";
+function add_new_entry_hover(counter, result) {
+    if (counter >= 4) {
+        return "</li><li>";
+    }
+    return ""
 }
 
 function get_percentage(name, list) {
     let counter = 0;
     for (let i = 0; i < list.length; i++) {
-        if (list[i] == name) {
+        if (list[i] === name) {
             counter += 1;
         }
     }
-    if (counter != 0 && list.length != 0) {
-        return Math.round(counter / list.length * 100) + "%"
+    if (counter !== 0 && list.length !== 0) {
+        return Math.round(counter / list.length * 100) + "%";
     } else {
-        return "0"
+        return "0";
     }
 }
 
@@ -393,10 +523,10 @@ function get_others_percentage(list) {
             counter += 1;
         }
     }
-    if (counter != 0) {
-        return Math.round(counter / list.length * 100) + "%"
+    if (counter !== 0) {
+        return Math.round(counter / list.length * 100) + "%";
     } else {
-        return "0"
+        return "0";
     }
 }
 
@@ -405,24 +535,154 @@ function getVisitedUrls(output) {
 
     elems.forEach(element => {
         element.addEventListener('click', (e) => { //TODO: Event Listener for right click + "open link in new tab"
-            var clickedUrl = new URL(element.children[0].href);
-            for (let site in output) {
+            const clickedUrl = new URL(element.children[0].href);
+            for (site in output) {
                 let value = output[site];
                 let domain = clickedUrl.href;
 
                 if (domain.includes(site)) {
                     let label = value[0]['label'];
-                    chrome.storage.local.set({
-                        [site]: label
-                    });
+                    chrome.storage.local.set({[site]: label});
                 }
             }
         });
     });
 }
 
+//############################ PRIVACY SUMMARY ####################################
+window.addEventListener("load", function (event) {
+
+    if (document.getElementById("submitButton")) {
+        document.getElementById("url").addEventListener("keyup", function () {
+            if (event.keyCode === 13) { // 13 is the enter key. TODO: Change input to form, so a submit event can be triggered.
+                document.getElementById("submitButton").click();
+            }
+        })
+        document.getElementById("submitButton").addEventListener("click", function () {
+            // call a method that looks for preferences stored in storage api
+            let url = document.getElementById("url").value;
+
+            let preference = getPreferences();
+            preference.then((res) => {
+                let body = JSON.stringify({
+                    "urls": url,
+                    "preferences": JSON.stringify(res),
+                    "expert": false
+                });
+                sendURL(body);
+            });
+        });
+    }
+
+    function sendURL(body) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // console.log(this.responseText);
+                let labels_score = [
+                    [chrome.runtime.getURL('images/not_found.png')],
+                    [chrome.runtime.getURL('images/green_icon_32.png')],
+                    [chrome.runtime.getURL('images/yellow_icon_32.png')],
+                    [chrome.runtime.getURL('images/red_icon_32.png')]
+                ];
+                let output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
+                let first_key = Object.keys(output)[0];
+                document.getElementById("calcLabel").style.display = "block";
+                let img = labels_score[output[first_key][0]["label"]];
+                console.log(output[first_key][0]["label"]);
+                if (output[first_key][1]["label"] === 0) {
+                    document.getElementById("printLabel").innerHTML = "Sorry, we don't have a label for this url yet.";
+                } else {
+                    document.getElementById("printLabel").innerHTML = "The label for the domain " + first_key + " is <img src= " + img + " > </img>.";
+                }
+            }
+        };
+        xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xhttp.send(body);
+    }
+
+    chrome.storage.local.get(function (data) {
+        let keys = Object.keys(data); //domains
+        let values = Object.values((data)); //labels
+        let all_labels = 0;
+        let goodLabels = 0; //green or gold
+        let unknownLabels = 0;
+
+        //console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+
+        for (let i = 0; i < values.length - 1; i++) {
+            if (values[i] !== 'pages') {
+                all_labels++;
+            }
+            if (!(3 < values[i])) {
+                if (values[i] === 0) {
+                    unknownLabels++;
+                    continue;
+                }
+                goodLabels++;
+            }
+        }
+        let score = '';
+
+        let privacyScoreNumber = document.getElementById("privacyScore_number");
+        let privacyScoreInfo = document.getElementById("privacyScore_info");
+
+        if (privacyScoreNumber && privacyScoreInfo) {
+            if (all_labels === 0) {
+                privacyScoreNumber.innerHTML = '¯\\_(ツ)_/¯';
+                privacyScoreInfo.innerHTML = 'Nothing to show yet.';
+            } else {
+                score = Math.round(goodLabels / (all_labels - unknownLabels) * 100);
+                privacyScoreNumber.innerHTML = score.toString() + '%';
+                privacyScoreInfo.innerHTML = getPrivacyInfo(score);
+            }
+        }
+
+        if (document.getElementById('all_labels')) {
+            let listOfLabels = '';
+            for (let i = 0; i <= all_labels; i++) {
+                if (keys[i] !== 'pages') {
+                    listOfLabels += keys[i] + ': ' + values[i] + '<br>';
+                }
+            }
+            document.getElementById('all_labels').innerHTML = listOfLabels;
+        }
+        //console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
+    });
 
 
+    function getPrivacyInfo(score) {
+        let info = "";
+
+        if (score >= 66) {
+            info = "Good job! You took good care about your privacy: " +
+                score + "% of your visited websites had a good label!";
+        } else if (score < 66 && score >= 33) {
+            info = "Not bad! You did quite well: " +
+                score + "% of your visited websites had a good label.";
+        } else {
+            info = "Could be better! Only " + score + "% of your visited websites had a good label. " +
+                "Next time take a look at the label before you open the page."
+        }
+        return info;
+    }
+
+//Reset statistics (Privacy Score)
+    if (document.getElementById("reset_stats")) {
+        document.getElementById("reset_stats").addEventListener("click", function () {
+            chrome.storage.local.get(function (data) {
+                if (Object.values(data).length === 0) {
+                    alert("Your storage is already empty");
+                } else {
+                    chrome.storage.local.clear();
+                    location.reload();
+                }
+            });
+        });
+    }
+});
 /* code dumpster
 -------------------------------------------------------------
 function findLabel(domain, label_index){

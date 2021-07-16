@@ -1,15 +1,15 @@
-import json
-from flask import Flask, jsonify, request
-import database_playground
-from flask_mysqldb import MySQL
-from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
+from flask import Flask, jsonify, request, make_response
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, preferences, backend_main, \
-expert_mode
-
-
+import json
+import requests
+import datetime
+import database_playground
+from flask_mysqldb import MySQL
+from flask_cors import CORS  # import with me with the following cmd: pip install flask-cors --upgrade
+from interpret_whotracksme import generic_sql_query, calc_label, get_domain_by_url, backend_main, change_prefs, \
+    change_expert
 
 app = Flask(__name__)
 CORS(app)
@@ -23,24 +23,37 @@ mysql = MySQL(app)
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
-    hardcoded_user_preference = ["pornvertising"]
-    input = str(request.data)
-    print(input)
-    split_input = input.split("SPLITME")
-    urls = split_input[0]
-    pref_input = split_input[1]
-    expert_input = split_input[2]
-    global expert_mode, preferences
-    if expert_input[:-1] == "true":  # without last elem of string as this is just "'"
-        expert_mode = True
+    default_preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
+                           "phishstats": [],
+                           "tosdr": [],
+                           "Tilthub": []}
+    input = request.json
+
+    #failure handling
+    if input["urls"] is None:
+        resp = make_response("No urls", 400)
+        return resp
+    if input["preferences"] is None:
+        resp = make_response("No preferences", 400)
+        return resp
+    if input["expert"] is None:
+        resp = make_response("No expert", 400)
+        return resp
+
+    #apply given input
+    if input["expert"]:
+        change_expert(True)
     else:
-        expert_mode = False
-    print(preferences)
-    preferences = json.loads(pref_input)
-    print(expert_mode)
-    if urls.__contains__("http://"):
+        change_expert(False)
+    if "no Preferences" in input["preferences"]:
+        print(input["preferences"])
+    else:
+        print(input["preferences"])
+        change_prefs(json.loads(input["preferences"]))
+    if input["urls"].__contains__("http://"):
         print("unsafe web protocol found")
-    urls = urls.split("https://")
+
+    urls = input["urls"].split("https://")
     urls.pop(0)
     ###
     # full_urls = collect_full_urls(urls)
@@ -51,6 +64,25 @@ def receive_urls():
     domains = list(dict.fromkeys(domains))
 
     domains = backend_main(domains)
+    y = datetime.datetime.now()
+
+    global x
+    if(abs((y-x).days) >= 3):
+
+        x = datetime.datetime.now()
+        solditems = requests.get('https://api.tosdr.org/all-services/v1/') 
+        data = solditems.json()
+        with open('tosdr.json', 'w') as f:
+            json.dump(data, f)
+
+        
+        solditems = requests.get('https://privacyspy.org/api/v2/index.json') 
+        data = solditems.json()
+        with open('privacyspy.json', 'w') as f:
+            json.dump(data, f)
+        
+
+    
 
     return jsonify(domains)
 
@@ -91,4 +123,5 @@ def trackers_category_from_url(url):
 
 
 if __name__ == '__main__':
+    x = datetime.datetime.now()
     app.run(debug=True)
