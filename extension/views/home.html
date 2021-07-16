@@ -32,15 +32,16 @@
     <button type="submit" id="reset_stats" class="btn btn-light" title="Reset Statistics"><h4>&#10006;</h4></button>
 </div>
 
-<div class="container-sm pt-3 p-3 text-center rounded">
-    <div class="row justify-content-center">
+<div class="container-sm pt-3 p-3 rounded">
+    <div class="row justify-content-center text-center">
         <div class="col-4">
             <button data-toggle="collapse" data-target="#all_labels" class="btn btn-check btn-dark"><h4>Labels in your score</h4></button>
             <br>
-            <div id="all_labels" class="collapse">  </div>
+            <br>
+            <div id="all_labels" class="collapse text-center">  </div>
         </div>
-        <div class="col-4">
-            <button data-toggle="collapse" data-target="#create" class="btn btn-check btn-dark"><h4>Get a label</h4></button>
+        <div class="col-4 text-center">
+            <button data-toggle="collapse" data-target="#create" class="btn btn-check btn-dark "><h4>Get a label</h4></button>
             <div id="create" class="collapse">
                 <br>
                     <input type="url" class="form-control" placeholder="Enter url" id="url" value="https://">
@@ -48,11 +49,11 @@
                         <p id="printLabel"></p>
                     </div>
                     <br>
-                    <input type="submit" id="submitButton" class="btn rainbow rainbow-5" value="Get">
+                    <input type="submit" id="submitButton" class="btn rainbow rainbow-5 text-center" value="Get">
             </div>
         </div>
     </div>
-    <div class="row p-5 justify-content-center">
+    <div class="row p-5 justify-content-center text-center">
         <div class="col-8">
             <a href="#how" class="btn btn-dark" data-toggle="collapse"><h4>How does it work?</h4></a>
             <div id="how" class="collapse">

@@ -550,7 +550,13 @@ function getVisitedUrls(output) {
 }
 
 //############################ PRIVACY SUMMARY ####################################
-window.addEventListener("load", function (event) {
+window.addEventListener("load", function(event) {
+    let labels_score = [
+        [chrome.runtime.getURL('images/not_found.png')],
+        [chrome.runtime.getURL('images/green_icon_32.png')],
+        [chrome.runtime.getURL('images/yellow_icon_32.png')],
+        [chrome.runtime.getURL('images/red_icon_32.png')]
+    ];
 
     if (document.getElementById("submitButton")) {
         document.getElementById("url").addEventListener("keyup", function () {
@@ -579,17 +585,11 @@ window.addEventListener("load", function (event) {
         xhttp.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 // console.log(this.responseText);
-                let labels_score = [
-                    [chrome.runtime.getURL('images/not_found.png')],
-                    [chrome.runtime.getURL('images/green_icon_32.png')],
-                    [chrome.runtime.getURL('images/yellow_icon_32.png')],
-                    [chrome.runtime.getURL('images/red_icon_32.png')]
-                ];
+
                 let output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
                 let first_key = Object.keys(output)[0];
                 document.getElementById("calcLabel").style.display = "block";
                 let img = labels_score[output[first_key][0]["label"]];
-                console.log(output[first_key][0]["label"]);
                 if (output[first_key][1]["label"] === 0) {
                     document.getElementById("printLabel").innerHTML = "Sorry, we don't have a label for this url yet.";
                 } else {
@@ -610,18 +610,17 @@ window.addEventListener("load", function (event) {
         let goodLabels = 0; //green or gold
         let unknownLabels = 0;
 
-        //console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+        console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
         for (let i = 0; i < values.length - 1; i++) {
             if (values[i] !== 'pages') {
                 all_labels++;
             }
-            if (!(3 < values[i])) {
-                if (values[i] === 0) {
-                    unknownLabels++;
-                    continue;
-                }
+            if (values[i] === 1) {
                 goodLabels++;
+            }
+            if (values[i] === 0) {
+                unknownLabels++;
             }
         }
         let score = '';
@@ -642,14 +641,19 @@ window.addEventListener("load", function (event) {
 
         if (document.getElementById('all_labels')) {
             let listOfLabels = '';
-            for (let i = 0; i <= all_labels; i++) {
+            for (let i = 0; i <= all_labels-1; i++) {
+                if (i%8 === 0){
+                    listOfLabels += '<br>';
+                }
                 if (keys[i] !== 'pages') {
-                    listOfLabels += keys[i] + ': ' + values[i] + '<br>';
+                    let img = labels_score[values[i]];
+                    //listOfLabels += keys[i] + ': ' + "&emsp;" + "<img src= " + img + "><br>";
+                    listOfLabels += "<img src= " + img + ">";
                 }
             }
             document.getElementById('all_labels').innerHTML = listOfLabels;
         }
-        //console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
+        console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
     });
 
 
