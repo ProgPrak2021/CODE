@@ -19,6 +19,19 @@ const labels = [
     [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
     [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
 ];
+const labels_expert = [
+    [chrome.runtime.getURL('images/not_found.png'), "none"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/green_icon_128.png'), "green"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/yellow_icon_128.png'), "yellow"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"],
+    [chrome.runtime.getURL('images/red_icon_128.png'), "red"]
+
+];
 
 const labels_coins = [
     [chrome.runtime.getURL('images/not_found.png'), "none"],
@@ -317,7 +330,7 @@ function printLabels(output) {
                 if (coins_as_label) {
                     popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 } else {
-                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 }
 
             } else { // this is default mode
