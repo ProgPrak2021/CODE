@@ -75,27 +75,27 @@ class PageService {
         });
     }
 
-    static savePage = async(key, value) => {
+    static savePage = async (key, value) => {
         const pages = await this.getPages();
         let updatedPages;
         let found = false;
-        for(let i = 0; i < pages.length; i++) {
+        for (let i = 0; i < pages.length; i++) {
             if (pages[i]["key"] === key) {
                 pages[i]["value"] = value;
                 found = true;
                 break;
             }
         }
-        if (found){
+        if (found) {
             updatedPages = [...pages];
-        }
-        else{
-            updatedPages = [...pages, { key, value }];
+        } else {
+            updatedPages = [...pages, {key, value}];
         }
 
         return toPromise((resolve, reject) => {
             chrome.storage.local.set({
-                [PAGES_KEY]: updatedPages }, () => {
+                [PAGES_KEY]: updatedPages
+            }, () => {
                 if (chrome.runtime.lastError)
                     reject(chrome.runtime.lastError);
                 resolve(updatedPages);
@@ -134,7 +134,7 @@ let img = $('<img class="code-selector">');
 let expert = false;
 let coins_as_label = false;
 
-function getPreferences(){
+function getPreferences() {
     return new Promise(
         function (resolve, reject) {
             const preferences = {
@@ -203,7 +203,13 @@ function getPreferences(){
 function receivePrefs(datasource, preference) {
     if (preferences === undefined) {
         console.log("is undefined")
-        var preferences = { "whotracksme": ["Facebook", "Amazon"], "privacyspy": [], "google_safeBrowsing": [], "phishstats": [], "webrisk": [] }
+        var preferences = {
+            "whotracksme": ["Facebook", "Amazon"],
+            "privacyspy": [],
+            "google_safeBrowsing": [],
+            "phishstats": [],
+            "webrisk": []
+        }
     }
     const index = preferences[datasource].indexOf(preference);
     if (index !== -1) {
@@ -230,7 +236,7 @@ function sendURLsToBackend() {
 }
 
 const xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
+xhttp.onreadystatechange = function () {
     if (this.readyState === 4 && this.status === 200) {
         // console.log(this.responseText)
         const output = JSON.parse(JSON.parse(this.responseText)); // dont know why but you have to parse it twice
@@ -243,7 +249,7 @@ xhttp.onreadystatechange = function() {
 const preferences_promise = getPreferences();
 
 let urls = sendURLsToBackend();
-preferences_promise.then((res)=>{
+preferences_promise.then((res) => {
     //console.log(JSON.stringify(res));
     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -256,18 +262,30 @@ preferences_promise.then((res)=>{
 function printLabels(output) {
 
     function storeVar(key, value) {
-        if (key === "label") { label = value; }
-        if (key === "tracker_count") { tracker = value; }
-        if (key === "facebook") { facebook = value; }
-        if (key === "amazon") { amazon = value; }
-        if (key === "trackers") { trackers = value; }
-        if (key === "expert") { expert_from_backend = value !== "False"; }
+        if (key === "label") {
+            label = value;
+        }
+        if (key === "tracker_count") {
+            tracker = value;
+        }
+        if (key === "facebook") {
+            facebook = value;
+        }
+        if (key === "amazon") {
+            amazon = value;
+        }
+        if (key === "trackers") {
+            trackers = value;
+        }
+        if (key === "expert") {
+            expert_from_backend = value !== "False";
+        }
     }
 
     function traverse_JSON(obj, func) {
         for (let key in obj) {
             func.apply(this, [key, obj[key]]);
-            if (obj[key] !== null && typeof(obj[key]) == "object") {
+            if (obj[key] !== null && typeof (obj[key]) == "object") {
                 //going one step down in the object tree!!
                 traverse_JSON(obj[key], func);
             }
@@ -296,17 +314,16 @@ function printLabels(output) {
             popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
         } else {
             if (expert) {
-                if(coins_as_label){
+                if (coins_as_label) {
                     popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 } else {
                     popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 }
 
             } else { // this is default mode
-                if(coins_as_label){
+                if (coins_as_label) {
                     popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
-                }
-                else {
+                } else {
                     console.log(label)
                     popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
                 }
@@ -385,51 +402,90 @@ function get_logos_html_expert(v, list) {
                 result += '<li><img class="icons" alt="Twitter icon" src="' + icons[11] + '"><span>Twitter</span><span class="percentage"> ' + get_percentage(x, list) + '</span></li>';
                 break;
         }
-    })
+    });
     let others = get_others_percentage(list);
     if (others !== "0") {
         result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>" + others + "</span></li>";
     }
     return result += "</ul>";
 }
+
 function get_logos_html_normal(v, list) {
     let result = '<ul><li>';
-
+    let counter = 0;
     v.forEach(x => {
         switch (x) {
             case "Facebook":
                 result += '<img class="icons" alt="Facebook icon" src="' + icons[3] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Amazon":
                 result += '<img class="icons" alt="Amazon icon" src="' + icons[4] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Google":
                 result += '<img class="icons" alt="Google icon" src="' + icons[0] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Kaspersky Lab":
                 result += '<img class="icons" alt="Kaspersky icon" src="' + icons[5] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Wikimedia Foundation":
                 result += '<img class="icons" alt="Wikimedia icon" src="' + icons[6] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Microsoft":
                 result += '<img class="icons" alt="Microsoft icon" src="' + icons[8] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "BootstrapCDN":
                 result += '<img class="icons" alt="Boots. CDN icon" src="' + icons[7] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Cloudflare":
                 result += '<img class="icons" alt="Cloudflare icon" src="' + icons[9] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Adobe":
                 result += '<img class="icons" alt="Adobe icon" src="' + icons[10] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
             case "Twitter":
                 result += '<img class="icons" alt="Twitter icon" src="' + icons[11] + '">';
+                counter++;
+                result += add_new_entry_hover(counter, result);
+                counter = counter % 4;
                 break;
         }
     })
-    return result += "</li></ul>";
+    result += "</li></ul>";
+    return result
+}
+
+function add_new_entry_hover(counter, result) {
+    if (counter >= 4) {
+        return "</li><li>";
+    }
+    return ""
 }
 
 function get_percentage(name, list) {
@@ -481,7 +537,7 @@ function getVisitedUrls(output) {
 }
 
 //############################ PRIVACY SUMMARY ####################################
-window.addEventListener("load", function(event) {
+window.addEventListener("load", function (event) {
 
     if (document.getElementById("submitButton")) {
         document.getElementById("url").addEventListener("keyup", function () {
