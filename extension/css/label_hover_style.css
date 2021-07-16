@@ -39,9 +39,11 @@ ul {
 }
 
 .content li {
-    display: flex;
-    align-items: flex-end;
+    display: flex; /*display: inline;*/
+    align-items: flex-end;  /* delete this line*/
 }
+/*does changing this has any negativ effect?*/
+
 
 .content span {
     color: gray;
@@ -58,6 +60,7 @@ ul {
     padding-right: 1px;
     margin: 2px;
 }
+
 
 .list .entry:hover .content {
     visibility: visible;
