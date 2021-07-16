@@ -288,25 +288,27 @@ function printLabels(output) {
         }
         const companies = [...new Set(result)];
 
-        const logos = get_logos_html(companies, result); //Get html for the icon images.
+        const logos_expert = get_logos_html_expert(companies, result); //Get html for the icon images.
+        const logos_normal = get_logos_html_normal(companies, result); //Get html for the icon images.
+
 
         if (trackers.length === 0) {
             popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class=\"content\"> <div class="inner"><h2>We are sorry.</h2><p>We have currently no information about this website.</p><a href="' + chrome.runtime.getURL("views/options.html") + '" target="_blank"><span>Let us know!</span></a></div></div></div></div>');
         } else {
             if (expert) {
                 if(coins_as_label){
-                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 } else {
-                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + coins_expert[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_expert + '</div></div></div></div>');
                 }
 
             } else { // this is default mode
                 if(coins_as_label){
-                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels_coins[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
                 }
                 else {
                     console.log(label)
-                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos + '</div></div></div></div>');
+                    popup = $('<div class="list"> <div class="entry"><img class="code-selector" alt="Label image" src="' + labels[label][0] + '"> <div class="content"><div class="inner"><h2>' + tracker + ' Trackers</h2><h4> From:</h4>' + logos_normal + '</div></div></div></div>');
                 }
             }
         }
@@ -347,7 +349,7 @@ function getDomain(div) {
     return url;
 }
 
-function get_logos_html(v, list) {
+function get_logos_html_expert(v, list) {
     let result = '<ul>';
 
     v.forEach(x => {
@@ -389,6 +391,45 @@ function get_logos_html(v, list) {
         result += "<li style='margin-top: 5px'><span style='color: black; font-weight: bold'>Others:</span><span class='percentage'>" + others + "</span></li>";
     }
     return result += "</ul>";
+}
+function get_logos_html_normal(v, list) {
+    let result = '<ul><li>';
+
+    v.forEach(x => {
+        switch (x) {
+            case "Facebook":
+                result += '<img class="icons" alt="Facebook icon" src="' + icons[3] + '">';
+                break;
+            case "Amazon":
+                result += '<img class="icons" alt="Amazon icon" src="' + icons[4] + '">';
+                break;
+            case "Google":
+                result += '<img class="icons" alt="Google icon" src="' + icons[0] + '">';
+                break;
+            case "Kaspersky Lab":
+                result += '<img class="icons" alt="Kaspersky icon" src="' + icons[5] + '">';
+                break;
+            case "Wikimedia Foundation":
+                result += '<img class="icons" alt="Wikimedia icon" src="' + icons[6] + '">';
+                break;
+            case "Microsoft":
+                result += '<img class="icons" alt="Microsoft icon" src="' + icons[8] + '">';
+                break;
+            case "BootstrapCDN":
+                result += '<img class="icons" alt="Boots. CDN icon" src="' + icons[7] + '">';
+                break;
+            case "Cloudflare":
+                result += '<img class="icons" alt="Cloudflare icon" src="' + icons[9] + '">';
+                break;
+            case "Adobe":
+                result += '<img class="icons" alt="Adobe icon" src="' + icons[10] + '">';
+                break;
+            case "Twitter":
+                result += '<img class="icons" alt="Twitter icon" src="' + icons[11] + '">';
+                break;
+        }
+    })
+    return result += "</li></ul>";
 }
 
 function get_percentage(name, list) {
