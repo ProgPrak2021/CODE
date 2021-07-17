@@ -39,9 +39,29 @@ The extension is available for Chrome. Its source code is open source.
 The source code is available at <--->.
 ### Algorithm (TO DO) 
 Lorem impsum...
-### Expert Mode (TO DO) Ali
-Lorem impsum...
+### Expert Mode 
+CODE was designed to simplify the transparency experience, so user can drive real results in terms of transparency and save time setting up privacy. 
+The Expert Mode offers the full range of CODE features. It gives the user more control over their label calculation. We recommend it for advanced user with special preferences.
+With the Expert Mode the user can influence the label calculation by giving higher weight to special criteria, for example:
 
+- Look For Facebook Tracker
+- Look For Amazon Tracker
+- Weight Number Of Trackers
+- Disable WhoTrackMe Database
+- Weight The Use Of HTTPS
+
+- Disable Google API
+- Disable privacyspy
+- Disable Web Risk API
+- Disable phishstats
+
+
+If you desire more advanced features in CODE, here’s how you can switch to Expert Mode.
+
+1.	Navigate to the Options page
+2.	Click on the ‘ Settings ’ button
+3.	Switch ‘ Enable Expert Mode ’ to ON 
+4.	 ( If desired ) switch ‘ Change Labels To Coins ’ to ON 
 ## Design
 ### Labels
 CODE-Labels are designed to give users privacy information about websites real quick. With a **simple comprehensible design** users easily understand its meaning.
