@@ -7,7 +7,7 @@ git checkout develop
 ## Orientierung
 Es gibt schon drei Python Skripte:
 * main: Für die Kommunikation zwischen Extension und Python Projekt
-* database_playground: Für das Aufsetzen und Abfragen eigener Datenbanken
+* database_setup: Für das Aufsetzen und Abfragen eigener Datenbanken
 * apicall_example: Altes Beispiel für Google API Abfrage, darf gerne erweitert werden
 
 Bei Bedarf können gerne weitere Skripte erstellen.

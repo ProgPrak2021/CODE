@@ -1,9 +1,8 @@
 import requests
 from flask import jsonify, config
-import database_playground
+from app import database_setup
 import json
 from pprint import pprint
-import ast
 
 preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
                            "phishstats": [],
@@ -64,11 +63,11 @@ def backend_main(domain_list):
     # global config
     # config = dotenv_values(".env")  # take environment variables from .env.
     domain_dict = {}
-    db = database_playground.connect_db_labels()
+    db = database_setup.connect_db_labels()
     data_summary = {}
     db_string = build_user_linking_string(unwanted_categories)
 
-    newlabelsdb = database_playground.connect_new_labels()
+    newlabelsdb = database_setup.connect_new_labels()
 
 
     for domain in domain_list:
@@ -154,7 +153,7 @@ def calc_label(label_max, db_array):
 
 
 def saveCalcLabels(data_summary, domain, label):
-    db = database_playground.connect_new_labels()
+    db = database_setup.connect_new_labels
 
     lenList = data_summary.__len__()
     query = f"INSERT INTO columns (name) SELECT 'preferences' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = 'preferences');"  # we have to store the labels together with the preferences
@@ -253,7 +252,7 @@ def saveCalcLabels(data_summary, domain, label):
 
 
 def fill_label_database(domain_dict, users):
-    db = database_playground.connect_db_labels()
+    db = database_setup.connect_db_labels()
     # print(domain_dict)
     for key in domain_dict:
         # print(key)
@@ -270,7 +269,7 @@ def fill_label_database(domain_dict, users):
 def whotracksme_score(domain, unwanted_categories):
     # print(preferences)
     query_trackers = f"SELECT sites_trackers_data.tracker AS tracker, categories.name AS category, companies.name AS Company_name, https FROM trackers, categories, sites_trackers_data, companies WHERE trackers.category_id = categories.id AND trackers.company_id = companies.id AND trackers.id = sites_trackers_data.tracker AND sites_trackers_data.site =\"{domain}\""
-    db = database_playground.connect_db()
+    db = database_setup.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
     # TODO: CREATE whotracksme_db DATA SUMMARY (information package)
@@ -439,7 +438,7 @@ def tosdr_score(domain):
             'link': ''
         }}
 
-    with open('tosdr.json', encoding="utf8") as file:
+    with open('db/tosdr.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data['parameters']['services']:
         if domain in elem['urls']:
@@ -480,7 +479,7 @@ def privacyspy_score(domain):
     label_max = 3
     if expert_mode:
         label_max = 9
-    with open('privacyspy.json', encoding="utf8") as file:
+    with open('db/privacyspy.json', encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
         if domain in elem['hostnames']:
@@ -502,7 +501,7 @@ def api_call(request, payload, body, type):
 def phishstats_score(domain):
 
     query = f"SELECT score, url from phish_score where URL like '%{domain}%'"
-    db = database_playground.connect_phishcore_db()
+    db = database_setup.connect_phishcore_db()
     req = generic_sql_query(query, db)
     data_summary = {
         'phishstats.db': {
