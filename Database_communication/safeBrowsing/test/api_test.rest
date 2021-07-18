@@ -7,7 +7,9 @@ content-type: application/json
   "urls":"https://en.wikipedia.org/wiki/Cheese",
 "preferences":"{\"whotracksme\":[],\"privacyspy\":[],\"google_safeBrowsing\":[],\"phishstats\":[],\"tosdr\":[],\"Tilthub\":[]}","expert":true
 }
+###
 
+GET http://localhost:5000/ids/ HTTP/1.1
 ###
 
 POST https://code-dawesys.appspot.com/sendurls/ HTTP/1.1
