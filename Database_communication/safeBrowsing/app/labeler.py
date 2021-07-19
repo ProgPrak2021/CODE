@@ -60,34 +60,31 @@ def dict_to_String(dict):
 
 def backend_main(domain_list):
     unwanted_categories = []  # just temporary
-    # global config
-    # config = dotenv_values(".env")  # take environment variables from .env.
-    domain_dict = {}
-    db = database_setup.connect_db_labels()
     data_summary = {}
-    db_string = build_user_linking_string(unwanted_categories)
-
     newlabelsdb = database_setup.connect_new_labels()
 
 
     for domain in domain_list:
-
-        query = f"SELECT domain FROM dict where domain = '{domain}' AND preferences = '{json.dumps(preferences)}';"
-        doma = generic_sql_query(query, newlabelsdb)
+        # query = """INSERT INTO dict (domain) SELECT %s WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = %s);"""
+        # query = f"SELECT domain FROM dict where domain = '{domain}' AND preferences = '{json.dumps(preferences)}';"
+        # doma = generic_sql_query(query, newlabelsdb)
+        query = """SELECT domain FROM dict where domain = %s AND preferences = %s"""
+        doma = newlabelsdb.execute(query, (domain, json.dumps(preferences))).fetchall()
         data_summary[domain] = []
 
         if doma and not expert_mode:
             query = f"SELECT name FROM columns;"
-            columns = generic_sql_query(query, newlabelsdb)
+            columns = newlabelsdb.execute(query).fetchall()
             cnt = columns.__len__()
             dontAdd = True
             for i in range(cnt):
                 col = columns[i]
-        
-                query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
-        
-                partialDict = generic_sql_query(query, newlabelsdb)
+
+                # query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
+                query = """SELECT %s FROM dict where domain = %%s""" % (col[0],)
+                partialDict = newlabelsdb.execute(query, (domain,)).fetchall()
                 strDict = (partialDict[0])[0]
+                print(strDict)
                 newDict = json.loads(strDict)
                 if dontAdd: # removes first elem of dict
                     dontAdd = False
@@ -116,15 +113,8 @@ def backend_main(domain_list):
             if not expert_mode:
                 saveCalcLabels(dictionary, domain, calced_label)
 
-            # domain_dict[domain] = data_summary[domain][0]["whotracksme_db"]["label"]
-            # domain_dict[domain] = score        # + phishstats_score(domain)
-            # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
-            # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
-            # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
+    return json.dumps(data_summary) 
 
-    # pprint(data_summary)
-
-    return json.dumps(data_summary)  # json.dumps(domain_dict)
 
 
 
@@ -153,32 +143,25 @@ def calc_label(label_max, db_array):
 
 
 def saveCalcLabels(data_summary, domain, label):
-    db = database_setup.connect_new_labels
+    db = database_setup.connect_new_labels()
 
     lenList = data_summary.__len__()
-    query = f"INSERT INTO columns (name) SELECT 'preferences' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = 'preferences');"  # we have to store the labels together with the preferences
-    cursor = db.cursor()
-    cursor.execute(query)
-    db.commit()
+    # we have to store the labels together with the preferences
+    query = f"INSERT INTO columns (name) SELECT 'preferences' WHERE NOT EXISTS (SELECT name FROM columns WHERE name = 'preferences');"
+    db.execute(query)
     try:
         query = f"ALTER TABLE dict ADD preferences varchar(999);"  # create row preferences
-        cursor = db.cursor()
-        cursor.execute(query)
-        db.commit()
+        db.execute(query)
 
-        query = f"UPDATE dict SET preferences = '{json.dumps(preferences)}' where domain = '{domain}';"  # map preferences to domain
-
-        cursor = db.cursor()
-        cursor.execute(query)
-        db.commit()
+        # query = f"UPDATE dict SET preferences = '{json.dumps(preferences)}' where domain = '{domain}';"  # map preferences to domain
+        query = """UPDATE dict SET preferences = %s WHERE domain = %s"""
+        db.execute(query, (json.dumps(preferences), domain))
+        
 
     except:
         # query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
-        query = f"UPDATE dict SET preferences = '{json.dumps(preferences)}' where domain = '{domain}';"  # map preferences to domain
-
-        cursor = db.cursor()
-        cursor.execute(query)
-        db.commit()
+      query = """UPDATE dict SET preferences = %s WHERE domain = %s"""
+      db.execute(query, (json.dumps(preferences), domain))
 
     for i in range(lenList):
         dict = data_summary[i]
@@ -193,69 +176,36 @@ def saveCalcLabels(data_summary, domain, label):
             key = dictString[start:end - 3]
         dictString = dictString.replace('"', "'")    
 
-        #  query = "INSERT INTO dict (domain) SELECT \"{domain}\" WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = \"{domain}\");"
         query = """INSERT INTO dict (domain) SELECT %s WHERE NOT EXISTS (SELECT domain FROM dict WHERE domain = %s);"""
-        cursor = db.cursor()
-        cursor.execute(query, (domain, domain))
-        db.commit()
+        db.execute(query, (domain, domain))
 
         # query = f"INSERT INTO columns (name) SELECT \"{key}\" WHERE NOT EXISTS (SELECT name FROM columns WHERE name = \"{key}\");"
         query = """INSERT INTO columns (name) SELECT %s WHERE NOT EXISTS (SELECT name FROM columns WHERE name = %s);"""
-        cursor = db.cursor()
-        cursor.execute(query, (key, key))
-        db.commit()
+        db.execute(query, (key, key))
 
         try:
 
             # query = f"ALTER TABLE dict ADD \"{key}\" TEXT;"
             query = """ALTER TABLE dict ADD %s TEXT;""" % (key,)
-            cursor = db.cursor()
-            cursor.execute(query)
-            db.commit()
+            db.execute(query)
 
             
             # query = f"update dict set {key} = \"{dictString}\" where domain = \"{domain}\";"
             query = """Update dict set %s = %%s WHERE domain = %%s""" % (key,)
-
-            cursor = db.cursor()
-            cursor.execute(query, (dictString, domain))
-            db.commit()
+            db.execute(query, (dictString, domain))
 
         except:
 
-            # query = f"replace INTO dict ({key}) VALUES ('{dictString}');"
-            
-            # query = f"update dict set {key} = \"{dictString}\" where domain = '{domain}';"
-            # query = """Update dict set %s = %s where domain = %s;"""
-
             query = """Update dict set %s = %%s WHERE domain = %%s""" % (key,)
-            cursor = db.cursor()
-            cursor.execute(query, (dictString, domain))
-            db.commit()
+            db.execute(query, (dictString, domain))
             continue
 
-    """whotracksme_label = data_summary[0]["whotracksme_db"]["score"]
-    tracker_cnt = data_summary[0]["whotracksme_db"]["tracker_count"]
-    amzn = data_summary[0]["whotracksme_db"]["amazon"]
-    fcbook = data_summary[0]["whotracksme_db"]["facebook"]
-
-
-    phishstats_label = data_summary[1]["phishstats.db"]["score"]
-    phishing_category = data_summary[1]["phishstats.db"]["category"]
-
-    privacyspy_score = str(data_summary[2]["privacyspy"]["score"])"""
-
-    """query = "REPLACE INTO labels (domain, calced_label, whotracksme_score, tracker_count, amazon, facebook, phishstats_score, phishing_category, privacyspy_score) VALUES (%s, %s , %s, %s, %s, %s, %s, %s , %s);"
-    cursor = db.cursor()
-    cursor.execute(query, (domain, label, whotracksme_label, tracker_cnt, fcbook, amzn, phishstats_label, phishing_category, privacy_score))
-    db.commit()"""
 
 
 def fill_label_database(domain_dict, users):
     db = database_setup.connect_db_labels()
-    # print(domain_dict)
+    
     for key in domain_dict:
-        # print(key)
         query = f"REPLACE INTO domain_data (domain, label, users) VALUES (\"{key}\", \"{domain_dict[key]}\", \"{users}\");"
         cursor = db.cursor()
         cursor.execute(query)

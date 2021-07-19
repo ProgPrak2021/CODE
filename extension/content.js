@@ -264,7 +264,7 @@ const preferences_promise = getPreferences();
 let urls = sendURLsToBackend();
 preferences_promise.then((res) => {
     //console.log(JSON.stringify(res));
-    xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+    xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Flask projekt muss am laufen sein 
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     //console.log(JSON.stringify(res))
