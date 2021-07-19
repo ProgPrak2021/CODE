@@ -1,4 +1,5 @@
 
+from flask import current_app as app
 import datetime
 import requests
 import json
@@ -6,9 +7,11 @@ from flask import jsonify, request, make_response
 from app import database_setup
 from app.labeler import generic_sql_query, get_domain_by_url, backend_main, change_prefs, \
     change_expert
-from flask import current_app as app
+
+
 
 x = datetime.datetime.now()
+
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
@@ -17,7 +20,7 @@ def receive_urls():
                            "tosdr": [],
                            "Tilthub": []}
     input = request.json
-
+    print("routes working")
     #failure handling
     if input["urls"] is None:
         resp = make_response("No urls", 400)
