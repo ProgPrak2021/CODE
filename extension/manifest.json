@@ -2,7 +2,7 @@
   "name": "cookie-decliner",
   "version": "1.0",
   "manifest_version": 2,
-  "description": "Gets rid of annoying cookie banners",
+  "description": "Get a CODE - privacy label next to your Google Search Results.",
   "background": "views/background.html",
 
   "web_accessible_resources": [
@@ -22,7 +22,7 @@
   },
   "browser_action" : {
     "default_popup": "views/popup.html",
-    "default_title": "Cookie Decliner Title",
+    "default_title": "CODE Privacy Labels",
     "default_icon": {
       "16": "/images/green_icon_16.png",
       "32": "/images/green_icon_32.png",
