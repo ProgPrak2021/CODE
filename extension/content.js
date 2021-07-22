@@ -264,7 +264,8 @@ const preferences_promise = getPreferences();
 let urls = sendURLsToBackend();
 preferences_promise.then((res) => {
     //console.log(JSON.stringify(res));
-    xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein 
+    xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Flask projekt muss am laufen sein
+    //xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein
     xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     //console.log(JSON.stringify(res))
@@ -552,7 +553,7 @@ function getVisitedUrls(output) {
 //############################ PRIVACY SUMMARY ####################################
 window.addEventListener("load", function(event) {
     let labels_score = [
-        [chrome.runtime.getURL('images/not_found.png')],
+        [chrome.runtime.getURL('images/not_found_32.png')],
         [chrome.runtime.getURL('images/green_icon_32.png')],
         [chrome.runtime.getURL('images/yellow_icon_32.png')],
         [chrome.runtime.getURL('images/red_icon_32.png')]
@@ -597,7 +598,8 @@ window.addEventListener("load", function(event) {
                 }
             }
         };
-        xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein
+        xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Flask projekt muss am laufen sein
+        //xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //Flask projekt muss am laufen sein
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
         xhttp.send(body);
