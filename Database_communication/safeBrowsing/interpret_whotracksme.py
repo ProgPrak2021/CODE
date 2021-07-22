@@ -259,14 +259,13 @@ def whotracksme_score(domain, unwanted_categories):
     db = database_playground.connect_db()
     trackers = generic_sql_query(query_trackers, db)
 
-    # TODO: CREATE WHOTRACKSME.db DATA SUMMARY (information package)
     data_summary = {
-        'whotracksme.db': {
-            'score': '0',
-            'tracker_count': '0',
-            'facebook': '',
-            'amazon': '',
-            'trackers': []
+        "whotracksme.db": {
+            "score": "0",
+            "tracker_count": "0",
+            "facebook": "",
+            "amazon": "",
+            "trackers": []
         }}
     if preferences["whotracksme"]:
         if "disableWTM" in preferences["whotracksme"]:
@@ -318,17 +317,17 @@ def whotracksme_score(domain, unwanted_categories):
     index = index.__round__()
 
     for i in trackers:
-        data_summary['whotracksme.db']['trackers'] += [{  # Fill trackers array
-            'name': i[0],
-            'category': i[1],
-            'company': i[2],
+        data_summary["whotracksme.db"]["trackers"] += [{  # Fill trackers array
+            "name": i[0],
+            "category": i[1],
+            "company": i[2],
         }]
 
-    data_summary['whotracksme.db']['score'] = eval(str(index))
-    data_summary['whotracksme.db']['tracker_count'] = eval(str(len(trackers)))
-    data_summary['whotracksme.db']['facebook'] = eval(str(facebook))
-    data_summary['whotracksme.db']['amazon'] = eval(str(amazon))
-    data_summary['whotracksme.db']['https_avg'] = eval(str(https_avg))
+    data_summary["whotracksme.db"]["score"] = eval(str(index))
+    data_summary["whotracksme.db"]["tracker_count"] = eval(str(len(trackers)))
+    data_summary["whotracksme.db"]["facebook"] = eval(str(facebook))
+    data_summary["whotracksme.db"]["amazon"] = eval(str(amazon))
+    data_summary["whotracksme.db"]["https_avg"] = eval(str(https_avg))
 
     return data_summary
 
@@ -339,22 +338,22 @@ def tilthubScore(domain):
     # req = f"http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={{'meta.url' : '{name}'}}"
     req2 = "http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt"
 
-    response = requests.get(req2, auth=('admin', 'secret'))
+    response = requests.get(req2, auth=("admin", "secret"))
 
     tiltDict = json.loads(response.content)
 
     data_summary = {
-        'tilthub': {
-            'score': '0',
-            'Data Disclosed': '',
-            'Third Country Transfers': '',
-            'Right to Withdraw Consent': '',
-            'Right to Complain': '',
-            'Data Protection Officer': '',
-            'Right to Data Portability': '',
-            'Right to Information': '',
-            'Right to Rectification or Deletion': '',
-            'Automated Decision Making': '',
+        "tilthub": {
+            "score": "0",
+            "Data Disclosed": "",
+            "Third Country Transfers": "",
+            "Right to Withdraw Consent": "",
+            "Right to Complain": "",
+            "Data Protection Officer": "",
+            "Right to Data Portability": "",
+            "Right to Information": "",
+            "Right to Rectification or Deletion": "",
+            "Automated Decision Making": "",
         }}
 
     length = len(tiltDict)
@@ -365,52 +364,52 @@ def tilthubScore(domain):
         adder = 0.3
     calcedScore = 0
     for i in range(length):
-        url = tiltDict[i]['meta']['url'].split("//")[1]
+        url = tiltDict[i]["meta"]["url"].split("//")[1]
         calcedDomain = get_domain_by_url(url)
         if calcedDomain == domain:
             tiltInfos = tiltDict[i]
 
-            data_summary['tilthub']['Right to Complain'] = str(tiltInfos['rightToComplain']['available'])
-            if not tiltInfos['rightToComplain']['available']:
+            data_summary["tilthub"]["Right to Complain"] = str(tiltInfos["rightToComplain"]["available"])
+            if not tiltInfos["rightToComplain"]["available"]:
                 calcedScore+=adder
 
-            data_summary['tilthub']['Data Protection Officer'] = str(tiltInfos['dataProtectionOfficer']['name'])
-            if tiltInfos['dataProtectionOfficer']['name'] == None:
+            data_summary["tilthub"]["Data Protection Officer"] = str(tiltInfos["dataProtectionOfficer"]["name"])
+            if tiltInfos["dataProtectionOfficer"]["name"] is None:
                 calcedScore+=adder
 
-            data_summary['tilthub']['Third Country Transfers'] = str(len(tiltInfos['thirdCountryTransfers']))
-            if not len(tiltInfos['thirdCountryTransfers']) > 1:
+            data_summary["tilthub"]["Third Country Transfers"] = str(len(tiltInfos["thirdCountryTransfers"]))
+            if not len(tiltInfos["thirdCountryTransfers"]) > 1:
                 calcedScore += adder
 
-            data_summary['tilthub']['Right to Withdraw Consent'] = str(tiltInfos['rightToWithdrawConsent']['available'])
-            if not tiltInfos['rightToWithdrawConsent']['available']:
+            data_summary["tilthub"]["Right to Withdraw Consent"] = str(tiltInfos["rightToWithdrawConsent"]["available"])
+            if not tiltInfos["rightToWithdrawConsent"]["available"]:
                 calcedScore += adder
 
-            data_summary['tilthub']['Right to Data Portability'] = str(tiltInfos['rightToDataPortability']['available'])
-            if not tiltInfos['rightToDataPortability']['available']:
+            data_summary["tilthub"]["Right to Data Portability"] = str(tiltInfos["rightToDataPortability"]["available"])
+            if not tiltInfos["rightToDataPortability"]["available"]:
                 calcedScore += adder
 
-            data_summary['tilthub']['Right to Information'] = str(tiltInfos['rightToInformation']['available'])
-            if not tiltInfos['rightToInformation']['available']:
+            data_summary["tilthub"]["Right to Information"] = str(tiltInfos["rightToInformation"]["available"])
+            if not tiltInfos["rightToInformation"]["available"]:
                 calcedScore += adder
 
-            data_summary['tilthub']['Right to Rectification or Deletion'] = str(tiltInfos['rightToRectificationOrDeletion']['available'])
-            if not tiltInfos['rightToRectificationOrDeletion']['available']:
+            data_summary["tilthub"]["Right to Rectification or Deletion"] = str(tiltInfos["rightToRectificationOrDeletion"]["available"])
+            if not tiltInfos["rightToRectificationOrDeletion"]["available"]:
                 calcedScore += adder
 
-            data_summary['tilthub']['Automated Decision Making'] = str(tiltInfos['automatedDecisionMaking']['inUse'])
-            if not tiltInfos['automatedDecisionMaking']['inUse']:
+            data_summary["tilthub"]["Automated Decision Making"] = str(tiltInfos["automatedDecisionMaking"]["inUse"])
+            if not tiltInfos["automatedDecisionMaking"]["inUse"]:
                 calcedScore += adder
 
-            """data_summary['tilthub']['Data Disclosed'] = str(tiltInfos['rightToComplain']['available'])
-            if tiltInfos['rightToComplain']['available']:
+            """data_summary["tilthub"]["Data Disclosed"] = str(tiltInfos["rightToComplain"]["available"])
+            if tiltInfos["rightToComplain"]["available"]:
                 calcedScore += adder"""
             break
 
     if not expert_mode:
         calcedScore = int(round(calcedScore))
 
-    data_summary['tilthub']['score'] = str(calcedScore)
+    data_summary["tilthub"]["score"] = str(calcedScore)
 
     return data_summary
 
@@ -419,19 +418,19 @@ def tilthubScore(domain):
 # https://tosdr.org/de/service/230 Expert Mode
 def tosdr_score(domain):
     data_summary = {
-        'tosdr': {
-            'score': '0',
-            'name': '',
-            'link': ''
+        "tosdr": {
+            "score": "0",
+            "name": "",
+            "link": ""
         }}
 
-    with open('tosdr.json', encoding="utf8") as file:
+    with open("tosdr.json", encoding="utf8") as file:
         data = json.load(file)
-    for elem in data['parameters']['services']:
-        if domain in elem['urls']:
-            data_summary['tosdr']['score'] = map_tosdr_score(elem['rating'])
-            data_summary['tosdr']['name'] = elem['name']
-            data_summary['tosdr']['link'] = 'https://tosdr.org/de/service/' + str(elem['id'])
+    for elem in data["parameters"]["services"]:
+        if domain in elem["urls"]:
+            data_summary["tosdr"]["score"] = map_tosdr_score(elem["rating"])
+            data_summary["tosdr"]["name"] = elem["name"]
+            data_summary["tosdr"]["link"] = "https://tosdr.org/de/service/" + str(elem["id"])
 
     return data_summary
 
@@ -455,10 +454,10 @@ def map_tosdr_score(rating):
 
 def privacyspy_score(domain):
     data_summary = {
-        'privacyspy': {
-            'score': '0',
-            'name': '',
-            'link': ''
+        "privacyspy": {
+            "score": "0",
+            "name": "",
+            "link": ""
         }}
     if preferences["privacyspy"]:
         if "disablePrsspy" in preferences["privacyspy"]:
@@ -466,13 +465,13 @@ def privacyspy_score(domain):
     label_max = 3
     if expert_mode:
         label_max = 9
-    with open('privacyspy.json', encoding="utf8") as file:
+    with open("privacyspy.json", encoding="utf8") as file:
         data = json.load(file)
     for elem in data:
-        if domain in elem['hostnames']:
-            data_summary['privacyspy']['score'] = (10 - elem['score']) * label_max/10
-            data_summary['privacyspy']['name'] = elem['name']
-            data_summary['privacyspy']['link'] = 'https://privacyspy.org/product/' + str(elem['slug'])
+        if domain in elem["hostnames"]:
+            data_summary["privacyspy"]["score"] = (10 - elem["score"]) * label_max/10
+            data_summary["privacyspy"]["name"] = elem["name"]
+            data_summary["privacyspy"]["link"] = "https://privacyspy.org/product/" + str(elem["slug"])
 
     return data_summary
 
@@ -491,10 +490,10 @@ def phishstats_score(domain):
     db = database_playground.connect_phishcore_db()
     req = generic_sql_query(query, db)
     data_summary = {
-        'phishstats.db': {
-            'score': '0',
-            'category': 'no info',
-            'phishing': 'false'
+        "phishstats.db": {
+            "score": "0",
+            "category": "no info",
+            "phishing": "false"
         }}
     if not req:
         return data_summary
@@ -544,22 +543,22 @@ def phishstats_score(domain):
     if expert_mode:
         data_summary['phishstats.db']['score'] = eval(str(num))
     '''
-    data_summary['phishstats.db']['category'] = "Be aware of phishing"
+    data_summary["phishstats.db"]["category"] = "Be aware of phishing"
 
     if expert_mode:
-        data_summary['phishstats.db']['score'] = eval(str(9))
+        data_summary["phishstats.db"]["score"] = eval(str(9))
     else:
-        data_summary['phishstats.db']['score'] = eval(str(3))
+        data_summary["phishstats.db"]["score"] = eval(str(3))
 
     return data_summary
 
 
 def google_safe_browsing_score(domain):
     data_summary = {
-        'safe_browsing_api': {
-            'score': '0',
-            'threatType': '',
-            'platform': ''
+        "safe_browsing_api": {
+            "score": "0",
+            "threatType": "",
+            "platform": ""
         }}
     if preferences["google_safeBrowsing"]:
         if "diableGoogle" in preferences["google_safeBrowsing"]:
@@ -587,19 +586,19 @@ def google_safe_browsing_score(domain):
     # print(response)
     if response:
         # print(response)
-        data_summary['safe_browsing_api.db']['score'] = 3
-        data_summary['safe_browsing_api.db']['threatType'] = response['matches'][0]['threatType']
-        data_summary['safe_browsing_api.db']['platform'] = response['matches'][0]['platformType']
+        data_summary["safe_browsing_api.db"]["score"] = '3'
+        data_summary["safe_browsing_api.db"]["threatType"] = response["matches"][0]["threatType"]
+        data_summary["safe_browsing_api.db"]["platform"] = response["matches"][0]["platformType"]
 
     return 0
 
 
 def web_risk_api_score(domain):
     data_summary = {
-        'safe_browsing_api': {
-            'score': '0',
-            'threatType': '',
-            'platform': '',
+        "safe_browsing_api": {
+            "score": "0",
+            "threatType": "",
+            "platform": "",
 
         }}
     if preferences["google_safeBrowsing"]:
@@ -610,8 +609,8 @@ def web_risk_api_score(domain):
     querystring = {"t": domain}
 
     headers = {
-        'x-rapidapi-key': config["RAPID_API_KEY"],
-        'x-rapidapi-host': "wot-web-risk-and-safe-browsing.p.rapidapi.com"
+        "x-rapidapi-key": config["RAPID_API_KEY"],
+        "x-rapidapi-host": "wot-web-risk-and-safe-browsing.p.rapidapi.com"
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
