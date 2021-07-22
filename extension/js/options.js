@@ -51,7 +51,7 @@ window.addEventListener("load", function(event) {
 
         const pages = PageService.getPages();
         pages.then((res)=>{
-            console.log(res);
+            //console.log(res);
             for (let i= 0;i<res.length;i++){
                 if(document.getElementById(res[i]["key"])){
                     document.getElementById(res[i]["key"]).click();

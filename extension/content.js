@@ -596,7 +596,7 @@ window.addEventListener("load", function (event) {
         let goodLabels = 0; //green or gold
         let unknownLabels = 0;
 
-        console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+        //console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
         for (let i = 0; i < values.length - 1; i++) {
             if (values[i] !== 'pages') {
@@ -639,7 +639,7 @@ window.addEventListener("load", function (event) {
             }
             document.getElementById('all_labels').innerHTML = listOfLabels;
         }
-        console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
+        //console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
     });
 
 

@@ -5,7 +5,7 @@ import json
 from pprint import pprint
 import ast
 
-preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
+preferences = {"whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [],
                            "phishstats": [],
                            "tosdr": [],
                            "Tilthub": []}
@@ -30,7 +30,7 @@ def generic_sql_query(query, db):
 
 def get_domain_by_url(url):
     if url.__contains__("www."):
-        url = url.replace('www.', '')
+        url = url.replace("www.", "")
     url = url.split("/")[0]
     url_split = url.split(".")
     if len(url_split) >= 3:
@@ -101,15 +101,13 @@ def backend_main(domain_list):
             if expert_mode:
                 label_max = 9
 
-            # TODO. ACTUALLY CALCUTALTE THE LABEL
             calced_label = calc_label(label_max,
                                       [whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
                                        privacyspy_score(domain),
                                        tosdr_score(domain),
                                        tilthubScore(domain)])  # , google_safe_browsing_score(domain)])
 
-            # TODO. CREATE JSON DATA SUMMARY (INFORMATION PACKAGE)
-            dictionary = {'label': calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), \
+            dictionary = {"label": calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), \
                          privacyspy_score(domain), tosdr_score(domain), tilthubScore(domain)  # , google_safe_browsing_score(domain)
 
             data_summary[domain] = dictionary

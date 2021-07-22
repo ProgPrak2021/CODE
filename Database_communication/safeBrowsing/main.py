@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datenbank.db'
 
 @app.route('/sendurls/', methods=['POST'])
 def receive_urls():
-    default_preferences = {"whotracksme": ['FacebookWTM', 'AmazonWTM'], "privacyspy": [], "google_safeBrowsing": [],
+    default_preferences = {"whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [],
                            "phishstats": [],
                            "tosdr": [],
                            "Tilthub": []}
@@ -49,9 +49,7 @@ def receive_urls():
 
     urls = input["urls"].split("https://")
     urls.pop(0)
-    ###
-    # full_urls = collect_full_urls(urls)
-    ###
+
     domains = []
     for url in urls:
         domains.append(get_domain_by_url(url))
@@ -64,19 +62,16 @@ def receive_urls():
     if(abs((y-x).days) >= 3):
 
         x = datetime.datetime.now()
-        solditems = requests.get('https://api.tosdr.org/all-services/v1/') 
+        solditems = requests.get("https://api.tosdr.org/all-services/v1/")
         data = solditems.json()
-        with open('tosdr.json', 'w') as f:
+        with open("tosdr.json", "w") as f:
             json.dump(data, f)
 
         
-        solditems = requests.get('https://privacyspy.org/api/v2/index.json') 
+        solditems = requests.get("https://privacyspy.org/api/v2/index.json")
         data = solditems.json()
-        with open('privacyspy.json', 'w') as f:
+        with open("privacyspy.json", "w") as f:
             json.dump(data, f)
-        
-
-    
 
     return jsonify(domains)
 
