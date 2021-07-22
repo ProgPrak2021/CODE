@@ -61,7 +61,7 @@ window.addEventListener("load", function(event) {
         });
     }
 
-    const PAGES_KEY = 'pages';
+    const PAGES_KEY = "pages";
 
     const toPromise = (callback) => {
         return new Promise((resolve, reject) => {
@@ -97,7 +97,7 @@ window.addEventListener("load", function(event) {
             //console.log(key)
             //var new_pages = pages.filter(page =>page["key"] === key);
             for (let i = 0;i<pages.length;i++){
-                if(pages[i]["key"]==key){
+                if(pages[i]["key"]===key){
                     const index = pages.indexOf(pages[i]);
                     pages.splice(index,1);
                     //console.log(pages);

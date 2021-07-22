@@ -62,7 +62,7 @@ const icons = [
     chrome.runtime.getURL('images/icons/twitter_icon.png')
 ];
 
-const PAGES_KEY = 'pages';
+const PAGES_KEY = "pages";
 
 const toPromise = (callback) => {
     return new Promise((resolve, reject) => {
@@ -127,20 +127,6 @@ class PageService {
     }
 }
 
-/*
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-    for (var key in changes) {
-        var storageChange = changes[key];
-        console.log('Storage key "%s" in namespace "%s" changed. ' +
-            'Old value was "%s", new value is "%s".',
-            key,
-            namespace,
-            storageChange.oldValue,
-            storageChange.newValue);
-    }
-});
-*/
-
 let result = $('.LC20lb').closest('div');
 let img = $('<img class="code-selector">');
 
@@ -178,40 +164,38 @@ function getPreferences() {
 
                     if (res[i]["key"].includes("WTM")) {
                         //console.log(res[i]["key"])
-                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.")
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.");
                     } else if (res[i]["key"].includes("Prsspy")) {
                         //console.log("jdjd")
-                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["privacyspy"].indexOf(res[i]["key"]) === -1 ? preferences["privacyspy"].push(res[i]["key"]) : console.log("Preference is set already.");
                     } else if (res[i]["key"].includes("Phish")) {
-                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["phishstats"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["phishstats"].indexOf(res[i]["key"]) === -1 ? preferences["phishstats"].push(res[i]["key"]) : console.log("Preference is set already.");
                     } else if (res[i]["key"].includes("Google")) {
-                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["google_safeBrowsing"].indexOf(res[i]["key"]) === -1 ? preferences["google_safeBrowsing"].push(res[i]["key"]) : console.log("Preference is set already.");
                     } else if (res[i]["key"].includes("Tosdr")) {
-                        preferences["tosdr"].indexOf(res[i]["key"]) === -1 ? preferences["tosdr"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["tosdr"].indexOf(res[i]["key"]) === -1 ? preferences["tosdr"].push(res[i]["key"]) : console.log("Preference is set already.");
                     } else if (res[i]["key"].includes("Tilthub")) {
-                        preferences["Tilthub"].indexOf(res[i]["key"]) === -1 ? preferences["Tilthub"].push(res[i]["key"]) : console.log("Preference is set already.")
+                        preferences["Tilthub"].indexOf(res[i]["key"]) === -1 ? preferences["Tilthub"].push(res[i]["key"]) : console.log("Preference is set already.");
                     } else if (res[i]["key"].includes("expert")) {
-                        expert = true
+                        expert = true;
                     } else if (res[i]["key"].includes("coin")) {
-                        coins_as_label = true
+                        coins_as_label = true;
                     } else if (res[i]["key"].includes("weight_https") && expert === true) {
-                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.")
+                        preferences["whotracksme"].indexOf(res[i]["key"]) === -1 ? preferences["whotracksme"].push(res[i]["key"]) : console.log(res[i]["key"] + " is set already.");
                     }
                 }
                 if (preferences !== undefined) {
                     if (!prefs_given) {
                         const d = {"no Preferences": "test"};
-                        resolve(d)
+                        resolve(d);
                     } else {
-                        resolve(preferences)
+                        resolve(preferences);
                     }
                 }
             });
         }
     )
-
 }
-
 
 function receivePrefs(datasource, preference) {
     if (preferences === undefined) {
@@ -518,7 +502,7 @@ function get_percentage(name, list) {
 
 function get_others_percentage(list) {
     let counter = 0;
-    let companies = ['Facebook', 'Amazon', 'Google', 'Kaspersky Lab', 'Wikimedia Foundation', 'Microsoft', 'BootstrapCDN', 'Adobe', 'Cloudflare', 'Twitter']
+    let companies = ["Facebook", "Amazon", "Google", "Kaspersky Lab", "Wikimedia Foundation", "Microsoft", "BootstrapCDN", "Adobe", "Cloudflare", "Twitter"]
     for (let i = 0; i < list.length; i++) {
         if (!companies.includes(list[i])) {
             counter += 1;
@@ -551,7 +535,7 @@ function getVisitedUrls(output) {
 }
 
 //############################ PRIVACY SUMMARY ####################################
-window.addEventListener("load", function(event) {
+window.addEventListener("load", function (event) {
     let labels_score = [
         [chrome.runtime.getURL('images/not_found_32.png')],
         [chrome.runtime.getURL('images/green_icon_32.png')],
@@ -643,8 +627,8 @@ window.addEventListener("load", function(event) {
 
         if (document.getElementById('all_labels')) {
             let listOfLabels = '';
-            for (let i = 0; i <= all_labels-1; i++) {
-                if (i%8 === 0){
+            for (let i = 0; i <= all_labels - 1; i++) {
+                if (i % 8 === 0) {
                     listOfLabels += '<br>';
                 }
                 if (keys[i] !== 'pages') {
@@ -689,105 +673,3 @@ window.addEventListener("load", function(event) {
         });
     }
 });
-/* code dumpster
--------------------------------------------------------------
-function findLabel(domain, label_index){
-  var div = findByDomain(domain);
-  if(div === null){ // should not happen as it means that the url was not found in website
-    return;
-  }
-  printLabel(div, label_index);
-}
-*/
-
-/*
-function printLabel(whereTo, img_index){
-  var divs = document.getElementsByClassName("yuRUbf");
-  var labels = ["https://simonk.s3.eu-central-1.amazonaws.com/images/icon_128_clear.png","https://simonk.s3.eu-central-1.amazonaws.com/images/yellow_icon_128.png","https://simonk.s3.eu-central-1.amazonaws.com/images/red_icon_128.png"]
-  var img = $('<img class="code-selector">');
-  img.attr('src', labels[img_index - 1]);
-  img.css('width', '25px')
-  img.css('float', 'left ')
-  img.css('margin-left', '-2.25em')
-  img.css('cursor', 'pointer')
-  img.css('margin-top', '0.5em')
-  for(div in divs){
-    img.attr('src', labels[getLabel(div) - 1]);
-    img.appendTo(div)
-  }
-  //img.appendTo(whereTo);
-}
-
-FUCKING RECURSIVE SHIT
-
-function recursiveScan(obj, index) {
-  console.log("iteration")
-  var res
-  switch (index) {
-    case 1:
-      var anchor = "tracker"
-      break;
-    case 2:
-      var anchor = "label"
-      break;
-    case 3:
-      var anchor = "facebook"
-      break;
-  }
-
-  if (typeof (anchor) !== 'undefined') {
-
-    Object.keys(obj).forEach(key => {
-
-      if (key == anchor) {
-        console.log("current anchor: " + anchor + " and value: " + obj[key] + " typeof " + typeof (obj[key]))
-        res = obj[key]
-      }
-
-      if (typeof obj[key] === 'object') {
-        return recursiveScan(obj[key], index)
-      }
-
-    })
-  }
-  //if(typeof(res) === 'undefined' || null)
-  //return ""
-
-  console.log("res " + res + " typeof " + typeof (res))
-  return res
-}
-
-function nestedLoop(obj) {
-  var res
-  function recurse(obj, current) {
-    for (const key in obj) {
-      let value = obj[key];
-      if (value != undefined) {
-        if (value && typeof value === 'object') {
-          recurse(value, key);
-        } else {
-          if (value == "tracker")
-            res = value;
-          console.log(value)
-          if (value == "label")
-            res = value;
-        }
-      }
-    }
-  }
-  recurse(obj);
-  return res;
-}
-
-function getLabel(div, output) {
-  var url = JSON.stringify(div.children[0].href)
-  var domain = "";
-  for (var key of Object.keys(output)) {
-    if (url.includes(key)) {
-      domain = key;
-    }
-  }
-  var index = output[domain];
-  return index //1...2....3
-}
-*/
