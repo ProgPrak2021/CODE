@@ -48,18 +48,18 @@ const coins_default = [
 ];
 
 const icons = [
-    chrome.runtime.getURL('images/icons/google_icon.png'),
-    chrome.runtime.getURL('images/icons/oracle_icon.png'),
-    chrome.runtime.getURL('images/icons/spy_icon.png'),
-    chrome.runtime.getURL('images/icons/facebook_icon.png'),
-    chrome.runtime.getURL('images/icons/amazon_icon.png'),
-    chrome.runtime.getURL('images/icons/kaspersky_lab_icon.png'),
-    chrome.runtime.getURL('images/icons/wikimedia_icon.png'),
-    chrome.runtime.getURL('images/icons/bootstrap_cdn_icon.png'),
-    chrome.runtime.getURL('images/icons/microsoft_icon.png'),
-    chrome.runtime.getURL('images/icons/cloudflare_icon.png'),
-    chrome.runtime.getURL('images/icons/adobe_icon.png'),
-    chrome.runtime.getURL('images/icons/twitter_icon.png')
+    chrome.runtime.getURL('images/icons/firmenlogos/google_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/oracle_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/spy_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/facebook_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/amazon_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/kaspersky_lab_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/wikimedia_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/bootstrap_cdn_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/microsoft_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/cloudflare_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/adobe_icon.jpeg'),
+    chrome.runtime.getURL('images/icons/firmenlogos/twitter_icon.jpeg')
 ];
 
 const PAGES_KEY = "pages";
