@@ -1,20 +1,25 @@
+import time
+
 import requests
 from flask import jsonify, config
 import database_playground
 import json
 from pprint import pprint
 import ast
+import threading
 
 preferences = {"whotracksme": ["FacebookWTM", "AmazonWTM"], "privacyspy": [], "google_safeBrowsing": [],
-                           "phishstats": [],
-                           "tosdr": [],
-                           "Tilthub": []}
+               "phishstats": [],
+               "tosdr": [],
+               "Tilthub": []}
 
 expert_mode = False
+
 
 def change_prefs(prefs):
     global preferences
     preferences = prefs
+
 
 def change_expert(expert):
     global expert_mode
@@ -39,15 +44,15 @@ def get_domain_by_url(url):
     return url
 
 
-def build_user_linking_string(unwanted_categroies):
-    unwanted_categroies.sort()
+def build_user_linking_string(unwanted_categories):
+    unwanted_categories.sort()
     db_string = ""
-    for category in unwanted_categroies:
+    for category in unwanted_categories:
         db_string += str(category)
     return db_string
 
 
-def dict_to_String(dict):
+def dict_to_string(dict):
     end_string = ""
     for key in dict:
         if dict[key]:
@@ -60,16 +65,16 @@ def dict_to_String(dict):
 ##################################################################################################################################
 
 def backend_main(domain_list):
+    start = time.time()
     unwanted_categories = []  # just temporary
     # global config
     # config = dotenv_values(".env")  # take environment variables from .env.
-    domain_dict = {}
-    db = database_playground.connect_db_labels()
+    # domain_dict = {}
+    # db = database_playground.connect_db_labels()
     data_summary = {}
-    db_string = build_user_linking_string(unwanted_categories)
+    # db_string = build_user_linking_string(unwanted_categories)
 
     newlabelsdb = database_playground.connect_new_labels()
-
 
     for domain in domain_list:
 
@@ -84,13 +89,13 @@ def backend_main(domain_list):
             dontAdd = True
             for i in range(cnt):
                 col = columns[i]
-        
+
                 query = f"SELECT {col[0]} FROM dict where domain = '{domain}';"
-        
+
                 partialDict = generic_sql_query(query, newlabelsdb)
                 strDict = (partialDict[0])[0]
                 newDict = json.loads(strDict)
-                if dontAdd: # removes first elem of dict
+                if dontAdd:  # removes first elem of dict
                     dontAdd = False
                     continue
                 data_summary[domain].append(newDict)
@@ -101,30 +106,35 @@ def backend_main(domain_list):
             if expert_mode:
                 label_max = 9
 
-            calced_label = calc_label(label_max,
-                                      [whotracksme_score(domain, unwanted_categories), phishstats_score(domain),
-                                       privacyspy_score(domain),
-                                       tosdr_score(domain),
-                                       tilthubScore(domain)])  # , google_safe_browsing_score(domain)])
+            whotracksme = whotracksme_score(domain, unwanted_categories)
+            phishstats = phishstats_score(domain)
+            privacyspy = privacyspy_score(domain)
+            tosdr = tosdr_score(domain)
+            tilt = tilthubScore(domain)
 
-            dictionary = {"label": calced_label}, whotracksme_score(domain, unwanted_categories), phishstats_score(domain), \
-                         privacyspy_score(domain), tosdr_score(domain), tilthubScore(domain)  # , google_safe_browsing_score(domain)
+            calced_label = calc_label(label_max, [whotracksme, phishstats, privacyspy, tosdr,
+                                                  tilt])  # google_safe_browsing_score(domain)])
+
+            dictionary = {
+                             "label": calced_label}, whotracksme, phishstats, privacyspy, tosdr, tilt  # google_safe_browsing_score(domain)
 
             data_summary[domain] = dictionary
 
             if not expert_mode:
-                saveCalcLabels(dictionary, domain, calced_label)
+                saveCalcLabels(dictionary, domain)
 
             # domain_dict[domain] = data_summary[domain][0]["whotracksme.db"]["label"]
             # domain_dict[domain] = score        # + phishstats_score(domain)
-            # if you have configured api keys from google and rapid and have stored the keys in textfile called .env you can use the line below and the first two lines in this function. If you not you should comment it to avoid errors
+            # if you have configured api keys from google and rapid and have stored the keys in textfile
+            # called .env you can use the line below and the first two lines in this function.
+            # If you not you should comment it to avoid errors
             # domain_dict[domain] += int(phishstats_score(domain)["phishstats.db"]["label"])
             # domain_dict[domain] += google_safe_browsing_score(domain) + web_risk_api_score(domain)
 
     # pprint(data_summary)
-
+    end = time.time()
+    print(end - start)
     return json.dumps(data_summary)  # json.dumps(domain_dict)
-
 
 
 ##################################################################################################################################
@@ -151,7 +161,7 @@ def calc_label(label_max, db_array):
     return res
 
 
-def saveCalcLabels(data_summary, domain, label):
+def saveCalcLabels(data_summary, domain):
     db = database_playground.connect_new_labels()
 
     lenList = data_summary.__len__()
@@ -357,7 +367,7 @@ def tilthubScore(domain):
         }}
 
     length = len(tiltDict)
-    #listOfIndices = []
+    # listOfIndices = []
     if expert_mode:
         adder = 1
     else:
@@ -371,11 +381,11 @@ def tilthubScore(domain):
 
             data_summary["tilthub"]["Right to Complain"] = str(tiltInfos["rightToComplain"]["available"])
             if not tiltInfos["rightToComplain"]["available"]:
-                calcedScore+=adder
+                calcedScore += adder
 
             data_summary["tilthub"]["Data Protection Officer"] = str(tiltInfos["dataProtectionOfficer"]["name"])
             if tiltInfos["dataProtectionOfficer"]["name"] is None:
-                calcedScore+=adder
+                calcedScore += adder
 
             data_summary["tilthub"]["Third Country Transfers"] = str(len(tiltInfos["thirdCountryTransfers"]))
             if not len(tiltInfos["thirdCountryTransfers"]) > 1:
@@ -393,7 +403,8 @@ def tilthubScore(domain):
             if not tiltInfos["rightToInformation"]["available"]:
                 calcedScore += adder
 
-            data_summary["tilthub"]["Right to Rectification or Deletion"] = str(tiltInfos["rightToRectificationOrDeletion"]["available"])
+            data_summary["tilthub"]["Right to Rectification or Deletion"] = str(
+                tiltInfos["rightToRectificationOrDeletion"]["available"])
             if not tiltInfos["rightToRectificationOrDeletion"]["available"]:
                 calcedScore += adder
 
@@ -440,11 +451,11 @@ def map_tosdr_score(rating):
     if expert_mode:
         label_max = 9
     switcher = {
-        'A': 1 * label_max/5,  # +0.1 as it is not supposed to be 0 elem['score']) * label_max/10
-        'B': 2 * label_max/5,
-        'C': 3 * label_max/5,
-        'D': 4 * label_max/5,
-        'E': 5 * label_max/5
+        'A': 1 * label_max / 5,  # +0.1 as it is not supposed to be 0 elem['score']) * label_max/10
+        'B': 2 * label_max / 5,
+        'C': 3 * label_max / 5,
+        'D': 4 * label_max / 5,
+        'E': 5 * label_max / 5
     }
     if switcher.get(rating, "0") != "0":
         return (switcher.get(rating, "0") / 5) * 3
@@ -469,7 +480,7 @@ def privacyspy_score(domain):
         data = json.load(file)
     for elem in data:
         if domain in elem["hostnames"]:
-            data_summary["privacyspy"]["score"] = (10 - elem["score"]) * label_max/10
+            data_summary["privacyspy"]["score"] = (10 - elem["score"]) * label_max / 10
             data_summary["privacyspy"]["name"] = elem["name"]
             data_summary["privacyspy"]["link"] = "https://privacyspy.org/product/" + str(elem["slug"])
 
@@ -485,7 +496,6 @@ def api_call(request, payload, body, type):
 
 
 def phishstats_score(domain):
-
     query = f"SELECT score, url from phish_score where URL like '%{domain}%'"
     db = database_playground.connect_phishcore_db()
     req = generic_sql_query(query, db)
@@ -520,9 +530,9 @@ def phishstats_score(domain):
     num = float(score.replace("\"", ""))
     '''
     If there is a result in the database the domain is definetely sus. Therefore, we ignore the label and return the wort label right away.
-    
-    
-    
+
+
+
         if num <= 2:
         data_summary['phishstats.db']['score'] = eval(str(2))
         data_summary['phishstats.db']['category'] = "possibly phishing"
