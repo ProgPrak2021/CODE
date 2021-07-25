@@ -170,5 +170,12 @@ This can seem rather unfair towards the domains as there is no way they can rece
 
 ### Chances & Concerns (TO DO)
 
-## Contribute Ali
+## Contribute 
+If you have an idea for CODE, think you found an error, or just want to bring something up with the team, feel free to create an issue in our GitHub repository. Creating issues in the GitHub repository is the best way to share feedback and comments.
+
+You can also contact us at the contact formular on our webpage https://dawesys-demo.webflow.io/#contact-section.
+
+If your issue is a suggestion—such as to fix an error—consider making the change yourself and submitting your modifications as a pull request. If you're not comfortable implementing the change yourself or don't know how, though, feel free to just create an issue.
+
+Please bear in mind that the project is still in the early phase and that most data is subject to important changes.
 
