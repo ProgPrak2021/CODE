@@ -1,6 +1,6 @@
 {
   "name": "cookie-decliner",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "description": "Get a CODE - privacy label next to your Google Search Results.",
   "background": "views/background.html",
