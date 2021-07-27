@@ -39,6 +39,16 @@ window.addEventListener("load", function(event) {
                 PageService.savePage("coinLabel", "change");
             });
             document.getElementById("expertMode").addEventListener('click', function () {
+                chrome.storage.local.get(function (data) {
+                    let domains = [];
+                    for (let i = 0; i < Object.keys(data).length; i++){
+                        if (Object.keys(data)[i] !== 'pages') {
+                            domains.push(Object.keys(data)[i]);
+                        }
+                    }
+                    chrome.storage.local.remove(domains); // remove everything but the settings
+                    console.log("removed");
+                });
                 PageService.savePage("expertMode", "change");
             });
             document.getElementById("weight_https").addEventListener('click', function () {
