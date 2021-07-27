@@ -542,6 +542,7 @@ window.addEventListener("load", function (event) {
         [chrome.runtime.getURL('images/green_icon_32.png')],
         [chrome.runtime.getURL('images/yellow_icon_32.png')],
         [chrome.runtime.getURL('images/red_icon_32.png')]
+
     ];
 
     if (document.getElementById("submitButton")) {
@@ -597,17 +598,17 @@ window.addEventListener("load", function (event) {
         let goodLabels = 0; //green or gold
         let unknownLabels = 0;
 
-        console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
+        //console.log(keys + ': ' + values); //UNCOMMENT TO SEE WHAT LABELS ARE SAVED
 
         for (let i = 0; i < values.length; i++) {
-            if (values[i] !== 'pages') {
+            if (keys[i] !== 'pages') {
                 all_labels++;
-            }
-            if (values[i] === 1) {
-                goodLabels++;
-            }
-            if (values[i] === 0) {
-                unknownLabels++;
+                if (values[i] === 1) {
+                    goodLabels++;
+                }
+                if (values[i] === 0) {
+                    unknownLabels++;
+                }
             }
         }
         let score = '';
@@ -625,22 +626,31 @@ window.addEventListener("load", function (event) {
                 privacyScoreInfo.innerHTML = getPrivacyInfo(score);
             }
         }
+        let img = "";
 
-        if (document.getElementById('all_labels')) {
+         if (document.getElementById('all_labels')) {
+            let map = [0,1,2,2,3,4,4,5,6]; // for label mapping
+            //console.log(map);
             let listOfLabels = '';
-            for (let i = 0; i <= all_labels - 1; i++) {
+            for (let i = 0; i <= all_labels; i++) {
                 if (i % 8 === 0) {
                     listOfLabels += '<br>';
                 }
                 if (keys[i] !== 'pages') {
-                    let img = labels_score[values[i]];
-                    //listOfLabels += keys[i] + ': ' + "&emsp;" + "<img src= " + img + "><br>";
+                    if (values[i] === 0) { //not found
+                        img = labels_score[0];
+                    } else if (expert) { //expert labels -> normal labels mapping
+                        let m = values[i] - map[values[i]-1];
+                        img = labels_score[m]; 
+                    } else { // normal mode -> no mapping needed
+                        img = labels_score[values[i]];
+                    }
                     listOfLabels += "<img src= " + img + ">";
                 }
             }
             document.getElementById('all_labels').innerHTML = listOfLabels;
         }
-        console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
+        //console.log(goodLabels + "/ (" + all_labels + " - " + unknownLabels + ")"); //check result
     });
 
 
@@ -667,7 +677,13 @@ window.addEventListener("load", function (event) {
                 if (Object.values(data).length === 0) {
                     alert("Your storage is already empty");
                 } else {
-                    chrome.storage.local.clear();
+                    let domains = [];
+                    for (let i = 0; i < Object.keys(data).length; i++){
+                        if (Object.keys(data)[i] !== 'pages') {
+                            domains.push(Object.keys(data)[i]);
+                        }
+                    }
+                    chrome.storage.local.remove(domains); // remove everything but the settings
                     location.reload();
                 }
             });
