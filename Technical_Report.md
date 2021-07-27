@@ -151,16 +151,18 @@ Website: https://github.com/Transparency-Information-Language/tilt-hub
 For each url we ask every datasource for information regarding this specific domain. Using these information we calculate a custom score from each datasource. In the next step we will simply calculate the average score of all datasource scores and this way have calculated a custom score for each domain. Of course, we do not include datasources that do not offer information on a domain. 
 Following we will explain the method to calculate a score for each domain: 
 ### WhoTracksMe
-gh
+The WhotracksMe database offers a great variety of data. We receive information about the trackers a domain uses, where the trackers are from and what kind of trackers they are, how the trackers communicate with their backend (https or http) and several other information. As we wanted to keep our label calculation as simple as possible we decided to only take the number of trackers into account. However, every user is able to enable more features in the options page and, therefore, can influence the label calculation theirself.
 ### PrivacySpy
-
+ Privacyspy scores a label for some domains as well. Therefore, we simply request their label and map it to our label system. 
 ### Phishstats
+Phishstats is similar to Privacyspy so we map their label to our system as well. However, we decided that it should not be possible to reach our best label if a domain is present in the phishstats database. This is because just existing in the Phishstats database is very suspicious.
 
 ### Google SafeBrowsing
 As the SafeBrowsing API by Google only stores unsafe domains that are mostly worse than most of the categories we concentrate on when asking the other datasources for information we decided that being in the list must have a big impact on the score. Therefore, our score calculation for this datasource is one of the simplest: If there is any information provided for regarding a domain, we give it the worst score, e.g. depending on the mode it is either 3 or 9. If, however, there is no information we return a score of 0(meaning not found). 
 This can seem rather unfair towards the domains as there is no way they can receive a good label in this function. However, not existing in this API is not something that should be rewarded as it is expected.
 
 ### Tosdr
+Just as Privacyspy this databse offers a label that we can map tou label system.
 
 ### Tilt
 
@@ -170,12 +172,5 @@ This can seem rather unfair towards the domains as there is no way they can rece
 
 ### Chances & Concerns (TO DO)
 
-## Contribute 
-If you have an idea for CODE, think you found an error, or just want to bring something up with the team, feel free to create an issue in our GitHub repository. Creating issues in the GitHub repository is the best way to share feedback and comments.
-
-You can also contact us at the contact formular on our webpage https://dawesys-demo.webflow.io/#contact-section.
-
-If your issue is a suggestion—such as to fix an error—consider making the change yourself and submitting your modifications as a pull request. If you're not comfortable implementing the change yourself or don't know how, though, feel free to just create an issue.
-
-Please bear in mind that the project is still in the early phase and that most data is subject to important changes.
+## Contribute Ali
 
