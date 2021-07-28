@@ -31,12 +31,16 @@ In order to structure all functionalities you can divide program into five diffe
 
 ### Our Backend as API
 When implementing the Browser extension it was important to us to strictly divide the frontend part from the logical part meaning the actual calculation of the labels. Our goal was to build an independent backend that does not care where the request is coming from. This way we can also offer to use our backend as an API. A detailed documentation of our API can be found [here](https://app.swaggerhub.com/apis/WebProgramming/ApiDocumentation/1.0.0). 
-### Extension (TO DO)
+
+### Extension 
+The real quintessence of our extension is to display transparency in a way, that might make you raise your eyebrows.
+You can customize the information you want displayed or the representation of our labels. Purely based to provide you with that piece of information that interests you the most, like which website is using a Facebook tracker for instance.  
 We offer a free, open-source browser extension that displays the CODE rating of the sites of your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
 
 The extension is available for Chrome. Its source code is open source.
 
 The source code is available at <--->.
+
 ### Algorithm 
 As an API and plugin that strives to promote transparency on the internet, it is only natural that it is our effort to be as transparent as possible ourselves. The way we calculate our labels is solely based on the information we are getting from our sources, standardizing them and simply taking the average score of said information. Luckily for us, most of our sources already return a score, which easily can be found on the respective website. Our only source of information, that needed some adjustment is the WhoTracksMe database.  With said database, we are taking into consideration what amount of tracker a certain website uses, lay some further emphasis on a few speficic ones of those trackers, certain categories those trackers a assigned to and so on. But we will get into more detail on that in later paragraphs.  We generally try to keep our on constributions as minimalist as possible, to ensure, like said before, that we keep transparency as a high priority. 
 
@@ -176,5 +180,4 @@ Finally we want to talk about possible chances and concerns. The quintessence of
 The chances that present themselves for our API are thanks to our backend structure quite extensive. To provide more information and to further protect from malicious websites, simply more sources need to be implemented. Aspects like for instance browser fingerprinting, especially when looking a new techlonogies like Googles FloC programm, are yet to be implemented, but provide an opportunity to further protect your personal data. Generally speaking does our API represent a starting point, to make transparency on the web more tangible. 
 However is our API far from perfect. Concerns that followed were for instance the question of being relevant and up to date. Working with static databases rather than a dynamic cloud bases approach, we need to constantly look for updates and manually implement those if available. This demand for high maintenance certainly is our biggest concern, but generally speaking, our approach with static assets is to be tackled in future development.
 
-## Contribute Ali
 
