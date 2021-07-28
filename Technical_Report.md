@@ -171,6 +171,9 @@ Just as Privacyspy this databse offers a label that we can map tou label system.
 ![image](https://lisztos.s3.amazonaws.com/images/code_overview.png)
 
 ### Chances & Concerns (TO DO)
+Finally we want to talk about possible chances and concerns. The quintessence of our effort and this API is to provide more tranparency and to give and insight into that, what is denied to the everyday user. We really hope, that through our doing, our Users get a better feel for what happens in the background while their surfing the web, a better understanding for who is watching and secretly gathering information. 
+The chances that present themselves for our API are thanks to our backend structure quite extensive. To provide more information and to further protect from malicious websites, simply more sources need to be implemented. Aspects like for instance browser fingerprinting, especially when looking a new techlonogies like Googles FloC programm, are yet to be implemented, but provide an opportunity to further protect your personal data. Generally speaking does our API represent a starting point, to make transparency on the web more tangible. 
+However is our API far from perfect. Concerns that followed were for instance the question of being relevant and up to date. Working with static databases rather than a dynamic cloud bases approach, we need to constantly look for updates and manually implement those if available. This demand for high maintenance certainly is our biggest concern, but generally speaking, our approach with static assets is to be tackled in future development.
 
 ## Contribute Ali
 
