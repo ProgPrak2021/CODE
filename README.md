@@ -20,12 +20,12 @@ Clone this repository:
 
 You can either run the code locally or on the cloud server. Comment out the not needed lines:
 ```javascript
-251     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Google Cloud
-252     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
+251 //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Google Cloud
+252 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
 ```
 ```javascript
-587     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Google Cloud
-588     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
+587 //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Google Cloud
+588 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
 ```
 If you decide to run the project locally, run the `main.py`file.
 
