@@ -1,14 +1,18 @@
 {
   "name": "cookie-decliner",
-  "version": "1.1",
+  "version": "1.0",
   "manifest_version": 2,
-  "description": "Get a CODE - privacy label next to your Google Search Results.",
+  "description": "Privacy label for your Google Search.",
   "background": "views/background.html",
 
   "web_accessible_resources": [
     "images/*.png",
     "images/*.jpeg",
     "views/options.html"
+  ],
+  
+  "permissions": [
+    "storage"
   ],
 
   "content_scripts": [
@@ -33,11 +37,6 @@
   },
 
   "options_page" : "/views/options.html",
-
-  "permissions": [
-    "tabs",
-    "storage"
-  ],
 
   "icons": {
     "16": "/images/green_icon_16.png",
