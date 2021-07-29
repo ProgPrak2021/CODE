@@ -14,6 +14,26 @@ The directory structure is as follows:
 ### "gcloud" branch
 * backend running on the [Google Cloud Server](https://code-dawesys.appspot.com)
 
+## Development setup
+Clone this repository:
+```git clone https://github.com/DonSimerino/CODE-DaWeSys.git```
+
+You can either run the code locally or on the cloud server. Comment out the not needed lines:
+```
+251     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //To run on Google Cloud
+252     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //To run locally
+```
+```
+587     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //To run on Google Cloud
+588     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //To run locally
+```
+If you decide to run the project locally, run the `main.py`file.
+
+You can add the extension manually to your Chrome browser:
+1. Open Chrome browser, navigate to `chrome://extensions/` and enable `Developer mode`
+2. Go to `Load upacked` and select the `extension` directory
+3. You a ready to go: Google something and check out the labels 🟢🟡🔴
+
 ## The MIT License (MIT)
 Copyright © 2021
 
