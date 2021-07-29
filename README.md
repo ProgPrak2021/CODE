@@ -18,7 +18,7 @@ The directory structure is as follows:
 Clone this repository:
 ```git clone https://github.com/DonSimerino/CODE-DaWeSys.git```
 
-You can either run the code locally or on the cloud server. Comment out the not needed lines:
+You can either run the code locally or on the cloud server. Comment out the not needed lines in `content.js`:
 ```javascript
 251 //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //Google Cloud
 252 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
