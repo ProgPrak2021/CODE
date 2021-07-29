@@ -1,21 +1,20 @@
 # CODE - one Plug-In for more Privacy
 ### Technical Report | DaWeSys | Summer'21
 
-![Title_image](https://images.unsplash.com/photo-1498049860654-af1a5c566876?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2550&q=80)
+
+<img align="right" width="600" height="375" src="img/labels_in_action.png">
 
 ## About CODE
 CODE is a browser extension for the Chrome-Browser. It allows users to get a quick overview about the information website track before they even open the website. With small labels next to the search results in Google they can easily decide whether to open a website or not.
-
 Most people don't have the patience to read privacy policies. But privacy is important, and we shouldn't just trust that products are treating our data right. CODE uses a consistent rubric to grade privacy.
 
-Most privacy policies are convoluted—sometimes even intentionally so. They can be difficult to read, and even more difficult to comprehend. Rarely do they provide actionable insight into protecting one's data.
+Most privacy policies are convoluted — sometimes even intentionally so. They can be difficult to read, and even more difficult to comprehend. Rarely do they provide actionable insight into protecting one's data.
 
 Making matters worse, companies are often only held accountable for their privacy practices when a data breach occurs or when they experience fallout from mishandling user data (think Facebook's Cambridge Analytica scandal, for example).
-
 If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. Because privacy matters.
 
 ## Functionality
-CODE makes privacy policies more convenient and accessible for those who simply don't have the time—or patience—to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
+CODE makes privacy policies more convenient and accessible for those who simply don't have the time —or patience— to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
 
 Let's summarize the core functionality features of the extension.
 Simply said the browser extension scans all results of a google search result and prints a label next to it. However, while that is totally true there is actually more functionalities implemented in the extension. 
@@ -35,37 +34,40 @@ You can customize the information you want displayed or the representation of ou
 We offer a free, open-source browser extension that displays the CODE rating of the sites of your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
 
 The extension is available for [Chrome](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde/related?hl=de&authuser=0).
-Its source code is open source.
-The source code is available at <--->.
 
 ### Algorithm 
-As an API and plugin that strives to promote transparency on the internet, it is only natural that it is our effort to be as transparent as possible ourselves. The way we calculate our labels is solely based on the information we are getting from our sources, standardizing them and simply taking the average score of said information. Luckily for us, most of our sources already return a score, which easily can be found on the respective website. Our only source of information, that needed some adjustment is the WhoTracksMe database.  With said database, we are taking into consideration what amount of tracker a certain website uses, lay some further emphasis on a few speficic ones of those trackers, certain categories those trackers a assigned to and so on. But we will get into more detail on that in later paragraphs.  We generally try to keep our on constributions as minimalist as possible, to ensure, like said before, that we keep transparency as a high priority. 
+
+As an API and plugin that strives to promote transparency on the internet, it is only natural that it is our effort to be as transparent as possible ourselves. The way we calculate our labels is solely based on the information we are getting from our sources, standardizing them and simply taking the average score of said information. Luckily for us, most of our sources already return a score, which easily can be found on the respective website. Our only source of information, that needed some adjustment is the WhoTracksMe database.  With said database, we are taking into consideration what amount of tracker a certain website uses, lay some further emphasis on a few speficic ones of those trackers, certain categories those trackers a assigned to and so on. But we will get into more detail on that in later paragraphs.  We generally try to keep our on constributions as minimal as possible, to ensure, like said before, that we keep transparency as a high priority. 
 
 ### Expert Mode 
-CODE was designed to simplify the transparency experience, so user can drive real results in terms of transparency and save time setting up privacy. 
+
+<img align="right" width="325" height="325" src="img/expert_mode.png">
+
+CODE was designed to simplify the transparency experience, so users can drive real results in terms of transparency and save time setting up privacy. 
 The Expert Mode offers the full range of CODE features. It gives the user more control over their label calculation. We recommend it for advanced user with special preferences.
 With the Expert Mode the user can influence the label calculation by giving higher weight to special criteria, for example:
 
-- Look For Facebook Tracker
-- Look For Amazon Tracker
-- Weight Number Of Trackers
-- Disable WhoTrackMe Database
-- Weight The Use Of HTTPS
-
-- Disable Google API
-- Disable privacyspy
-- Disable Web Risk API
-- Disable phishstats
-
+WhoTracksMe | Other
+------------ | -------------
+Look For Facebook Tracker | Disable PrivacySpy
+Look For Amazon Tracker | Disable Web Risk API
+Weight Number Of Trackers | Disable PhishStats
+Disable WhoTrackMe Database | 
+Weight The Use Of HTTPS | 
 
 If you desire more advanced features in CODE, here’s how you can switch to Expert Mode.
 
 1.	Navigate to the Options page
-2.	Click on the ‘ Settings ’ button
-3.	Switch ‘ Enable Expert Mode ’ to ON 
-4.	 ( If desired ) switch ‘ Change Labels To Coins ’ to ON 
+2.	Click on the `Settings` button
+3.	Switch `Enable Expert Mode` to ON 
+4.	( If desired ) switch `Change Labels To Coins` to ON 
+
+
 ## Design
 ### Labels
+
+<img align="left" width="100" height="225" src="img/labels.png">
+
 CODE-Labels are designed to give users privacy information about websites real quick. With a **simple comprehensible design** users easily understand its meaning.
 
 There are three labels: **green, yellow and red**. User will see the green one if the website is considered highly privacy sensitive and does not track their personal information. The yellow one appears, when there are some concerns about the website, which are not considered totally trustworthy. Lastly, there are red labels for websites, which are considered as not privacy sensitive or bare a risk for the user e.g. malicious software.
@@ -73,11 +75,13 @@ There are three labels: **green, yellow and red**. User will see the green one i
 No matter which label appears, users always can **hover over the label** to see more information about it. Users will find the amount of trackers found on the page as well as some icons for the popular ones like the ones by Google or Facebook. This way users are more likely to understand how the label "got it color".
 
 ### Privacy Summary (Homepage / New Tab)
-There are some design features on the Homepage which are worth mentioning. The Homepage appears on the New Tab in the browser and contains three main fields. The first and most present one is a number - **privacy score**. The privacy score summarizes the labels of the website visited by the user. It counts the green and golden labels among the visited websites and relates this number to labels from all visited labels. This way user can easily see how thier surfing behaviour was. For example: Assuming user sees a 75%. It means, that over all visited websites 75 percent had a green label. That's pretty awesome! Users can also reset the score, if wanted.
 
-There are two more fields: an overview about recently calculated labels and a form to create a new label for a website. Both are used to **increase user interaction** with the extension. With creating new labels, users can easily calculate labels for websites they are most interested in. And with the history of recently created labels users can track the dynamic nature of the extension and easily have a brief look at the results.
+<img align="left" width="475" height="375" src="img/newtab.png">
 
+There are some design features on the Homepage which are worth mentioning. The Homepage appears on the New Tab in the browser and contains three main fields. The first and most present one is a number - privacy score. The privacy score summarizes the labels of the website visited by the user. It counts the green and golden labels among the visited websites and relates this number to labels from all visited labels. There are two more fields: an overview about recently calculated labels and a form to look up a label for a website. 
 Since the Homepage summarizes the core functionality of the extension and informs users about it, it is simply called: **Privacy Summary**.
+
+
 
 ## Technical Details in a Nutshell
 ### Data sources
