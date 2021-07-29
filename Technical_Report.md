@@ -14,9 +14,6 @@ Making matters worse, companies are often only held accountable for their privac
 
 If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. Because privacy matters.
 
-
-
-
 ## Functionality
 CODE makes privacy policies more convenient and accessible for those who simply don't have the time—or patience—to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
 
@@ -37,8 +34,8 @@ The real quintessence of our extension is to display transparency in a way, that
 You can customize the information you want displayed or the representation of our labels. Purely based to provide you with that piece of information that interests you the most, like which website is using a Facebook tracker for instance.  
 We offer a free, open-source browser extension that displays the CODE rating of the sites of your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
 
-The extension is available for Chrome. Its source code is open source.
-
+The extension is available for [Chrome](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde/related?hl=de&authuser=0).
+Its source code is open source.
 The source code is available at <--->.
 
 ### Algorithm 
