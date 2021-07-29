@@ -19,11 +19,11 @@ Clone this repository:
 ```git clone https://github.com/DonSimerino/CODE-DaWeSys.git```
 
 You can either run the code locally or on the cloud server. Comment out the not needed lines:
-```
+```javascript
 251     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //To run on Google Cloud
 252     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //To run locally
 ```
-```
+```javascript
 587     //xhttp.open("POST", "https://code-dawesys.appspot.com/sendurls/", true); //To run on Google Cloud
 588     xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //To run locally
 ```
