@@ -2,8 +2,6 @@
 Extension for the Chrome browser which allows users to "see behind the links" on the Google Search results page.
 You're welcome to check out our [technical report](Technical_Report.md) for detailed information about the project.
 ![title](img/labels_in_action.png)
-## Installation
-Extension can be installed from the [Chrome Web Store](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde?hl=de&authuser=0).
 
 ## Project structure
 The directory structure is as follows:
@@ -45,7 +43,8 @@ You'll find several databases under [`Database_comminication/safeBrowsing/`](htt
 * `whotracksme.db`: ...
 
 ## Install extension
-You can add the extension manually to your Chrome browser:
+You can add the extension manually to your Chrome browser or download it directly from the [Chrome Web Store](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde?hl=de&authuser=0).
+To add the extension manually:
 1. Open Chrome browser, navigate to `chrome://extensions/` and enable `Developer mode`
 2. Go to `Load unpacked` and select the `extension` directory
 3. You a ready to go: Google something and check out the labels 🟢🟡🔴
