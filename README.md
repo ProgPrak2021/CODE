@@ -29,9 +29,25 @@ You can either run the code locally or on the cloud server. Comment out the not 
 ```
 If you decide to run the project locally, run the `main.py`file.
 
+## App `main.py` (TO DO)
+...
+
+## Label calculation `interpret_whotracksme.py` (TO DO)
+...
+
+## Databases (TO DO)
+You'll find several databases under `Database_comminication/safeBrowsing/`:
+* `datenbank.db`: ...
+* `labels.db`: ...
+* `newlabels.db`: ...
+* `phishstats.db`: ...
+* `top500webpages.db`: ...
+* `whotracksme.db`: ...
+
+## Install extension
 You can add the extension manually to your Chrome browser:
 1. Open Chrome browser, navigate to `chrome://extensions/` and enable `Developer mode`
-2. Go to `Load upacked` and select the `extension` directory
+2. Go to `Load unpacked` and select the `extension` directory
 3. You a ready to go: Google something and check out the labels 🟢🟡🔴
 
 ## The MIT License (MIT)
