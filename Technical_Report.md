@@ -144,9 +144,6 @@ Example of cases are:
   * Third-party cookies are used for advertising
   * Your account can be deleted without prior notice and without a reason
 
-Actually, Tilthub would be a Tool that could be helpful for them and also benefit from the work of this organisation. As both approaches do the same thing, but for different outcomes. One wants a score out of it, and te other one to put in a structure format. 
-
-
 Website: https://tosdr.org/ 
 
 **TiltHub:** As stated in their description, Tilt-hub is a document storage for transparency information specified in the Transparency Information Language and is part of the Transparency Information Language and Toolkit. It provides a structured and machine-readable transparency information document about Websites. Even though it does not have (yet) a big database, the transparency documents that it provides makes it exceptionally easy to read the most important information from the privacy policy. 
