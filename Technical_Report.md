@@ -170,6 +170,7 @@ This can seem rather unfair towards the domains as there is no way they can rece
 Just as Privacyspy this databse offers a label that we can map to our  label system.
 
 ### Tilt
+The way we handled information given to us by Tilt is simple. We start by having the best possible score, which is 0. For every negative aspect the Tilt document provides, we raise the score, therefore lowering its quality, by a constant. The value of said constant is depending on wether the expert mode is turnt on. If the case is that it is on, the value becomes 1. If on the otherhand it is off, we used a value of 0.3. The reason for these exact values is that we use 9 metrics to calculate the score. Ranging from wether the 'Right to Withdraw Consent' is provided or the 'Right to Rectification or Deletion' for example.
 
 
 ## Overview (TO DO)
