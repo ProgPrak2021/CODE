@@ -113,6 +113,7 @@ For each domain, it has the following information:
 * Score. 0 - 10. 
 * URL
 * Date
+
 Counter intuitively the lowest score is the best. But the scores themselves also are a part of categories. This can be taken from the CVS file, as it also comes with a description on how to interpret the scores. URLs having a score in the range from the minimum score, being 0, up to 2 are being classed as being 'likely' hazards of Phishing. The next category with a score between 2 and 4 describes URLs that are 'suspicious'. Following is the category which is labeled 'phishing'. The range is between 4 and 6. All URLs from here on are guaranteed to be a danger. Lastly we have the most treacherous URLs, whose scores are fittingly called 'omg phishing!'. Subsequently the score here range from 6 all the way up to 10.
   
 Website: https://phishstats.info/ 
