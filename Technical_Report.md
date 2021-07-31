@@ -11,7 +11,8 @@ Most people don't have the patience to read privacy policies. But privacy is imp
 Most privacy policies are convoluted — sometimes even intentionally so. They can be difficult to read, and even more difficult to comprehend. Rarely do they provide actionable insight into protecting one's data.
 
 Making matters worse, companies are often only held accountable for their privacy practices when a data breach occurs or when they experience fallout from mishandling user data (think Facebook's Cambridge Analytica scandal, for example).
-If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. Because privacy matters.
+If companies were held accountable for their privacy policies—not just for creating policies, but also for creating good ones—our data would be safer. 
+Because privacy does matter.
 
 ## Functionality
 CODE makes privacy policies more convenient and accessible for those who simply don't have the time —or patience— to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
@@ -106,12 +107,13 @@ On top of that, this database is being updated every month. Whic is a very impor
 
 ### APIs
 
-**Phishstats:** It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Luckily enough, they also let us download from their webpage a csv file, that is being updated every 90 minutes, with phishing URLs from the past 30 days.
+**Phishstats:** It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Fortunately, they provide a csv file on their webpage, which is being updated every 90 minutes, with phishing URLs from the past 30 days.
 For each domain, it has the following information: 
 * IP
-* Score. 1 - 10. Being 10 the highest Phishing risk.
+* Score. 0 - 10. 
 * URL
 * Date
+Counter intuitively the lowest score is the best. But the scores themselves also are a part of categories. This can be taken from the CVS file, as it also comes with a description on how to interpret the scores. URLs having a score in the range from the minimum score, being 0, up to 2 are being classed as being 'likely' hazards of Phishing. The next category with a score between 2 and 4 describes URLs that are 'suspicious'. Following is the category which is labeled 'phishing'. The range is between 4 and 6. All URLs from here on are guaranteed to be a danger. Lastly we have the most treacherous URLs, whose scores are fittingly called 'omg phishing!'. Subsequently the score here range from 6 all the way up to 10.
   
 Website: https://phishstats.info/ 
 
@@ -161,7 +163,7 @@ The WhotracksMe database offers a great variety of data. We receive information 
 Phishstats is similar to Privacyspy meaning that we also map their label to our label system. However, we decided that it should not be possible to reach our best label. This is because even existing in the Phishstats database is very suspicious.
 
 ### Google SafeBrowsing
-The domains stored in the SafeBrowsing APi are domains that As the SafeBrowsing API by Google only stores unsafe domains. Those are for example phishing or social engineering sites. Therefore, we decided to keep our score calculation very simple: If there is any information provided for a domain, we give it the worst score, e.g. depending on the mode it is either 3 or 9. If, however, there is no information we return a score of 0 (meaning not found). 
+The domains stored in the SafeBrowsing API are domains that As the SafeBrowsing API by Google only stores unsafe domains. Those are for example phishing or social engineering sites. Therefore, we decided to keep our score calculation very simple: If there is any information provided for a domain, we give it the worst score, e.g. depending on the mode it is either 3 or 9. If, however, there is no information we return a score of 0 (meaning not found). 
 This can seem rather unfair towards the domains as there is no way they can receive a good label in this function. However, not existing in this API is not something that should be rewarded as it is expected.
 
 ### Tosdr
@@ -174,8 +176,8 @@ Just as Privacyspy this databse offers a label that we can map to our  label sys
 ![image](https://lisztos.s3.amazonaws.com/images/code_overview.png)
 
 ### Chances & Concerns 
-Finally we want to talk about possible chances and concerns. The quintessence of our effort and this API is to provide more tranparency and to give and insight into that, what is denied to the everyday user. We really hope, that through our doing, our Users get a better feel for what happens in the background while their surfing the web, a better understanding for who is watching and secretly gathering information. 
-The chances that present themselves for our API are thanks to our backend structure quite extensive. To provide more information and to further protect from malicious websites, simply more sources need to be implemented. Aspects like for instance browser fingerprinting, especially when looking a new techlonogies like Googles FloC programm, are yet to be implemented, but provide an opportunity to further protect your personal data. Generally speaking does our API represent a starting point, to make transparency on the web more tangible. 
-However is our API far from perfect. Concerns that followed were for instance the question of being relevant and up to date. Working with static databases rather than a dynamic cloud bases approach, we need to constantly look for updates and manually implement those if available. This demand for high maintenance certainly is our biggest concern, but generally speaking, our approach with static assets is to be tackled in future development.
+Finally we want to talk about possible chances and our concerns. The quintessence of our effort and this API is to provide more transparency and to give an insight into that, what is denied to the everyday user. We really hope, that through our doing, our Users get a better feel for what happens in the background while they are surfing the web, and also a better understanding for who is watching and secretly gathering information. 
+The chances that present themselves for our API are thanks to our backend structure quite extensive. To provide more information and to further protect from malicious websites, simply more sources are needed to be implemented. Aspects like for instance browser fingerprinting, especially when looking a new techlonogies like Googles FloC programm, are yet to be implemented, but provide an opportunity to further protect your personal data. Generally speaking our API does represent a starting point, to make transparency on the web more tangible. 
+However our API is far from perfect. Concerns that followed were for instance the question of being relevant and up to date. Working with static databases rather than a dynamic cloud bases approach meant we needed to constantly look for updates and manually implement those if available. This demand for high maintenance certainly is our biggest concern, but generally speaking, our approach with static assets is to be tackled in future development.
 
 
