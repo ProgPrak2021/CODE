@@ -110,7 +110,7 @@ On top of that, this database is being updated every month. Whic is a very impor
 **Phishstats:** It is a real time Phishing database that gathers phishing URLs from several sources. It started in 2014, and it has now a Database with over 3 million records. Its free API is however very slow, and did not meet our requirements. Fortunately, they provide a csv file on their webpage, which is being updated every 90 minutes, with phishing URLs from the past 30 days.
 For each domain, it has the following information: 
 * IP
-* Score. 0 - 10. 
+* Score from 0 - 10. 
 * URL
 * Date
 
