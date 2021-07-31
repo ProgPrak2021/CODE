@@ -5,8 +5,8 @@
 <img align="right" width="600" height="375" src="img/labels_in_action.png">
 
 ## About CODE
-CODE is a browser extension for the Chrome-Browser. It allows users to get a quick overview about the information website track before they even open the website. With small labels next to the search results in Google they can easily decide whether to open a website or not.
-Most people don't have the patience to read privacy policies. But privacy is important, and we shouldn't just trust that products are treating our data right. CODE uses a consistent rubric to grade privacy.
+CODE is a browser extension for the Chrome-Browser. It allows users to get a quick overview about the information websites track before they even open the website. With small labels next to the search results in Google they can easily decide whether to open a website or not.
+Most people don't have the patience to read privacy policies. But privacy is important, and we shouldn't just trust that products are treating our data the right way. CODE uses a consistent rubric to grade privacy.
 
 Most privacy policies are convoluted — sometimes even intentionally so. They can be difficult to read, and even more difficult to comprehend. Rarely do they provide actionable insight into protecting one's data.
 
@@ -17,22 +17,22 @@ Because privacy does matter.
 ## Functionality
 CODE makes privacy policies more convenient and accessible for those who simply don't have the time —or patience— to read full privacy policies themselves. Privacy should be more than just a box to check; they are fundamental to ensuring data transparency and allowing users to make informed choices.
 
-Let's summarize the core functionality features of the extension.
-Simply said the browser extension scans all results of a google search result and prints a label next to it. However, while that is totally true there is actually more functionalities implemented in the extension. 
-In order to structure all functionalities you can divide program into five different parts: 
+Let's summarize the core functionalities of the extension.
+Simply said the browser extension scans all results of a google search result and prints a label next to it. However, while that is totally true there are actually more features  implemented in the extension. 
+In order to structure all functionalities you can divide the program into five different parts: 
 * The algorithm responsible for the label calculation
 * The different labels
 * Our Home page and most importantly the options page.
 * The Privacy Support
-* Our Backend as API 
+* Our Backend as an API 
 
 ### Our Backend as API
 When implementing the Browser extension it was important to us to strictly divide the frontend part from the logical part meaning the actual calculation of the labels. Our goal was to build an independent backend that does not care where the request is coming from. This way we can also offer to use our backend as an API. A detailed documentation of our API can be found [here](https://app.swaggerhub.com/apis/WebProgramming/ApiDocumentation/1.0.0). 
 
 ### Extension 
-The real quintessence of our extension is to display transparency in a way, that might make you raise your eyebrows.
-You can customize the information you want displayed or the representation of our labels. Purely based to provide you with that piece of information that interests you the most, like which website is using a Facebook tracker for instance.  
-We offer a free, open-source browser extension that displays the CODE rating of the sites of your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
+The quintessence of our extension is to display transparency in a way, that might make you raise your eyebrows.
+You can customize the information you want displayed or the representation of our labels. Purely based to provide you with the pieces of information that interest you the most, like which websites are using a Facebook tracker for instance.  
+We offer a free, open-source browser extension that displays the CODE rating of the sites in your google search. It works by periodically requesting the CODE database from our API, which means it never exposes your browsing activity to an external server, and then locally checking the pages you visit against that external database.
 
 The extension is available for [Chrome](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde/related?hl=de&authuser=0).
 
@@ -161,14 +161,14 @@ The WhotracksMe database offers a great variety of data. We receive information 
 ### PrivacySpy
  Privacyspy scores a label for some domains as well. Therefore, we simply request their label and map it to our label system. 
 ### Phishstats
-Phishstats is similar to Privacyspy meaning that we also map their label to our label system. However, we decided that it should not be possible to reach our best label. This is because even existing in the Phishstats database is very suspicious.
+Phishstats is similar to Privacyspy meaning that we also map their label to our label system. However, we decided that it should not be possible to reach our best label. This is because even existing in the Phishstats database is already concerning.
 
 ### Google SafeBrowsing
 The domains stored in the SafeBrowsing API are domains that As the SafeBrowsing API by Google only stores unsafe domains. Those are for example phishing or social engineering sites. Therefore, we decided to keep our score calculation very simple: If there is any information provided for a domain, we give it the worst score, e.g. depending on the mode it is either 3 or 9. If, however, there is no information we return a score of 0 (meaning not found). 
 This can seem rather unfair towards the domains as there is no way they can receive a good label in this function. However, not existing in this API is not something that should be rewarded as it is expected.
 
 ### Tosdr
-Just as Privacyspy this databse offers a label that we can map to our  label system.
+Just like Privacyspy this databse offers a label that we can map to our label system.
 
 ### Tilt
 The way we handled information given to us by Tilt is simple. We start by having the best possible score, which is 0. For every negative aspect the Tilt document provides, we raise the score, therefore lowering its quality, by a constant. The value of said constant is depending on wether the expert mode is turned on. If the case is that it is on, the value becomes 1. If on the otherhand it is off, we used a value of 0.3. The reason for these exact values is that we use 9 metrics to calculate the score.  Ranging from wether the 'Right to Withdraw Consent' is provided or the 'Right to Rectification or Deletion' for example. And considering the worst ratings were 9 and 3 for the expert mode turned on and off, respectively. The constants were a logical choice.
