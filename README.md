@@ -26,6 +26,17 @@ You can either run the code locally or on the cloud server. Comment out the not 
 588 xhttp.open("POST", "http://127.0.0.1:5000/sendurls/", true); //local
 ```
 If you decide to run the project locally, run the `main.py`file.
+## Project as Docker
+There is a Dockerfile included in the directory `safeBrowsing` . Before building the image, however, you should specify the port in `main.py` at `app.run` as 0.0.0.0 . An example is given in the Dockerfile. 
+
+You can build the image with the following command:
+```sh
+docker build -t <name> .
+```
+If successfully built you start the container like this:
+```sh
+docker run -it --rm -p 5000:5000 --name <name_of_container> <name_of_image>
+```
 
 ## Install extension
 You can add the extension manually to your Chrome browser or download it directly from the [Chrome Web Store](https://chrome.google.com/webstore/detail/cookie-decliner/pfgokjomcikflphieccllalibiejlcde?hl=de&authuser=0).
