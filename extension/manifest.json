@@ -1,6 +1,6 @@
 {
-  "name": "cookie-decliner",
-  "version": "1.0",
+  "name": "Privacy Labels",
+  "version": "2.1",
   "manifest_version": 2,
   "description": "Privacy label for your Google Search.",
   "background": "views/background.html",
@@ -17,7 +17,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://*.google.com/search?*"],
+      "matches": ["https://*.google.com/search?*", "https://*.google.de/search?*", "https://*.google.com/search?*", "https://*.google.com.mx/search?*", "https://*.google.ru/search?*"],
       "js": ["js/jquery.min.js", "content.js", "js/popup.js", "js/options.js"],
       "css":["/css/label_hover_style.css"]
     }
