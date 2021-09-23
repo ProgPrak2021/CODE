@@ -1,7 +1,11 @@
+
 # CODE: Privacy Labels for your Google Search results
 Extension for the Chrome browser which allows users to "see behind the links" on the Google Search results page.
 You're welcome to check out our [technical report](Technical_Report.md) for detailed information about the project.
 ![title](img/labels_in_action.png)
+
+https://user-images.githubusercontent.com/18154624/134519914-b56c66fc-fe52-48d1-b5d7-6c46959ef316.mp4
+
 
 ## Project structure
 The directory structure is as follows:
